@@ -118,12 +118,16 @@ class WeatherTile extends StatelessWidget {
 
     return day == null
         ? card
-        : Stack(
-            alignment: Alignment.topCenter,
-            children: [
-              card,
-              Positioned(top: -10, child: Chip(label: Text(day!))),
-            ],
+        : Padding(
+            padding: const EdgeInsets.only(top: 5, right: 10, left: 10),
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.topCenter,
+              children: [
+                card,
+                Positioned(top: -10, child: Chip(label: Text(day!))),
+              ],
+            ),
           );
   }
 }

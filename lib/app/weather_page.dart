@@ -12,6 +12,9 @@ import 'package:yaru_widgets/yaru_widgets.dart';
 bool get showYaruWindowTitleBar =>
     !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
 
+bool get isDesktop =>
+    Platform.isLinux || Platform.isMacOS || Platform.isWindows;
+
 class WeatherPage extends StatelessWidget {
   const WeatherPage({super.key});
 
@@ -55,7 +58,7 @@ class WeatherPage extends StatelessWidget {
             )
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(top: 20, bottom: 10),
                 child: SizedBox(
                   height: 1000,
                   child: Column(
@@ -99,7 +102,7 @@ class WeatherPage extends StatelessWidget {
             ),
     );
 
-    return Platform.isLinux
+    return isDesktop
         ? scaffold
         : SafeArea(
             child: scaffold,
