@@ -33,7 +33,7 @@ class WeatherTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var radius = foreCast ? 10.0 : 20.0;
+    var radius = 15.0;
     var mq = MediaQuery.of(context);
     final style = TextStyle(
       color: Colors.white,

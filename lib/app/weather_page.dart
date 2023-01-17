@@ -46,7 +46,7 @@ class WeatherPage extends StatelessWidget {
                 for (int i = 0; i < model.forecast.length; i++)
                   Expanded(
                     child: WeatherTile(
-                      padding: EdgeInsets.only(bottom: isDesktop ? 20 : 8),
+                      padding: EdgeInsets.only(bottom: isDesktop ? 20 : 10),
                       widthFactor: 1,
                       day: DateFormat('EEEE').format(
                         DateTime.now().add(
@@ -84,47 +84,63 @@ class WeatherPage extends StatelessWidget {
           : Padding(
               padding: isDesktop
                   ? const EdgeInsets.only(top: 20, right: 20, left: 20)
-                  : const EdgeInsets.only(top: 5, right: 5, left: 5),
+                  : const EdgeInsets.only(top: 10, right: 10, left: 10),
               child: SizedBox(
                 height: size.height,
                 child: OrientationBuilder(
                   builder: (context, orientation) {
+                    var column = Column(
+                      children: [
+                        WeatherTile(
+                          padding: EdgeInsets.only(bottom: isDesktop ? 20 : 10),
+                          widthFactor: 1,
+                          day: 'Now',
+                          height: 250,
+                          position: model.position,
+                          data: model.data,
+                          fontSize: 20,
+                          cityName: model.cityName,
+                        ),
+                        foreCastTiles
+                      ],
+                    );
+                    var row = Row(
+                      children: [
+                        WeatherTile(
+                          padding: EdgeInsets.only(
+                            bottom: isDesktop ? 20 : 10,
+                          ),
+                          widthFactor: 1,
+                          day: 'Now',
+                          width: size.width / 2,
+                          position: model.position,
+                          data: model.data,
+                          fontSize: 20,
+                          cityName: model.cityName,
+                        ),
+                        SizedBox(
+                          width: isDesktop ? 20 : 10,
+                        ),
+                        foreCastTiles
+                      ],
+                    );
                     return orientation == Orientation.portrait
-                        ? Column(
-                            children: [
-                              WeatherTile(
-                                padding:
-                                    EdgeInsets.only(bottom: isDesktop ? 20 : 8),
-                                widthFactor: 1,
-                                day: 'Now',
-                                height: 250,
-                                position: model.position,
-                                data: model.data,
-                                fontSize: 20,
-                                cityName: model.cityName,
-                              ),
-                              foreCastTiles
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              WeatherTile(
-                                padding:
-                                    EdgeInsets.only(bottom: isDesktop ? 20 : 8),
-                                widthFactor: 1,
-                                day: 'Now',
-                                width: size.width / 2,
-                                position: model.position,
-                                data: model.data,
-                                fontSize: 20,
-                                cityName: model.cityName,
-                              ),
-                              SizedBox(
-                                width: isDesktop ? 20 : 8,
-                              ),
-                              foreCastTiles
-                            ],
-                          );
+                        ? isDesktop
+                            ? column
+                            : SingleChildScrollView(
+                                child: SizedBox(
+                                  height: size.height,
+                                  child: column,
+                                ),
+                              )
+                        : isDesktop
+                            ? row
+                            : SingleChildScrollView(
+                                child: SizedBox(
+                                  height: size.height,
+                                  child: row,
+                                ),
+                              );
                   },
                 ),
               ),
