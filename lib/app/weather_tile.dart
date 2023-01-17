@@ -33,8 +33,7 @@ class WeatherTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var radius = 20.0 - 2 * count;
-    var margin = 10.0 - count;
+    var radius = foreCast ? 10.0 : 20.0;
     var mq = MediaQuery.of(context);
     final style = TextStyle(
       color: Colors.white,
@@ -61,12 +60,17 @@ class WeatherTile extends StatelessWidget {
             'Feels like: ${data.feelsLike}',
             style: style,
           ),
+          Text(
+            'Wind: ${data.windSpeed}',
+            style: style,
+          ),
         ],
       ),
-      Text(
-        'Wind: ${data.windSpeed}',
-        style: style,
-      ),
+      if (day != null && foreCast)
+        Text(
+          day!,
+          style: style,
+        ),
       Text(
         data.shortDescription,
         textAlign: TextAlign.center,
@@ -86,7 +90,7 @@ class WeatherTile extends StatelessWidget {
 
     var card = Card(
       elevation: 6,
-      margin: EdgeInsets.all(margin),
+      margin: EdgeInsets.zero,
       shape:
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius)),
       child: ClipPath(
@@ -120,18 +124,9 @@ class WeatherTile extends StatelessWidget {
       ),
     );
 
-    return day == null
-        ? card
-        : Padding(
-            padding: padding,
-            child: Stack(
-              clipBehavior: Clip.none,
-              alignment: Alignment.topCenter,
-              children: [
-                card,
-                Positioned(top: -10, child: Chip(label: Text(day!))),
-              ],
-            ),
-          );
+    return Padding(
+      padding: padding,
+      child: card,
+    );
   }
 }

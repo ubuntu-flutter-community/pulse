@@ -27,6 +27,7 @@ class WeatherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final model = context.watch<WeatherModel>();
 
     final locationButton = Center(
@@ -45,12 +46,7 @@ class WeatherPage extends StatelessWidget {
                 for (int i = 0; i < model.forecast.length; i++)
                   Expanded(
                     child: WeatherTile(
-                      padding: const EdgeInsets.only(
-                        top: 10,
-                        right: 10,
-                        left: 10,
-                        bottom: 5,
-                      ),
+                      padding: EdgeInsets.only(bottom: isDesktop ? 20 : 8),
                       widthFactor: 1,
                       day: DateFormat('EEEE').format(
                         DateTime.now().add(
@@ -60,7 +56,7 @@ class WeatherPage extends StatelessWidget {
                       foreCast: true,
                       count: 5,
                       data: model.forecast.elementAt(i),
-                      fontSize: 15,
+                      fontSize: isDesktop ? 15 : 10,
                     ),
                   )
               ],
@@ -86,20 +82,19 @@ class WeatherPage extends StatelessWidget {
               child: YaruCircularProgressIndicator(),
             )
           : Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              padding: isDesktop
+                  ? const EdgeInsets.only(top: 20, right: 20, left: 20)
+                  : const EdgeInsets.only(top: 5, right: 5, left: 5),
               child: SizedBox(
-                height: 1000,
+                height: size.height,
                 child: OrientationBuilder(
                   builder: (context, orientation) {
                     return orientation == Orientation.portrait
                         ? Column(
                             children: [
                               WeatherTile(
-                                padding: const EdgeInsets.only(
-                                  top: 10,
-                                  right: 10,
-                                  left: 10,
-                                ),
+                                padding:
+                                    EdgeInsets.only(bottom: isDesktop ? 20 : 8),
                                 widthFactor: 1,
                                 day: 'Now',
                                 height: 250,
@@ -114,18 +109,18 @@ class WeatherPage extends StatelessWidget {
                         : Row(
                             children: [
                               WeatherTile(
-                                padding: const EdgeInsets.only(
-                                  top: 5,
-                                  right: 10,
-                                  left: 10,
-                                ),
+                                padding:
+                                    EdgeInsets.only(bottom: isDesktop ? 20 : 8),
                                 widthFactor: 1,
                                 day: 'Now',
-                                width: 400,
+                                width: size.width / 2,
                                 position: model.position,
                                 data: model.data,
                                 fontSize: 20,
                                 cityName: model.cityName,
+                              ),
+                              SizedBox(
+                                width: isDesktop ? 20 : 8,
                               ),
                               foreCastTiles
                             ],
