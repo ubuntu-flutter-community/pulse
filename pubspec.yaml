@@ -1,0 +1,42 @@
+name: weather
+description: View weather.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.18.6 <3.0.0"
+
+dependencies:
+  collection: ^1.16.0
+  flutter:
+    sdk: flutter
+
+  flutter_weather_bg_null_safety:
+    git:
+      url: https://github.com/Feichtmeier/flutter_weather_bg_null_safety
+      ref: b9e3943904596809b957b44a3733b3794a43517b
+  geolocator: ^9.0.2
+  geolocator_apple: ^2.1.2
+  geolocator_linux: ^0.1.0
+  handy_window: ^0.2.0
+  open_weather_client:
+    git:
+      url: https://github.com/Feichtmeier/flutter_open_weather_package
+      ref: fix_coords_null_in_forecast
+  provider: ^6.0.5
+  safe_change_notifier: ^0.2.0
+  yaru: ^0.4.7
+  yaru_icons: ^1.0.1
+  yaru_widgets: ^2.0.0-beta-4
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  assets:
+  - assets/apikey.json
