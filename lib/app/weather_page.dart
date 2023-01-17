@@ -53,32 +53,37 @@ class WeatherPage extends StatelessWidget {
           ? const Center(
               child: YaruCircularProgressIndicator(),
             )
-          : Column(
-              children: [
-                WeatherTile(
-                  height: 250,
-                  position: model.position,
-                  data: model.data,
-                  fontSize: 20,
-                  cityName: model.cityName,
+          : SingleChildScrollView(
+              child: SizedBox(
+                height: 1000,
+                child: Column(
+                  children: [
+                    WeatherTile(
+                      height: 250,
+                      position: model.position,
+                      data: model.data,
+                      fontSize: 20,
+                      cityName: model.cityName,
+                    ),
+                    Expanded(
+                      child: Column(
+                        children: [
+                          for (final day
+                              in model.fiveDaysForCast ?? <WeatherData>[])
+                            Expanded(
+                              child: WeatherTile(
+                                foreCast: true,
+                                count: 1,
+                                data: FormattedWeatherData(day),
+                                fontSize: 15,
+                              ),
+                            )
+                        ],
+                      ),
+                    )
+                  ],
                 ),
-                Expanded(
-                  child: Column(
-                    children: [
-                      for (final day
-                          in model.fiveDaysForCast ?? <WeatherData>[])
-                        Expanded(
-                          child: WeatherTile(
-                            foreCast: true,
-                            count: 1,
-                            data: FormattedWeatherData(day),
-                            fontSize: 15,
-                          ),
-                        )
-                    ],
-                  ),
-                )
-              ],
+              ),
             ),
     );
 
