@@ -13,6 +13,8 @@ class WeatherTile extends StatelessWidget {
   final double? height;
   final bool foreCast;
   final String? day;
+  final double widthFactor;
+  final EdgeInsets padding;
 
   const WeatherTile({
     Key? key,
@@ -25,6 +27,8 @@ class WeatherTile extends StatelessWidget {
     this.height,
     this.foreCast = false,
     this.day,
+    required this.widthFactor,
+    required this.padding,
   }) : super(key: key);
 
   @override
@@ -38,8 +42,8 @@ class WeatherTile extends StatelessWidget {
       shadows: [
         BoxShadow(
           color: Colors.black.withOpacity(0.9),
-          spreadRadius: 8,
-          blurRadius: 8,
+          spreadRadius: 4,
+          blurRadius: 3,
           offset: const Offset(0, 1), // changes position of shadow
         ),
       ],
@@ -96,8 +100,8 @@ class WeatherTile extends StatelessWidget {
           children: [
             WeatherBg(
               weatherType: data.weatherType,
-              width: width ?? mq.size.width / count,
-              height: height ?? mq.size.width * 2,
+              width: width ?? mq.size.width * widthFactor,
+              height: height ?? mq.size.width,
             ),
             Center(
               child: foreCast
@@ -119,7 +123,7 @@ class WeatherTile extends StatelessWidget {
     return day == null
         ? card
         : Padding(
-            padding: const EdgeInsets.only(top: 5, right: 10, left: 10),
+            padding: padding,
             child: Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.topCenter,

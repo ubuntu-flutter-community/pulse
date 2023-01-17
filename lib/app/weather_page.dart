@@ -45,13 +45,20 @@ class WeatherPage extends StatelessWidget {
                 for (int i = 0; i < model.forecast.length; i++)
                   Expanded(
                     child: WeatherTile(
+                      padding: const EdgeInsets.only(
+                        top: 10,
+                        right: 10,
+                        left: 10,
+                        bottom: 5,
+                      ),
+                      widthFactor: 1,
                       day: DateFormat('EEEE').format(
                         DateTime.now().add(
                           Duration(days: i),
                         ),
                       ),
                       foreCast: true,
-                      count: 1,
+                      count: 5,
                       data: model.forecast.elementAt(i),
                       fontSize: 15,
                     ),
@@ -78,42 +85,52 @@ class WeatherPage extends StatelessWidget {
           ? const Center(
               child: YaruCircularProgressIndicator(),
             )
-          : SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 10),
-                child: SizedBox(
-                  height: 1000,
-                  child: OrientationBuilder(
-                    builder: (context, orientation) {
-                      return orientation == Orientation.portrait
-                          ? Column(
-                              children: [
-                                WeatherTile(
-                                  day: 'Now',
-                                  height: 250,
-                                  position: model.position,
-                                  data: model.data,
-                                  fontSize: 20,
-                                  cityName: model.cityName,
+          : Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: SizedBox(
+                height: 1000,
+                child: OrientationBuilder(
+                  builder: (context, orientation) {
+                    return orientation == Orientation.portrait
+                        ? Column(
+                            children: [
+                              WeatherTile(
+                                padding: const EdgeInsets.only(
+                                  top: 10,
+                                  right: 10,
+                                  left: 10,
                                 ),
-                                foreCastTiles
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                WeatherTile(
-                                  day: 'Now',
-                                  width: 400,
-                                  position: model.position,
-                                  data: model.data,
-                                  fontSize: 20,
-                                  cityName: model.cityName,
+                                widthFactor: 1,
+                                day: 'Now',
+                                height: 250,
+                                position: model.position,
+                                data: model.data,
+                                fontSize: 20,
+                                cityName: model.cityName,
+                              ),
+                              foreCastTiles
+                            ],
+                          )
+                        : Row(
+                            children: [
+                              WeatherTile(
+                                padding: const EdgeInsets.only(
+                                  top: 5,
+                                  right: 10,
+                                  left: 10,
                                 ),
-                                foreCastTiles
-                              ],
-                            );
-                    },
-                  ),
+                                widthFactor: 1,
+                                day: 'Now',
+                                width: 400,
+                                position: model.position,
+                                data: model.data,
+                                fontSize: 20,
+                                cityName: model.cityName,
+                              ),
+                              foreCastTiles
+                            ],
+                          );
+                  },
                 ),
               ),
             ),
