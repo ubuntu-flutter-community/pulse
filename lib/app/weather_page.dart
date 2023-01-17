@@ -37,6 +37,28 @@ class WeatherPage extends StatelessWidget {
       ),
     );
 
+    var foreCastTiles = Expanded(
+      child: Column(
+        children: model.forecast.isEmpty
+            ? []
+            : [
+                for (int i = 0; i < model.forecast.length; i++)
+                  Expanded(
+                    child: WeatherTile(
+                      day: DateFormat('EEEE').format(
+                        DateTime.now().add(
+                          Duration(days: i),
+                        ),
+                      ),
+                      foreCast: true,
+                      count: 1,
+                      data: model.forecast.elementAt(i),
+                      fontSize: 15,
+                    ),
+                  )
+              ],
+      ),
+    );
     final scaffold = Scaffold(
       appBar: !showYaruWindowTitleBar
           ? AppBar(
@@ -61,41 +83,36 @@ class WeatherPage extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 20, bottom: 10),
                 child: SizedBox(
                   height: 1000,
-                  child: Column(
-                    children: [
-                      WeatherTile(
-                        day: 'Now',
-                        height: 250,
-                        position: model.position,
-                        data: model.data,
-                        fontSize: 20,
-                        cityName: model.cityName,
-                      ),
-                      Expanded(
-                        child: Column(
-                          children: model.forecast.isEmpty
-                              ? []
-                              : [
-                                  for (int i = 0;
-                                      i < model.forecast.length;
-                                      i++)
-                                    Expanded(
-                                      child: WeatherTile(
-                                        day: DateFormat('EEEE').format(
-                                          DateTime.now().add(
-                                            Duration(days: i),
-                                          ),
-                                        ),
-                                        foreCast: true,
-                                        count: 1,
-                                        data: model.forecast.elementAt(i),
-                                        fontSize: 15,
-                                      ),
-                                    )
-                                ],
-                        ),
-                      )
-                    ],
+                  child: OrientationBuilder(
+                    builder: (context, orientation) {
+                      return orientation == Orientation.portrait
+                          ? Column(
+                              children: [
+                                WeatherTile(
+                                  day: 'Now',
+                                  height: 250,
+                                  position: model.position,
+                                  data: model.data,
+                                  fontSize: 20,
+                                  cityName: model.cityName,
+                                ),
+                                foreCastTiles
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                WeatherTile(
+                                  day: 'Now',
+                                  width: 400,
+                                  position: model.position,
+                                  data: model.data,
+                                  fontSize: 20,
+                                  cityName: model.cityName,
+                                ),
+                                foreCastTiles
+                              ],
+                            );
+                    },
                   ),
                 ),
               ),
