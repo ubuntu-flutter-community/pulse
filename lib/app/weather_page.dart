@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:open_weather_client/models/weather_data.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:weather/app/city_search_field.dart';
 import 'package:weather/app/weather_model.dart';
 import 'package:weather/app/weather_tile.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
 bool get showYaruWindowTitleBar =>
@@ -54,34 +54,46 @@ class WeatherPage extends StatelessWidget {
               child: YaruCircularProgressIndicator(),
             )
           : SingleChildScrollView(
-              child: SizedBox(
-                height: 1000,
-                child: Column(
-                  children: [
-                    WeatherTile(
-                      height: 250,
-                      position: model.position,
-                      data: model.data,
-                      fontSize: 20,
-                      cityName: model.cityName,
-                    ),
-                    Expanded(
-                      child: Column(
-                        children: [
-                          for (final day
-                              in model.fiveDaysForCast ?? <WeatherData>[])
-                            Expanded(
-                              child: WeatherTile(
-                                foreCast: true,
-                                count: 1,
-                                data: FormattedWeatherData(day),
-                                fontSize: 15,
-                              ),
-                            )
-                        ],
+              child: Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                child: SizedBox(
+                  height: 1000,
+                  child: Column(
+                    children: [
+                      WeatherTile(
+                        day: 'Now',
+                        height: 250,
+                        position: model.position,
+                        data: model.data,
+                        fontSize: 20,
+                        cityName: model.cityName,
                       ),
-                    )
-                  ],
+                      Expanded(
+                        child: Column(
+                          children: model.forecast.isEmpty
+                              ? []
+                              : [
+                                  for (int i = 0;
+                                      i < model.forecast.length;
+                                      i++)
+                                    Expanded(
+                                      child: WeatherTile(
+                                        day: DateFormat('EEEE').format(
+                                          DateTime.now().add(
+                                            Duration(days: i),
+                                          ),
+                                        ),
+                                        foreCast: true,
+                                        count: 1,
+                                        data: model.forecast.elementAt(i),
+                                        fontSize: 15,
+                                      ),
+                                    )
+                                ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

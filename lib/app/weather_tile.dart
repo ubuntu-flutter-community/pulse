@@ -12,6 +12,7 @@ class WeatherTile extends StatelessWidget {
   final double? width;
   final double? height;
   final bool foreCast;
+  final String? day;
 
   const WeatherTile({
     Key? key,
@@ -23,6 +24,7 @@ class WeatherTile extends StatelessWidget {
     this.width,
     this.height,
     this.foreCast = false,
+    this.day,
   }) : super(key: key);
 
   @override
@@ -78,7 +80,7 @@ class WeatherTile extends StatelessWidget {
         )
     ];
 
-    return Card(
+    var card = Card(
       elevation: 6,
       margin: EdgeInsets.all(margin),
       shape:
@@ -113,5 +115,15 @@ class WeatherTile extends StatelessWidget {
         ),
       ),
     );
+
+    return day == null
+        ? card
+        : Stack(
+            alignment: Alignment.topCenter,
+            children: [
+              card,
+              Positioned(top: -10, child: Chip(label: Text(day!))),
+            ],
+          );
   }
 }

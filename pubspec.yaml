@@ -21,6 +21,7 @@ dependencies:
   geolocator_apple: ^2.1.2
   geolocator_linux: ^0.1.0
   handy_window: ^0.2.0
+  intl: ^0.18.0
   open_weather_client:
     git:
       url: https://github.com/Feichtmeier/flutter_open_weather_package
