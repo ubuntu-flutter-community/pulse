@@ -32,7 +32,6 @@ class _CitySearchFieldState extends State<CitySearchField> {
     final model = context.watch<WeatherModel>();
     var textField = TextField(
       onSubmitted: (value) => model.init(cityName: _controller.text),
-      textAlign: TextAlign.center,
       controller: _controller,
       decoration: InputDecoration(
         prefixIcon: widget.underline

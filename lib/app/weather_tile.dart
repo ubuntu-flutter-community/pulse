@@ -11,6 +11,7 @@ class WeatherTile extends StatelessWidget {
   final Position? position;
   final double? width;
   final double? height;
+  final bool foreCast;
 
   const WeatherTile({
     Key? key,
@@ -21,6 +22,7 @@ class WeatherTile extends StatelessWidget {
     this.position,
     this.width,
     this.height,
+    this.foreCast = false,
   }) : super(key: key);
 
   @override
@@ -33,13 +35,48 @@ class WeatherTile extends StatelessWidget {
       fontSize: fontSize,
       shadows: [
         BoxShadow(
-          color: Colors.black.withOpacity(0.8),
-          spreadRadius: 3,
-          blurRadius: 5,
+          color: Colors.black.withOpacity(0.9),
+          spreadRadius: 8,
+          blurRadius: 8,
           offset: const Offset(0, 1), // changes position of shadow
         ),
       ],
     );
+
+    final children = [
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            data.currentTemperature,
+            style: style,
+          ),
+          Text(
+            'Feels like: ${data.feelsLike}',
+            style: style,
+          ),
+        ],
+      ),
+      Text(
+        'Wind: ${data.windSpeed}',
+        style: style,
+      ),
+      Text(
+        data.shortDescription,
+        textAlign: TextAlign.center,
+        style: style.copyWith(fontSize: fontSize * 2),
+      ),
+      if (cityName != null)
+        Text(
+          cityName!,
+          style: style,
+        )
+      else if (position != null)
+        Text(
+          'Position: ${position!.longitude.toString()}, ${position!.latitude.toString()}',
+          style: style,
+        )
+    ];
 
     return Card(
       elevation: 6,
@@ -53,6 +90,7 @@ class WeatherTile extends StatelessWidget {
           ),
         ),
         child: Stack(
+          alignment: Alignment.center,
           children: [
             WeatherBg(
               weatherType: data.weatherType,
@@ -60,39 +98,16 @@ class WeatherTile extends StatelessWidget {
               height: height ?? mq.size.width * 2,
             ),
             Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    data.currentTemperature,
-                    style: style,
-                  ),
-                  Text(
-                    'Feels like: ${data.feelsLike}',
-                    style: style,
-                  ),
-                  Text(
-                    'Wind: ${data.windSpeed}',
-                    style: style,
-                  ),
-                  Text(
-                    data.shortDescription,
-                    textAlign: TextAlign.center,
-                    style: style.copyWith(fontSize: fontSize * 2),
-                  ),
-                  if (cityName != null)
-                    Text(
-                      cityName!,
-                      style: style,
+              child: foreCast
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: children,
                     )
-                  else if (position != null)
-                    Text(
-                      'Position: ${position!.longitude.toString()}, ${position!.latitude.toString()}',
-                      style: style,
-                    )
-                ],
-              ),
+                  : Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: children,
+                    ),
             )
           ],
         ),

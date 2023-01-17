@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:open_weather_client/models/weather_data.dart';
 import 'package:weather/app/city_search_field.dart';
 import 'package:weather/app/weather_model.dart';
 import 'package:weather/app/weather_tile.dart';
@@ -54,37 +55,27 @@ class WeatherPage extends StatelessWidget {
             )
           : Column(
               children: [
-                Expanded(
-                  child: WeatherTile(
-                    position: model.position,
-                    data: model.data,
-                    fontSize: 15,
-                    cityName: model.cityName,
-                  ),
-                ),
-                Center(
-                  child: Text(
-                    'Five days forecast',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
+                WeatherTile(
+                  height: 250,
+                  position: model.position,
+                  data: model.data,
+                  fontSize: 20,
+                  cityName: model.cityName,
                 ),
                 Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children: model.fiveDaysForCast
-                              ?.map(
-                                (e) => Expanded(
-                                  child: WeatherTile(
-                                    count: 5,
-                                    data: FormattedWeatherData(e),
-                                    fontSize: 15,
-                                  ),
-                                ),
-                              )
-                              .toList() ??
-                          <Icon>[],
-                    ),
+                  child: Column(
+                    children: [
+                      for (final day
+                          in model.fiveDaysForCast ?? <WeatherData>[])
+                        Expanded(
+                          child: WeatherTile(
+                            foreCast: true,
+                            count: 1,
+                            data: FormattedWeatherData(day),
+                            fontSize: 15,
+                          ),
+                        )
+                    ],
                   ),
                 )
               ],
