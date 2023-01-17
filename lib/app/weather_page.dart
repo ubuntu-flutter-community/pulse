@@ -25,24 +25,25 @@ class WeatherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<WeatherModel>();
 
-    var scaffold = Scaffold(
+    final locationButton = Center(
+      child: YaruIconButton(
+        icon: const Icon(Icons.location_on),
+        style: IconButton.styleFrom(fixedSize: const Size(40, 40)),
+        onPressed: () => model.init(cityName: null),
+      ),
+    );
+
+    final scaffold = Scaffold(
       appBar: !showYaruWindowTitleBar
           ? AppBar(
-              leading: const YaruIconButton(icon: Icon(Icons.location_on)),
-              titleSpacing: 0,
+              leading: locationButton,
               toolbarHeight: 44,
               title: const CitySearchField(
                 underline: true,
               ),
             )
           : YaruWindowTitleBar(
-              leading: Center(
-                child: YaruIconButton(
-                  icon: const Icon(Icons.location_on),
-                  style: IconButton.styleFrom(fixedSize: const Size(40, 40)),
-                  onPressed: () => model.init(cityName: null),
-                ),
-              ),
+              leading: locationButton,
               title: const CitySearchField(
                 underline: false,
               ),
