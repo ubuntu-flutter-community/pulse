@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
-import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
+import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
+import 'package:yaru_colors/yaru_colors.dart';
+import 'package:yaru_icons/yaru_icons.dart';
 
 class WeatherModel extends SafeChangeNotifier {
   WeatherModel(String apiKey) : _openWeather = OpenWeather(apiKey: apiKey);
@@ -182,29 +184,49 @@ class FormattedWeatherData {
   String get longDescription =>
       weatherData?.details.firstOrNull?.weatherLongDescription ?? '';
 
-  WeatherType get weatherType =>
-      _weatherTypeFromShortDescription(shortDescription);
-
-  WeatherType _weatherTypeFromShortDescription(String? longDescription) {
+  Color get color {
     final time = DateTime.now();
 
     final night = time.hour > 19 || time.hour < 8;
 
-    switch (longDescription) {
+    switch (shortDescription) {
       case 'Clouds':
-        return night ? WeatherType.cloudyNight : WeatherType.cloudy;
+        return night ? YaruColors.blue : YaruColors.blue;
       case 'Drizzle':
-        return WeatherType.lightRainy;
+        return YaruColors.warmGrey;
       case 'Rain':
-        return WeatherType.middleRainy;
+        return YaruColors.sage;
       case 'Snow':
-        return WeatherType.heavySnow;
+        return YaruColors.porcelain;
       case 'Clear':
-        return night ? WeatherType.sunnyNight : WeatherType.sunny;
+        return night ? YaruColors.blue[900]! : YaruColors.blue[300]!;
       case 'Sunny':
-        return night ? WeatherType.sunnyNight : WeatherType.sunny;
+        return night ? YaruColors.warning : YaruColors.warning;
       default:
-        return WeatherType.thunder;
+        return Colors.transparent;
+    }
+  }
+
+  IconData get icon {
+    final time = DateTime.now();
+
+    final night = time.hour > 19 || time.hour < 8;
+
+    switch (shortDescription) {
+      case 'Clouds':
+        return night ? YaruIcons.few_clouds_night : YaruIcons.few_clouds;
+      case 'Drizzle':
+        return YaruIcons.rain;
+      case 'Rain':
+        return YaruIcons.rain;
+      case 'Snow':
+        return YaruIcons.snow;
+      case 'Clear':
+        return night ? YaruIcons.clear_night : YaruIcons.sun;
+      case 'Sunny':
+        return night ? YaruIcons.clear_night : YaruIcons.sun;
+      default:
+        return night ? YaruIcons.storm : YaruIcons.storm;
     }
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,12 +7,6 @@ import 'package:weather/app/city_search_field.dart';
 import 'package:weather/app/weather_model.dart';
 import 'package:weather/app/weather_tile.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
-
-bool get showYaruWindowTitleBar =>
-    !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
-
-bool get isDesktop =>
-    Platform.isLinux || Platform.isMacOS || Platform.isWindows;
 
 class WeatherPage extends StatelessWidget {
   const WeatherPage({super.key});
@@ -27,7 +20,6 @@ class WeatherPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     final model = context.watch<WeatherModel>();
 
     final locationButton = Center(
@@ -38,43 +30,36 @@ class WeatherPage extends StatelessWidget {
       ),
     );
 
-    var foreCastTiles = Expanded(
-      child: Column(
-        children: model.forecast.isEmpty
-            ? []
-            : [
-                for (int i = 0; i < model.forecast.length; i++)
-                  Expanded(
-                    child: WeatherTile(
-                      padding: EdgeInsets.only(bottom: isDesktop ? 20 : 10),
-                      widthFactor: 1,
-                      day: DateFormat('EEEE').format(
-                        DateTime.now().add(
-                          Duration(days: i),
-                        ),
-                      ),
-                      foreCast: true,
-                      count: 5,
-                      data: model.forecast.elementAt(i),
-                      fontSize: isDesktop ? 15 : 10,
-                    ),
-                  )
-              ],
-      ),
-    );
+    var foreCastTiles = model.forecast.isEmpty
+        ? <Widget>[]
+        : [
+            for (int i = 0; i < model.forecast.length; i++)
+              WeatherTile(
+                height: 150,
+                padding: const EdgeInsets.only(bottom: 20),
+                day: DateFormat('EEEE').format(
+                  DateTime.now().add(
+                    Duration(days: i),
+                  ),
+                ),
+                foreCast: true,
+                data: model.forecast.elementAt(i),
+                fontSize: 15,
+              )
+          ];
     final scaffold = Scaffold(
-      appBar: !showYaruWindowTitleBar
-          ? AppBar(
-              leading: locationButton,
-              toolbarHeight: 44,
-              title: const CitySearchField(
-                underline: true,
-              ),
-            )
-          : YaruWindowTitleBar(
+      appBar: !Platform.isAndroid && !Platform.isIOS
+          ? YaruWindowTitleBar(
               leading: locationButton,
               title: const CitySearchField(
                 underline: false,
+              ),
+            )
+          : AppBar(
+              leading: locationButton,
+              toolbarHeight: kToolbarHeight,
+              title: const CitySearchField(
+                underline: true,
               ),
             ),
       body: model.initializing == true
@@ -82,18 +67,15 @@ class WeatherPage extends StatelessWidget {
               child: YaruCircularProgressIndicator(),
             )
           : Padding(
-              padding: isDesktop
-                  ? const EdgeInsets.only(top: 20, right: 20, left: 20)
-                  : const EdgeInsets.only(top: 10, right: 10, left: 10),
+              padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
               child: SizedBox(
-                height: size.height,
+                // height: size.height,
                 child: OrientationBuilder(
                   builder: (context, orientation) {
-                    var column = Column(
+                    var column = ListView(
                       children: [
                         WeatherTile(
-                          padding: EdgeInsets.only(bottom: isDesktop ? 20 : 10),
-                          widthFactor: 1,
+                          padding: const EdgeInsets.only(bottom: 20),
                           day: 'Now',
                           height: 250,
                           position: model.position,
@@ -101,56 +83,42 @@ class WeatherPage extends StatelessWidget {
                           fontSize: 20,
                           cityName: model.cityName,
                         ),
-                        foreCastTiles
+                        ...foreCastTiles
                       ],
                     );
+
                     var row = Row(
                       children: [
                         WeatherTile(
-                          padding: EdgeInsets.only(
-                            bottom: isDesktop ? 20 : 10,
+                          padding: const EdgeInsets.only(
+                            bottom: 20,
                           ),
-                          widthFactor: 1,
                           day: 'Now',
-                          width: size.width / 2,
+                          width: 500,
                           position: model.position,
                           data: model.data,
                           fontSize: 20,
                           cityName: model.cityName,
                         ),
-                        SizedBox(
-                          width: isDesktop ? 20 : 10,
+                        const SizedBox(
+                          width: 20,
                         ),
-                        foreCastTiles
+                        Expanded(
+                          child: ListView(
+                            children: foreCastTiles,
+                          ),
+                        )
                       ],
                     );
-                    return orientation == Orientation.portrait
-                        ? isDesktop
-                            ? column
-                            : SingleChildScrollView(
-                                child: SizedBox(
-                                  height: size.height,
-                                  child: column,
-                                ),
-                              )
-                        : isDesktop
-                            ? row
-                            : SingleChildScrollView(
-                                child: SizedBox(
-                                  height: size.height,
-                                  child: row,
-                                ),
-                              );
+                    return orientation == Orientation.portrait ? column : row;
                   },
                 ),
               ),
             ),
     );
-
-    return isDesktop
-        ? scaffold
-        : SafeArea(
-            child: scaffold,
-          );
+    if (Platform.isAndroid || Platform.isIOS) {
+      return SafeArea(child: scaffold);
+    }
+    return scaffold;
   }
 }

@@ -1,18 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:weather/app/weather_page.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:weather/app/weather_page.dart';
 import 'package:yaru/yaru.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
-bool get showYaruWindowTitleBar =>
-    !kIsWeb && !Platform.isAndroid && !Platform.isIOS;
-
 Future<void> main() async {
-  if (showYaruWindowTitleBar) {
+  if (!Platform.isAndroid && !Platform.isIOS) {
     await YaruWindowTitleBar.ensureInitialized();
   }
 
