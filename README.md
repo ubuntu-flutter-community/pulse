@@ -2,6 +2,8 @@
 
 Weather APP for Linux, Android, iOS and Windows - WIP
 
+![screenshot_dark_linux](.github/images/screenshot_dark_linux.png)
+
 ## Build
 
 ### Install Flutter
