@@ -10,7 +10,7 @@ class WeatherTile extends StatelessWidget {
   final Position? position;
   final double? width;
   final double? height;
-  final bool foreCast;
+  final bool isForeCastTile;
   final String? day;
   final EdgeInsets padding;
 
@@ -22,14 +22,17 @@ class WeatherTile extends StatelessWidget {
     this.position,
     this.width,
     this.height,
-    this.foreCast = false,
+    this.isForeCastTile = false,
     this.day,
     required this.padding,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final style = Theme.of(context).textTheme.bodyLarge;
+    final theme = Theme.of(context);
+    final style = isForeCastTile
+        ? theme.textTheme.bodyLarge
+        : theme.textTheme.headlineSmall;
 
     final children = [
       Column(
@@ -49,7 +52,7 @@ class WeatherTile extends StatelessWidget {
           ),
         ],
       ),
-      if (day != null && foreCast)
+      if (day != null && isForeCastTile)
         Text(
           day!,
           style: style,
@@ -57,7 +60,7 @@ class WeatherTile extends StatelessWidget {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(data.icon),
+          data.icon,
           const SizedBox(
             width: 10,
           ),
@@ -78,20 +81,29 @@ class WeatherTile extends StatelessWidget {
         Text(
           'Position: ${position!.longitude.toString()}, ${position!.latitude.toString()}',
           style: style,
+          textAlign: TextAlign.center,
         )
     ];
 
     var banner = YaruBanner(
       surfaceTintColor: data.color,
       child: Center(
-        child: foreCast
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        child: isForeCastTile
+            ? Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 40,
+                runAlignment: WrapAlignment.center,
+                runSpacing: 20,
                 children: children,
               )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
+            : Wrap(
+                direction: Axis.vertical,
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 20,
+                runSpacing: 20,
+                runAlignment: WrapAlignment.center,
                 children: children,
               ),
       ),

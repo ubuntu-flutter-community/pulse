@@ -35,14 +35,14 @@ class WeatherPage extends StatelessWidget {
         : [
             for (int i = 0; i < model.forecast.length; i++)
               WeatherTile(
-                height: 150,
+                height: 200,
                 padding: const EdgeInsets.only(bottom: 20),
                 day: DateFormat('EEEE').format(
                   DateTime.now().add(
                     Duration(days: i),
                   ),
                 ),
-                foreCast: true,
+                isForeCastTile: true,
                 data: model.forecast.elementAt(i),
                 fontSize: 15,
               )
@@ -77,7 +77,7 @@ class WeatherPage extends StatelessWidget {
                         WeatherTile(
                           padding: const EdgeInsets.only(bottom: 20),
                           day: 'Now',
-                          height: 250,
+                          height: 300,
                           position: model.position,
                           data: model.data,
                           fontSize: 20,

@@ -53,13 +53,16 @@ class WeatherModel extends SafeChangeNotifier {
     initializing = false;
   }
 
-  Future<WeatherData> loadWeatherFromCityName(String cityName) async {
-    WeatherData weatherData = await _openWeather.currentWeatherByCityName(
-      cityName: cityName,
-      weatherUnits: WeatherUnits.METRIC,
-    );
-
-    return weatherData;
+  Future<WeatherData?> loadWeatherFromCityName(String cityName) async {
+    try {
+      WeatherData? weatherData = await _openWeather.currentWeatherByCityName(
+        cityName: cityName,
+        weatherUnits: WeatherUnits.METRIC,
+      );
+      return weatherData;
+      // ignore: empty_catches
+    } catch (e) {}
+    return null;
   }
 
   List<WeatherData>? _fiveDaysForCast;
@@ -191,42 +194,59 @@ class FormattedWeatherData {
 
     switch (shortDescription) {
       case 'Clouds':
-        return night ? YaruColors.blue : YaruColors.blue;
+        return YaruColors.warmGrey[200]!;
       case 'Drizzle':
-        return YaruColors.warmGrey;
+        return YaruColors.warmGrey[600]!;
       case 'Rain':
-        return YaruColors.sage;
+        return YaruColors.warmGrey[800]!;
       case 'Snow':
-        return YaruColors.porcelain;
+        return Colors.white;
       case 'Clear':
         return night ? YaruColors.blue[900]! : YaruColors.blue[300]!;
       case 'Sunny':
-        return night ? YaruColors.warning : YaruColors.warning;
+        return night ? YaruColors.blue[900]! : YaruColors.blue[300]!;
       default:
         return Colors.transparent;
     }
   }
 
-  IconData get icon {
+  Icon get icon {
     final time = DateTime.now();
 
-    final night = time.hour > 19 || time.hour < 8;
+    final night = time.hour > 19 || time.hour < 6;
 
     switch (shortDescription) {
       case 'Clouds':
-        return night ? YaruIcons.few_clouds_night : YaruIcons.few_clouds;
+        return Icon(
+          night ? YaruIcons.few_clouds_night : YaruIcons.few_clouds,
+        );
       case 'Drizzle':
-        return YaruIcons.rain;
+        return const Icon(YaruIcons.showers);
       case 'Rain':
-        return YaruIcons.rain;
+        return const Icon(YaruIcons.rain);
       case 'Snow':
-        return YaruIcons.snow;
+        return const Icon(YaruIcons.snow);
       case 'Clear':
-        return night ? YaruIcons.clear_night : YaruIcons.sun;
+        return night
+            ? const Icon(YaruIcons.clear_night)
+            : const Icon(
+                YaruIcons.sun_filled,
+                color: YaruColors.warning,
+              );
       case 'Sunny':
-        return night ? YaruIcons.clear_night : YaruIcons.sun;
+        return night
+            ? const Icon(YaruIcons.clear_night)
+            : const Icon(
+                YaruIcons.sun_filled,
+                color: YaruColors.warning,
+              );
       default:
-        return night ? YaruIcons.storm : YaruIcons.storm;
+        return night
+            ? const Icon(YaruIcons.clear_night)
+            : const Icon(
+                YaruIcons.sun_filled,
+                color: YaruColors.warning,
+              );
     }
   }
 }
