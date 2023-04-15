@@ -38,7 +38,7 @@ parts:
 
   weather:
     plugin: nil
-    source: https://github.com/ubuntu-flutter-community/weather.git
+    source: https://github.com/peter-kal/weather.git
     after: [flutter-git]
     
     override-build: |
@@ -58,6 +58,7 @@ slots:
 apps:
   weather:
    command: bin/weather
+   desktop: snap/gui/weather.desktop
    extensions: [gnome]
    plugs:
     - network
