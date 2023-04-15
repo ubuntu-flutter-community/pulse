@@ -38,7 +38,7 @@ parts:
 
   weather:
     plugin: nil
-    source: https://github.com/peter-kal/weather.git
+    source: https://github.com/ubuntu-flutter-community/weather.git
     after: [flutter-git]
     
     override-build: |
