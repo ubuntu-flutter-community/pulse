@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+
+Version=1.0
+Type=Application
+Name=Weather
+
+
+Terminal=false
+Exec=weather
+
+Keywords=Weather;Utilities;
+Comment=A flutter weather app
+Categories=Utilities;
