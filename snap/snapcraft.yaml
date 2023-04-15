@@ -12,7 +12,7 @@ license: MPL-2.0
 
 compression: lzo
 grade: stable
-confinement: devmode # use 'strict' once you have the right plugs and slots
+confinement: strict
 architectures: [amd64]
 
 parts:
