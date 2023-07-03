@@ -90,7 +90,7 @@ class WeatherTile extends StatelessWidget {
         )
       else if (position != null)
         Text(
-          'Position: ${position!.longitude.toString()}, ${position!.latitude.toString()}',
+          'Position: ${position!.longitude.toStringAsFixed(4)}, ${position!.latitude.toStringAsFixed(4)}',
           style: style,
           textAlign: TextAlign.center,
         )
