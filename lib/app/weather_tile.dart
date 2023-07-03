@@ -100,7 +100,7 @@ class WeatherTile extends StatelessWidget {
     final banner = YaruBorderContainer(
       color: data.color.withOpacity(light ? 0.07 : 0.1),
       border: Border.all(
-        color: theme.dividerColor.withOpacity(0.6),
+        color: theme.dividerColor.withOpacity(light ? 1 : 0.6),
       ),
       borderRadius: BorderRadius.circular(10),
       child: Center(
