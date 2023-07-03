@@ -66,28 +66,31 @@ class WeatherPage extends StatelessWidget {
           ? const Center(
               child: YaruCircularProgressIndicator(),
             )
-          : Padding(
-              padding: const EdgeInsets.only(top: 20, right: 20, left: 20),
-              child: SizedBox(
-                // height: size.height,
-                child: OrientationBuilder(
-                  builder: (context, orientation) {
-                    var column = ListView(
-                      children: [
-                        WeatherTile(
-                          padding: const EdgeInsets.only(bottom: 20),
-                          day: 'Now',
-                          height: 300,
-                          position: model.position,
-                          data: model.data,
-                          fontSize: 20,
-                          cityName: model.cityName,
-                        ),
-                        ...foreCastTiles
-                      ],
-                    );
+          : SizedBox(
+              // height: size.height,
+              child: OrientationBuilder(
+                builder: (context, orientation) {
+                  var column = ListView(
+                    padding:
+                        const EdgeInsets.only(top: 20, right: 20, left: 20),
+                    children: [
+                      WeatherTile(
+                        padding: const EdgeInsets.only(bottom: 20),
+                        day: 'Now',
+                        height: 300,
+                        position: model.position,
+                        data: model.data,
+                        fontSize: 20,
+                        cityName: model.cityName,
+                      ),
+                      ...foreCastTiles
+                    ],
+                  );
 
-                    var row = Row(
+                  var row = Padding(
+                    padding:
+                        const EdgeInsets.only(top: 20, right: 20, left: 20),
+                    child: Row(
                       children: [
                         WeatherTile(
                           padding: const EdgeInsets.only(
@@ -109,10 +112,10 @@ class WeatherPage extends StatelessWidget {
                           ),
                         )
                       ],
-                    );
-                    return orientation == Orientation.portrait ? column : row;
-                  },
-                ),
+                    ),
+                  );
+                  return orientation == Orientation.portrait ? column : row;
+                },
               ),
             ),
     );
