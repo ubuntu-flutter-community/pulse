@@ -200,6 +200,9 @@ class FormattedWeatherData {
   }
 
   Color get color {
+    if (weatherData?.date == null) {
+      return Colors.transparent;
+    }
     final hour =
         DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000).hour;
     final night = hour > 20 || hour < 6;
