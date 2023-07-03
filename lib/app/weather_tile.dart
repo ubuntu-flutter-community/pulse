@@ -33,9 +33,7 @@ class WeatherTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final light = theme.brightness == Brightness.light;
-    final style = isForeCastTile
-        ? theme.textTheme.bodyLarge
-        : theme.textTheme.headlineSmall;
+    final style = theme.textTheme.bodyLarge;
 
     final children = [
       Column(
@@ -55,8 +53,9 @@ class WeatherTile extends StatelessWidget {
           ),
         ],
       ),
-      if (day != null && isForeCastTile)
+      if (day != null)
         Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               day!,
@@ -79,7 +78,7 @@ class WeatherTile extends StatelessWidget {
           Text(
             data.shortDescription,
             textAlign: TextAlign.center,
-            style: style!.copyWith(fontSize: fontSize * 1.5),
+            style: style,
             overflow: TextOverflow.ellipsis,
           )
         ],
@@ -105,13 +104,16 @@ class WeatherTile extends StatelessWidget {
       borderRadius: BorderRadius.circular(10),
       child: Center(
         child: isForeCastTile
-            ? Wrap(
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 40,
-                runAlignment: WrapAlignment.center,
-                runSpacing: 20,
-                children: children,
+            ? Padding(
+                padding: const EdgeInsets.all(20),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 40,
+                  runAlignment: WrapAlignment.center,
+                  runSpacing: 20,
+                  children: children,
+                ),
               )
             : Wrap(
                 direction: Axis.vertical,
