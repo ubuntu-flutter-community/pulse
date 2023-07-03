@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
-import 'package:yaru/yaru.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
 class WeatherModel extends SafeChangeNotifier {
@@ -201,32 +200,40 @@ class FormattedWeatherData {
   }
 
   Color get color {
-    final time = DateTime.now();
-
-    final night = time.hour > 19 || time.hour < 8;
+    final hour =
+        DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000).hour;
+    final night = hour > 20 || hour < 6;
 
     switch (shortDescription) {
       case 'Clouds':
-        return YaruColors.warmGrey.withOpacity(0.3);
+        return night
+            ? const Color.fromARGB(255, 68, 40, 26).withOpacity(0.3)
+            : const Color.fromARGB(255, 59, 40, 17).withOpacity(0.3);
       case 'Drizzle':
-        return YaruColors.warmGrey.withOpacity(0.5);
+        return night
+            ? const Color.fromARGB(255, 48, 46, 45).withOpacity(0.3)
+            : const Color.fromARGB(255, 151, 146, 140).withOpacity(0.3);
       case 'Rain':
-        return YaruColors.warmGrey.withOpacity(0.8);
+        return night
+            ? const Color.fromARGB(255, 72, 34, 104).withOpacity(0.3)
+            : const Color.fromARGB(255, 145, 71, 187).withOpacity(0.3);
       case 'Snow':
-        return Colors.white;
+        return night
+            ? const Color.fromARGB(255, 116, 116, 116).withOpacity(0.3)
+            : const Color.fromARGB(255, 255, 255, 255).withOpacity(0.3);
       case 'Clear':
-        return night ? Colors.blue[900]! : Colors.blue[300]!;
+        return night ? Colors.blue[900]! : Colors.yellow[300]!;
       case 'Sunny':
-        return night ? Colors.blue[900]! : Colors.blue[300]!;
+        return night ? Colors.blue[900]! : Colors.yellow[300]!;
       default:
         return Colors.transparent;
     }
   }
 
   Icon get icon {
-    final time = DateTime.now();
-
-    final night = time.hour > 19 || time.hour < 6;
+    final hour =
+        DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000).hour;
+    final night = hour > 20 || hour < 6;
 
     switch (shortDescription) {
       case 'Clouds':

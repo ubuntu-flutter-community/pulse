@@ -1,6 +1,6 @@
-import 'package:weather/app/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather/app/weather_model.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
 class WeatherTile extends StatelessWidget {
@@ -32,6 +32,7 @@ class WeatherTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final light = theme.brightness == Brightness.light;
     final style = isForeCastTile
         ? theme.textTheme.bodyLarge
         : theme.textTheme.headlineSmall;
@@ -96,11 +97,12 @@ class WeatherTile extends StatelessWidget {
         )
     ];
 
-    var banner = YaruBorderContainer(
-      color: data.color.withOpacity(0.1),
+    final banner = YaruBorderContainer(
+      color: data.color.withOpacity(light ? 0.07 : 0.1),
       border: Border.all(
-        color: theme.dividerColor.withOpacity(0.8),
+        color: theme.dividerColor.withOpacity(0.6),
       ),
+      borderRadius: BorderRadius.circular(10),
       child: Center(
         child: isForeCastTile
             ? Wrap(
