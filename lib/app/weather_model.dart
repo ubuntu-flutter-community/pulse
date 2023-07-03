@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
-import 'package:yaru_colors/yaru_colors.dart';
+import 'package:yaru/yaru.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
 class WeatherModel extends SafeChangeNotifier {
@@ -194,17 +194,17 @@ class FormattedWeatherData {
 
     switch (shortDescription) {
       case 'Clouds':
-        return YaruColors.warmGrey[200]!;
+        return YaruColors.warmGrey.withOpacity(0.3);
       case 'Drizzle':
-        return YaruColors.warmGrey[600]!;
+        return YaruColors.warmGrey.withOpacity(0.5);
       case 'Rain':
-        return YaruColors.warmGrey[800]!;
+        return YaruColors.warmGrey.withOpacity(0.8);
       case 'Snow':
         return Colors.white;
       case 'Clear':
-        return night ? YaruColors.blue[900]! : YaruColors.blue[300]!;
+        return night ? Colors.blue[900]! : Colors.blue[300]!;
       case 'Sunny':
-        return night ? YaruColors.blue[900]! : YaruColors.blue[300]!;
+        return night ? Colors.blue[900]! : Colors.blue[300]!;
       default:
         return Colors.transparent;
     }
@@ -231,21 +231,21 @@ class FormattedWeatherData {
             ? const Icon(YaruIcons.clear_night)
             : const Icon(
                 YaruIcons.sun_filled,
-                color: YaruColors.warning,
+                color: Colors.yellow,
               );
       case 'Sunny':
         return night
             ? const Icon(YaruIcons.clear_night)
             : const Icon(
                 YaruIcons.sun_filled,
-                color: YaruColors.warning,
+                color: Colors.yellow,
               );
       default:
         return night
             ? const Icon(YaruIcons.clear_night)
             : const Icon(
                 YaruIcons.sun_filled,
-                color: YaruColors.warning,
+                color: Colors.yellow,
               );
     }
   }
