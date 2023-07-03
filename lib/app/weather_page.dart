@@ -61,7 +61,7 @@ class WeatherPage extends StatelessWidget {
                 builder: (context, constraints) {
                   var column = ListView(
                     padding:
-                        const EdgeInsets.only(top: 20, right: 20, left: 20),
+                        const EdgeInsets.only(top: 10, right: 20, left: 20),
                     children: [
                       WeatherTile(
                         padding: const EdgeInsets.only(bottom: 20),

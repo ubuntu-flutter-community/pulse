@@ -42,7 +42,8 @@ class _CitySearchFieldState extends State<CitySearchField> {
           YaruIcons.search,
           size: 15,
         ),
-        prefixIconConstraints: const BoxConstraints(minWidth: 35, minHeight: 0),
+        prefixIconConstraints:
+            const BoxConstraints(minWidth: 35, minHeight: 30),
         contentPadding: const EdgeInsets.all(8),
         filled: true,
         hintText: 'Cityname',
