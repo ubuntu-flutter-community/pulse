@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:intl/intl.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
 import 'package:yaru/yaru.dart';
@@ -78,30 +79,25 @@ class WeatherModel extends SafeChangeNotifier {
 
   Future<List<WeatherData>> loadForeCastByCityName({
     required String cityName,
-    int take = 5,
   }) async {
     return (await _openWeather.fiveDaysWeatherForecastByCityName(
       cityName: cityName,
       weatherUnits: WeatherUnits.METRIC,
     ))
         .forecastData
-        .take(take)
         .toList();
   }
 
   Future<List<WeatherData>> loadForeCastByPosition({
     required double longitude,
     required double latitude,
-    int take = 5,
   }) async {
     return (await _openWeather.fiveDaysWeatherForecastByLocation(
       longitude: longitude,
       latitude: latitude,
       weatherUnits: WeatherUnits.METRIC,
     ))
-        .forecastData
-        .take(take)
-        .toList();
+        .forecastData;
   }
 
   String? _error;
@@ -186,6 +182,23 @@ class FormattedWeatherData {
       weatherData?.details.firstOrNull?.weatherShortDescription ?? '';
   String get longDescription =>
       weatherData?.details.firstOrNull?.weatherLongDescription ?? '';
+
+  String getDate(BuildContext context) => weatherData?.date == null
+      ? ''
+      : DateFormat.yMMMMEEEEd(
+          Localizations.maybeLocaleOf(context)?.toLanguageTag(),
+        )
+          .format(DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000))
+          .toString();
+  String getTime(BuildContext context) {
+    return weatherData?.date == null
+        ? ''
+        : DateFormat.Hm(Localizations.maybeLocaleOf(context)?.toLanguageTag())
+            .format(
+              DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000),
+            )
+            .toString();
+  }
 
   Color get color {
     final time = DateTime.now();

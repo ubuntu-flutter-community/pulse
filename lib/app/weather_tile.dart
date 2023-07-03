@@ -13,6 +13,7 @@ class WeatherTile extends StatelessWidget {
   final bool isForeCastTile;
   final String? day;
   final EdgeInsets padding;
+  final String? time;
 
   const WeatherTile({
     Key? key,
@@ -25,6 +26,7 @@ class WeatherTile extends StatelessWidget {
     this.isForeCastTile = false,
     this.day,
     required this.padding,
+    this.time,
   }) : super(key: key);
 
   @override
@@ -53,9 +55,18 @@ class WeatherTile extends StatelessWidget {
         ],
       ),
       if (day != null && isForeCastTile)
-        Text(
-          day!,
-          style: style,
+        Column(
+          children: [
+            Text(
+              day!,
+              style: style,
+            ),
+            if (time != null && isForeCastTile)
+              Text(
+                time!,
+                style: style,
+              ),
+          ],
         ),
       Row(
         mainAxisSize: MainAxisSize.min,
@@ -85,8 +96,11 @@ class WeatherTile extends StatelessWidget {
         )
     ];
 
-    var banner = YaruBanner(
-      surfaceTintColor: data.color,
+    var banner = YaruBorderContainer(
+      color: data.color.withOpacity(0.1),
+      border: Border.all(
+        color: theme.dividerColor.withOpacity(0.8),
+      ),
       child: Center(
         child: isForeCastTile
             ? Wrap(

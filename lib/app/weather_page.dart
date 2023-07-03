@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:weather/app/city_search_field.dart';
 import 'package:weather/app/weather_model.dart';
@@ -11,22 +8,21 @@ import 'package:yaru_widgets/yaru_widgets.dart';
 class WeatherPage extends StatelessWidget {
   const WeatherPage({super.key});
 
-  static Widget create(BuildContext context, String apiKey) {
-    return ChangeNotifierProvider<WeatherModel>(
-      create: (context) => WeatherModel(apiKey)..init(),
-      child: const WeatherPage(),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final model = context.watch<WeatherModel>();
 
     final locationButton = Center(
-      child: YaruIconButton(
-        icon: const Icon(Icons.location_on),
-        style: IconButton.styleFrom(fixedSize: const Size(40, 40)),
-        onPressed: () => model.init(cityName: null),
+      child: SizedBox(
+        height: 35,
+        width: 35,
+        child: YaruIconButton(
+          icon: const Icon(
+            Icons.location_on,
+            size: 16,
+          ),
+          onPressed: () => model.init(cityName: null),
+        ),
       ),
     );
 
@@ -37,39 +33,32 @@ class WeatherPage extends StatelessWidget {
               WeatherTile(
                 height: 200,
                 padding: const EdgeInsets.only(bottom: 20),
-                day: DateFormat('EEEE').format(
-                  DateTime.now().add(
-                    Duration(days: i),
-                  ),
-                ),
+                day: model.forecast[i].getDate(context),
+                time: model.forecast[i].getTime(context),
                 isForeCastTile: true,
                 data: model.forecast.elementAt(i),
                 fontSize: 15,
               )
           ];
     final scaffold = Scaffold(
-      appBar: !Platform.isAndroid && !Platform.isIOS
-          ? YaruWindowTitleBar(
-              leading: locationButton,
-              title: const CitySearchField(
-                underline: false,
-              ),
-            )
-          : AppBar(
-              leading: locationButton,
-              toolbarHeight: kToolbarHeight,
-              title: const CitySearchField(
-                underline: true,
-              ),
-            ),
+      backgroundColor: model.data.color.withOpacity(0.1),
+      appBar: YaruWindowTitleBar(
+        backgroundColor: Colors.transparent,
+        border: BorderSide.none,
+        leading: locationButton,
+        title: const SizedBox(
+          width: 300,
+          child: CitySearchField(),
+        ),
+      ),
       body: model.initializing == true
           ? const Center(
               child: YaruCircularProgressIndicator(),
             )
           : SizedBox(
               // height: size.height,
-              child: OrientationBuilder(
-                builder: (context, orientation) {
+              child: LayoutBuilder(
+                builder: (context, constraints) {
                   var column = ListView(
                     padding:
                         const EdgeInsets.only(top: 20, right: 20, left: 20),
@@ -114,14 +103,12 @@ class WeatherPage extends StatelessWidget {
                       ],
                     ),
                   );
-                  return orientation == Orientation.portrait ? column : row;
+                  return constraints.maxWidth < 1000 ? column : row;
                 },
               ),
             ),
     );
-    if (Platform.isAndroid || Platform.isIOS) {
-      return SafeArea(child: scaffold);
-    }
+
     return scaffold;
   }
 }

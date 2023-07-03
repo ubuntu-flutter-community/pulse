@@ -1,16 +1,15 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:weather/app/weather_model.dart';
 import 'package:weather/app/weather_page.dart';
 import 'package:yaru/yaru.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
 Future<void> main() async {
-  if (!Platform.isAndroid && !Platform.isIOS) {
-    await YaruWindowTitleBar.ensureInitialized();
-  }
+  await YaruWindowTitleBar.ensureInitialized();
 
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -18,8 +17,8 @@ Future<void> main() async {
 
   if (apiKey != null) {
     runApp(
-      MyApp(
-        apiKey: apiKey,
+      MyApp.create(
+        apiKey,
       ),
     );
   }
@@ -31,11 +30,23 @@ Future<String?> loadApiKey() async {
   return json['apiKey'] as String;
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key, required this.apiKey});
 
   final String apiKey;
 
+  static Widget create(String apiKey) {
+    return ChangeNotifierProvider<WeatherModel>(
+      create: (context) => WeatherModel(apiKey)..init(),
+      child: MyApp(apiKey: apiKey),
+    );
+  }
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -43,7 +54,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: yaruLight,
       darkTheme: yaruDark,
-      home: WeatherPage.create(context, apiKey),
+      home: const WeatherPage(),
     );
   }
 }
