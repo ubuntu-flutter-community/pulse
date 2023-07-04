@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather/app/city_search_field.dart';
+import 'package:weather/app/utils.dart';
 import 'package:weather/app/weather_model.dart';
 import 'package:weather/app/weather_tile.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
@@ -12,6 +13,8 @@ class WeatherPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = context.watch<WeatherModel>();
     final mq = MediaQuery.of(context);
+    final theme = Theme.of(context);
+    final light = theme.brightness == Brightness.light;
 
     final locationButton = Center(
       child: SizedBox(
@@ -43,9 +46,7 @@ class WeatherPage extends StatelessWidget {
               )
           ];
     final scaffold = Scaffold(
-      backgroundColor: Theme.of(context).brightness == Brightness.light
-          ? const Color.fromARGB(102, 210, 210, 210)
-          : null,
+      backgroundColor: getColor(model.data).withOpacity(light ? 0.1 : 0.05),
       appBar: YaruWindowTitleBar(
         backgroundColor: Colors.transparent,
         border: BorderSide.none,

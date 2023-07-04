@@ -26,9 +26,9 @@ Color getColor(FormattedWeatherData formattedWeatherData) {
     case 'Snow':
       return Colors.white;
     case 'Clear':
-      return night ? Colors.blueAccent : Colors.yellow[300]!;
+      return night ? Colors.blueAccent : Colors.blueAccent;
     case 'Sunny':
-      return night ? Colors.blueAccent : Colors.yellow[300]!;
+      return night ? Colors.blueAccent : Colors.blueAccent;
     default:
       return Colors.transparent;
   }
