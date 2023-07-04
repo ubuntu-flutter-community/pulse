@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:weather/app/utils.dart';
 import 'package:weather/app/weather_model.dart';
-import 'package:yaru_widgets/yaru_widgets.dart';
 
 class WeatherTile extends StatelessWidget {
   final FormattedWeatherData data;
@@ -96,12 +96,9 @@ class WeatherTile extends StatelessWidget {
         )
     ];
 
-    final banner = YaruBorderContainer(
-      color: data.color.withOpacity(light ? 0.07 : 0.1),
-      border: Border.all(
-        color: theme.dividerColor.withOpacity(light ? 1 : 0.6),
-      ),
-      borderRadius: BorderRadius.circular(10),
+    final banner = Card(
+      elevation: 3,
+      surfaceTintColor: getColor(data).withOpacity(light ? 0.07 : 0.1),
       child: Center(
         child: isForeCastTile
             ? Padding(

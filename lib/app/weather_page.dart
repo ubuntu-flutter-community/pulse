@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:weather/app/city_search_field.dart';
+import 'package:weather/app/utils.dart';
 import 'package:weather/app/weather_model.dart';
 import 'package:weather/app/weather_tile.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
@@ -41,7 +42,7 @@ class WeatherPage extends StatelessWidget {
               )
           ];
     final scaffold = Scaffold(
-      backgroundColor: model.data.color.withOpacity(0.1),
+      backgroundColor: getColor(model.data).withOpacity(0.02),
       appBar: YaruWindowTitleBar(
         backgroundColor: Colors.transparent,
         border: BorderSide.none,
