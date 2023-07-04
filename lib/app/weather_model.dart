@@ -4,7 +4,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
-import 'package:yaru_icons/yaru_icons.dart';
 
 class WeatherModel extends SafeChangeNotifier {
   WeatherModel(String apiKey) : _openWeather = OpenWeather(apiKey: apiKey);
@@ -197,45 +196,5 @@ class FormattedWeatherData {
               DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000),
             )
             .toString();
-  }
-
-  Icon get icon {
-    final hour =
-        DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000).hour;
-    final night = hour > 20 || hour < 6;
-
-    switch (shortDescription) {
-      case 'Clouds':
-        return Icon(
-          night ? YaruIcons.few_clouds_night : YaruIcons.few_clouds,
-        );
-      case 'Drizzle':
-        return const Icon(YaruIcons.showers);
-      case 'Rain':
-        return const Icon(YaruIcons.rain);
-      case 'Snow':
-        return const Icon(YaruIcons.snow);
-      case 'Clear':
-        return night
-            ? const Icon(YaruIcons.clear_night)
-            : const Icon(
-                YaruIcons.sun_filled,
-                color: Colors.yellow,
-              );
-      case 'Sunny':
-        return night
-            ? const Icon(YaruIcons.clear_night)
-            : const Icon(
-                YaruIcons.sun_filled,
-                color: Colors.yellow,
-              );
-      default:
-        return night
-            ? const Icon(YaruIcons.clear_night)
-            : const Icon(
-                YaruIcons.sun_filled,
-                color: Colors.yellow,
-              );
-    }
   }
 }

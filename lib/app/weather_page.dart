@@ -12,6 +12,7 @@ class WeatherPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final model = context.watch<WeatherModel>();
+    final mq = MediaQuery.of(context);
 
     final locationButton = Center(
       child: SizedBox(
@@ -32,6 +33,7 @@ class WeatherPage extends StatelessWidget {
         : [
             for (int i = 0; i < model.forecast.length; i++)
               WeatherTile(
+                width: mq.size.width - 40,
                 height: 200,
                 padding: const EdgeInsets.only(bottom: 20),
                 day: model.forecast[i].getDate(context),
@@ -42,7 +44,9 @@ class WeatherPage extends StatelessWidget {
               )
           ];
     final scaffold = Scaffold(
-      backgroundColor: getColor(model.data).withOpacity(0.02),
+      backgroundColor: Theme.of(context).brightness == Brightness.light
+          ? Color.fromARGB(102, 210, 210, 210)
+          : null,
       appBar: YaruWindowTitleBar(
         backgroundColor: Colors.transparent,
         border: BorderSide.none,
@@ -65,6 +69,7 @@ class WeatherPage extends StatelessWidget {
                         const EdgeInsets.only(top: 10, right: 20, left: 20),
                     children: [
                       WeatherTile(
+                        width: mq.size.width - 40,
                         padding: const EdgeInsets.only(bottom: 20),
                         day: 'Now',
                         height: 300,
@@ -88,6 +93,7 @@ class WeatherPage extends StatelessWidget {
                           ),
                           day: 'Now',
                           width: 500,
+                          height: mq.size.height - 40,
                           position: model.position,
                           data: model.data,
                           fontSize: 20,

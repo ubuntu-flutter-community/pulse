@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
+import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/app/utils.dart';
 import 'package:weather/app/weather_model.dart';
+import 'package:weather/string_x.dart';
 
 class WeatherTile extends StatelessWidget {
   final FormattedWeatherData data;
@@ -21,8 +24,8 @@ class WeatherTile extends StatelessWidget {
     this.cityName,
     this.fontSize = 20,
     this.position,
-    this.width,
-    this.height,
+    required this.width,
+    required this.height,
     this.isForeCastTile = false,
     this.day,
     required this.padding,
@@ -33,7 +36,17 @@ class WeatherTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final light = theme.brightness == Brightness.light;
-    final style = theme.textTheme.bodyLarge;
+    final style = theme.textTheme.headlineSmall?.copyWith(
+      color: Colors.white,
+      fontSize: 20,
+      shadows: [
+        Shadow(
+          color: Colors.black.withOpacity(0.8),
+          offset: const Offset(0, 1),
+          blurRadius: 3,
+        )
+      ],
+    );
 
     final children = [
       Column(
@@ -71,12 +84,12 @@ class WeatherTile extends StatelessWidget {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          data.icon,
+          getIcon(data, theme.colorScheme),
           const SizedBox(
             width: 10,
           ),
           Text(
-            data.shortDescription,
+            data.longDescription.capitalize(),
             textAlign: TextAlign.center,
             style: style,
             overflow: TextOverflow.ellipsis,
@@ -97,30 +110,43 @@ class WeatherTile extends StatelessWidget {
     ];
 
     final banner = Card(
-      elevation: 3,
-      surfaceTintColor: getColor(data).withOpacity(light ? 0.07 : 0.1),
-      child: Center(
-        child: isForeCastTile
-            ? Padding(
-                padding: const EdgeInsets.all(20),
-                child: Wrap(
-                  alignment: WrapAlignment.center,
-                  crossAxisAlignment: WrapCrossAlignment.center,
-                  spacing: 40,
-                  runAlignment: WrapAlignment.center,
-                  runSpacing: 20,
-                  children: children,
-                ),
-              )
-            : Wrap(
-                direction: Axis.vertical,
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 20,
-                runSpacing: 20,
-                runAlignment: WrapAlignment.center,
-                children: children,
+      child: Stack(
+        children: [
+          Opacity(
+            opacity: light ? 1 : 0.4,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: WeatherBg(
+                weatherType: getWeatherType(data),
+                width: width ?? double.infinity,
+                height: height ?? double.infinity,
               ),
+            ),
+          ),
+          Center(
+            child: isForeCastTile
+                ? Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Wrap(
+                      alignment: WrapAlignment.center,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      spacing: 40,
+                      runAlignment: WrapAlignment.center,
+                      runSpacing: 20,
+                      children: children,
+                    ),
+                  )
+                : Wrap(
+                    direction: Axis.vertical,
+                    alignment: WrapAlignment.center,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 20,
+                    runSpacing: 20,
+                    runAlignment: WrapAlignment.center,
+                    children: children,
+                  ),
+          )
+        ],
       ),
     );
 

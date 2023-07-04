@@ -107,6 +107,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_weather_bg_null_safety:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: b9e3943904596809b957b44a3733b3794a43517b
+      resolved-ref: b9e3943904596809b957b44a3733b3794a43517b
+      url: "https://github.com/Feichtmeier/flutter_weather_bg_null_safety"
+    source: git
+    version: "1.0.0"
   flutter_web_plugins:
     dependency: transitive
     description: flutter

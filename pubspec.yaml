@@ -26,6 +26,11 @@ dependencies:
   yaru_icons: ^1.0.4
   yaru_widgets: ^2.5.0
 
+  flutter_weather_bg_null_safety:
+    git:
+      url: https://github.com/Feichtmeier/flutter_weather_bg_null_safety
+      ref: b9e3943904596809b957b44a3733b3794a43517b
+
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
