@@ -13,16 +13,16 @@ Color getColor(FormattedWeatherData formattedWeatherData) {
   switch (formattedWeatherData.shortDescription) {
     case 'Clouds':
       return night
-          ? const Color.fromARGB(255, 68, 40, 26).withOpacity(0.3)
-          : const Color.fromARGB(255, 59, 40, 17).withOpacity(0.3);
+          ? const Color.fromARGB(255, 66, 66, 66).withOpacity(0.3)
+          : const Color.fromARGB(255, 170, 170, 170).withOpacity(0.3);
     case 'Drizzle':
       return night
-          ? const Color.fromARGB(255, 48, 46, 45).withOpacity(0.3)
-          : const Color.fromARGB(255, 151, 146, 140).withOpacity(0.3);
+          ? const Color.fromARGB(255, 6, 39, 43).withOpacity(0.3)
+          : const Color.fromARGB(255, 41, 255, 251).withOpacity(0.3);
     case 'Rain':
       return night
-          ? const Color.fromARGB(255, 72, 34, 104).withOpacity(0.3)
-          : const Color.fromARGB(255, 145, 71, 187).withOpacity(0.3);
+          ? const Color.fromARGB(255, 51, 56, 91).withOpacity(0.3)
+          : const Color.fromARGB(255, 109, 128, 157).withOpacity(0.3);
     case 'Snow':
       return night
           ? const Color.fromARGB(255, 116, 116, 116).withOpacity(0.3)
