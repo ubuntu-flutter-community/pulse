@@ -10,5 +10,5 @@ Terminal=false
 Exec=pulse
 
 Keywords=Weather;News;Utilities;
-Comment=News and weather app for Ubuntu
+Comment=Weather and news app for Ubuntu
 Categories=Utilities;
