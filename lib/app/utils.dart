@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
-import 'package:weather/app/weather_model.dart';
+import 'package:pulse/app/weather_model.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
 Color getColor(FormattedWeatherData formattedWeatherData) {

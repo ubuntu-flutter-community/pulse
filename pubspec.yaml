@@ -1,5 +1,5 @@
-name: weather
-description: View weather.
+name: pulse
+description: Weather and news app for Ubuntu.
 
 publish_to: "none"
 

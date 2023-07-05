@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(runner LANGUAGES CXX)
 
-set(BINARY_NAME "weather")
-set(APPLICATION_ID "org.feichtmeier.Weather")
+set(BINARY_NAME "pulse")
+set(APPLICATION_ID "org.feichtmeier.Pulse")
 
 cmake_policy(SET CMP0063 NEW)
 

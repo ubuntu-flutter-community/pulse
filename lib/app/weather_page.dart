@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:weather/app/city_search_field.dart';
-import 'package:weather/app/utils.dart';
-import 'package:weather/app/weather_model.dart';
-import 'package:weather/app/weather_tile.dart';
+import 'package:pulse/app/city_search_field.dart';
+import 'package:pulse/app/utils.dart';
+import 'package:pulse/app/weather_model.dart';
+import 'package:pulse/app/weather_tile.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
 class WeatherPage extends StatelessWidget {

@@ -1,26 +1,11 @@
-# Weather
+# Pulse - weather and news app for Ubuntu Desktop
 
-Weather APP for Linux, Android, iOS and Windows - WIP
 
 ![screenshot_dark_linux](.github/images/screenshot_dark_linux.png)
 
 ## Build
 
 ### Install Flutter
-
-<details>
-<summary>Windows</summary>
-
-[Official Flutter Windows installation instructions by Google](https://docs.flutter.dev/get-started/install/windows)
-
-</details>
-
-<details>
-<summary>MacOS</summary>
-
-[Official Flutter MacOS installation instructions by Google](https://docs.flutter.dev/get-started/install/macos)
-
-</details>
 
 <details>
 <summary>Ubuntu</summary>

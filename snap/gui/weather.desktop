@@ -3,12 +3,12 @@ Encoding=UTF-8
 
 Version=1.0
 Type=Application
-Name=Weather
+Name=Pulse
 
 
 Terminal=false
-Exec=weather
+Exec=pulse
 
-Keywords=Weather;Utilities;
-Comment=A flutter weather app
+Keywords=Weather;News;Utilities;
+Comment=News and weather app for Ubuntu
 Categories=Utilities;

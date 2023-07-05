@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:weather/app/utils.dart';
-import 'package:weather/app/weather_model.dart';
-import 'package:weather/string_x.dart';
+import 'package:pulse/app/utils.dart';
+import 'package:pulse/app/weather_model.dart';
+import 'package:pulse/string_x.dart';
 
 class WeatherTile extends StatelessWidget {
   final FormattedWeatherData data;
