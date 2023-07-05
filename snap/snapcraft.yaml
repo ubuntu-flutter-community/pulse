@@ -1,13 +1,15 @@
-name: weather
-title: Weather
+name: pulse
+title: Pulse
 base: core22
-version: '0.1'
-summary: A beautiful weather app made with Flutter, and Yaru widgets.
+version: git
+contact: frederik.feichtmeier@gmail.com
+summary: Weather and news app for Ubuntu.
 description: |
-  A beautiful weather app made with Flutter, and Yaru widgets.
+  A beautiful weather and news app made with Flutter, and Yaru widgets.
 source-code: https://github.com/ubuntu-flutter-community/pulse
 issues: https://github.com/ubuntu-flutter-community/pulse/issues
 license: GPL-3.0
+icon: snap/gui/pulse.png
 
 
 compression: lzo
@@ -36,7 +38,7 @@ parts:
     prime:
       - -*
 
-  weather:
+  pulse:
     plugin: nil
     source: .
     after: [flutter-git]
@@ -50,18 +52,19 @@ parts:
       cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/bin/ 
 
 slots:
-  weather-dbus: 
+  pulse-dbus: 
    interface: dbus
    bus: session
    name: org.feichtmeier.Pulse
 
 apps:
-  weather:
+  pulse:
    command: bin/pulse
    desktop: snap/gui/pulse.desktop
    extensions: [gnome]
    plugs:
     - network
+    - network-status
     - x11
     - wayland 
     - desktop 
