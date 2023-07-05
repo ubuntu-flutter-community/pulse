@@ -46,7 +46,9 @@ class WeatherPage extends StatelessWidget {
               )
           ];
     final scaffold = Scaffold(
-      backgroundColor: getColor(model.data).withOpacity(light ? 0.1 : 0.05),
+      backgroundColor: model.data == null
+          ? null
+          : getColor(model.data!).withOpacity(light ? 0.1 : 0.05),
       appBar: YaruWindowTitleBar(
         backgroundColor: Colors.transparent,
         border: BorderSide.none,
@@ -60,60 +62,62 @@ class WeatherPage extends StatelessWidget {
           ? const Center(
               child: YaruCircularProgressIndicator(),
             )
-          : SizedBox(
-              // height: size.height,
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  var column = ListView(
-                    padding:
-                        const EdgeInsets.only(top: 10, right: 20, left: 20),
-                    children: [
-                      WeatherTile(
-                        width: mq.size.width - 40,
-                        padding: const EdgeInsets.only(bottom: 20),
-                        day: 'Now',
-                        height: 300,
-                        position: model.position,
-                        data: model.data,
-                        fontSize: 20,
-                        cityName: model.cityName,
-                      ),
-                      ...foreCastTiles
-                    ],
-                  );
+          : model.data == null
+              ? const SizedBox()
+              : SizedBox(
+                  // height: size.height,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      var column = ListView(
+                        padding:
+                            const EdgeInsets.only(top: 10, right: 20, left: 20),
+                        children: [
+                          WeatherTile(
+                            width: mq.size.width - 40,
+                            padding: const EdgeInsets.only(bottom: 20),
+                            day: 'Now',
+                            height: 300,
+                            position: model.position,
+                            data: model.data!,
+                            fontSize: 20,
+                            cityName: model.cityName,
+                          ),
+                          ...foreCastTiles
+                        ],
+                      );
 
-                  var row = Padding(
-                    padding:
-                        const EdgeInsets.only(top: 20, right: 20, left: 20),
-                    child: Row(
-                      children: [
-                        WeatherTile(
-                          padding: const EdgeInsets.only(
-                            bottom: 20,
-                          ),
-                          day: 'Now',
-                          width: 500,
-                          height: mq.size.height - 40,
-                          position: model.position,
-                          data: model.data,
-                          fontSize: 20,
-                          cityName: model.cityName,
+                      var row = Padding(
+                        padding:
+                            const EdgeInsets.only(top: 20, right: 20, left: 20),
+                        child: Row(
+                          children: [
+                            WeatherTile(
+                              padding: const EdgeInsets.only(
+                                bottom: 20,
+                              ),
+                              day: 'Now',
+                              width: 500,
+                              height: mq.size.height - 40,
+                              position: model.position,
+                              data: model.data!,
+                              fontSize: 20,
+                              cityName: model.cityName,
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            Expanded(
+                              child: ListView(
+                                children: foreCastTiles,
+                              ),
+                            )
+                          ],
                         ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        Expanded(
-                          child: ListView(
-                            children: foreCastTiles,
-                          ),
-                        )
-                      ],
-                    ),
-                  );
-                  return constraints.maxWidth < 1000 ? column : row;
-                },
-              ),
-            ),
+                      );
+                      return constraints.maxWidth < 1000 ? column : row;
+                    },
+                  ),
+                ),
     );
 
     return scaffold;

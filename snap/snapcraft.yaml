@@ -62,6 +62,7 @@ apps:
    command: bin/pulse
    desktop: snap/gui/pulse.desktop
    extensions: [gnome]
+   common-id: org.feichtmeier.Pulse
    plugs:
     - network
     - network-status
@@ -70,3 +71,4 @@ apps:
     - desktop 
     - desktop-legacy
     - unity7 
+    - geoclue

@@ -38,7 +38,7 @@ class MyApp extends StatefulWidget {
 
   static Widget create(String apiKey) {
     return ChangeNotifierProvider<WeatherModel>(
-      create: (context) => WeatherModel(apiKey)..init(),
+      create: (context) => WeatherModel(apiKey),
       child: MyApp(apiKey: apiKey),
     );
   }

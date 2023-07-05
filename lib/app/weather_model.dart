@@ -15,7 +15,8 @@ class WeatherModel extends SafeChangeNotifier {
   Position? get position => _position;
 
   WeatherData? _weatherData;
-  FormattedWeatherData get data => FormattedWeatherData(_weatherData);
+  FormattedWeatherData? get data =>
+      _weatherData == null ? null : FormattedWeatherData(_weatherData);
 
   String? _cityName;
   String? get cityName => _cityName;
