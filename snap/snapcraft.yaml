@@ -8,19 +8,20 @@ description: |
   A beautiful weather and news app made with Flutter, and Yaru widgets.
 source-code: https://github.com/ubuntu-flutter-community/pulse
 issues: https://github.com/ubuntu-flutter-community/pulse/issues
-license: GPL-3.0
+license: GPL-3.0+
 icon: snap/gui/pulse.png
 
 
-compression: lzo
 grade: stable
 confinement: strict
-architectures: [amd64]
+architectures:
+  - build-on: amd64
+  - build-on: arm64
 
 parts:
   flutter-git:
     source: https://github.com/flutter/flutter.git
-    source-branch: stable
+    source-tag: 3.10.0
     plugin: nil
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
@@ -70,5 +71,5 @@ apps:
     - wayland 
     - desktop 
     - desktop-legacy
-    - unity7 
-    - geoclue
+    - unity7
+    - location-observe
