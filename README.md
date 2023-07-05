@@ -1,7 +1,20 @@
-# Pulse - weather and news app for Ubuntu Desktop
+# Pulse - Weather and news app for the Ubuntu Desktop
 
+WIP - Soon available as snap.
 
-![screenshot_dark_linux](.github/images/screenshot_dark_linux.png)
+| | |
+|-|-|
+|![screenshot_dark_linux](.github/images/screenshot_dark_linux.png)|![screenshot_light_linux](.github/images/screenshot_light_linux.png)|
+
+## Pulse Level 1
+
+- [X] Display weather of current location
+- [X] Display weather of a location X
+- [ ] Save your favorite locations
+- [ ] Filter per day/week
+- [ ] Show news in your location
+- [ ] Show news of location X
+- [ ] Filter news by topic/location
 
 ## Build
 
@@ -17,11 +30,6 @@ sudo apt -y install git curl cmake meson make clang libgtk-3-dev pkg-config && m
 ```
 
 </details>
-
-<br>
-
-
-
 
 ### Api Key
 
