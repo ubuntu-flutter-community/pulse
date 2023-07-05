@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -55,6 +56,15 @@ class _MyAppState extends State<MyApp> {
       theme: yaruLight,
       darkTheme: yaruDark,
       home: const WeatherPage(),
+      scrollBehavior: const MaterialScrollBehavior().copyWith(
+        dragDevices: {
+          PointerDeviceKind.mouse,
+          PointerDeviceKind.touch,
+          PointerDeviceKind.stylus,
+          PointerDeviceKind.unknown,
+          PointerDeviceKind.trackpad,
+        },
+      ),
     );
   }
 }
