@@ -12,3 +12,4 @@ Exec=pulse
 Keywords=Weather;News;Utilities;
 Comment=Weather and news app for Ubuntu
 Categories=Utilities;
+Icon=weather-app
