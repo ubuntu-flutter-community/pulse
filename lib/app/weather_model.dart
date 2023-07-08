@@ -1,3 +1,4 @@
+import 'package:geocoding_resolver/geocoding_resolver.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:pulse/weather_data_x.dart';
@@ -5,13 +6,33 @@ import 'package:pulse/weekday.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
 
 class WeatherModel extends SafeChangeNotifier {
-  WeatherModel(String apiKey) : _openWeather = OpenWeather(apiKey: apiKey);
+  WeatherModel(String apiKey)
+      : _openWeather = OpenWeather(apiKey: apiKey),
+        geoCoder = GeoCoder();
+
+  GeoCoder geoCoder;
 
   final OpenWeather _openWeather;
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
 
   Position? _position;
   Position? get position => _position;
+
+  String? _cityFromPosition;
+  String? get cityFromPosition => _cityFromPosition;
+
+  Future<String> loadCityFromPosition() async {
+    if (position == null) {
+      return '';
+    }
+
+    Address address = await geoCoder.getAddressFromLatLng(
+      latitude: _position!.latitude,
+      longitude: _position!.longitude,
+    );
+
+    return address.displayName;
+  }
 
   WeatherData? _weatherData;
   WeatherData? get data => _weatherData;
@@ -42,6 +63,7 @@ class WeatherModel extends SafeChangeNotifier {
         longitude: position!.longitude,
         latitude: position!.latitude,
       );
+      _cityFromPosition = await loadCityFromPosition();
     } else {
       _weatherData = await loadWeatherFromCityName(cityName!);
       _cityName = cityName;

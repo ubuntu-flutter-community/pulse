@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:open_weather_client/models/weather_data.dart';
 import 'package:pulse/app/utils.dart';
 import 'package:pulse/string_x.dart';
@@ -11,7 +10,7 @@ class ForecastTile extends StatelessWidget {
   final WeatherData data;
   final String? cityName;
   final double fontSize;
-  final Position? position;
+  final String? position;
   final double? width;
   final double? height;
   final String? day;
@@ -104,7 +103,7 @@ class ForecastTile extends StatelessWidget {
         )
       else if (position != null)
         Text(
-          'Position: ${position!.longitude.toStringAsFixed(4)}, ${position!.latitude.toStringAsFixed(4)}',
+          position ?? '',
           style: style,
           textAlign: TextAlign.center,
         )
