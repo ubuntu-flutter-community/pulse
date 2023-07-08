@@ -74,7 +74,11 @@ class WeatherPage extends StatelessWidget {
               child: YaruCircularProgressIndicator(),
             )
           : model.data == null
-              ? const SizedBox()
+              ? Center(
+                  child: model.error != null
+                      ? Text(model.error!)
+                      : const SizedBox.shrink(),
+                )
               : SizedBox(
                   // height: size.height,
                   child: LayoutBuilder(

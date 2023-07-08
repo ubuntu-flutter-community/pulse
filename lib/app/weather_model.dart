@@ -58,9 +58,10 @@ class WeatherModel extends SafeChangeNotifier {
         weatherUnits: WeatherUnits.METRIC,
       );
       return weatherData;
-      // ignore: empty_catches
-    } catch (e) {}
-    return null;
+    } catch (e) {
+      error = e.toString();
+      return null;
+    }
   }
 
   List<WeatherData>? _fiveDaysForCast;
@@ -135,24 +136,34 @@ class WeatherModel extends SafeChangeNotifier {
       ));
 
       return weatherForecastData.forecastData;
-    } on Exception catch (_) {
+    } on Exception catch (e) {
+      error = e.toString();
       return null;
     }
   }
 
   String? _error;
   String? get error => _error;
-  Future<WeatherData> loadWeatherByPosition({
+  set error(String? value) {
+    _error = value;
+    notifyListeners();
+  }
+
+  Future<WeatherData?> loadWeatherByPosition({
     required double latitude,
     required double longitude,
   }) async {
-    return await _openWeather
-        .currentWeatherByLocation(
-          latitude: latitude,
-          longitude: longitude,
-          weatherUnits: WeatherUnits.METRIC,
-        )
-        .catchError((err) => _error = err);
+    try {
+      final weatherData = await _openWeather.currentWeatherByLocation(
+        latitude: latitude,
+        longitude: longitude,
+        weatherUnits: WeatherUnits.METRIC,
+      );
+      return weatherData;
+    } on Exception catch (e) {
+      error = e.toString();
+      return null;
+    }
   }
 
   Future<Position?> _getCurrentPosition() async {
