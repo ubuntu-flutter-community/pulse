@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
-import 'package:pulse/app/weather_model.dart';
+import 'package:open_weather_client/models/weather_data.dart';
+import 'package:pulse/weather_data_x.dart';
 import 'package:yaru_icons/yaru_icons.dart';
 
-Color getColor(FormattedWeatherData formattedWeatherData) {
-  if (formattedWeatherData.weatherData?.date == null) {
-    return Colors.transparent;
-  }
+Color getColor(WeatherData weatherData) {
   final hour = DateTime.fromMillisecondsSinceEpoch(
-    formattedWeatherData.weatherData!.date * 1000,
+    weatherData.date * 1000,
   ).hour;
   final night = hour > 20 || hour < 6;
 
-  switch (formattedWeatherData.shortDescription) {
+  switch (weatherData.shortDescription) {
     case 'Clouds':
       return night
           ? const Color.fromARGB(255, 55, 55, 55)
@@ -35,16 +33,22 @@ Color getColor(FormattedWeatherData formattedWeatherData) {
 }
 
 Icon getIcon(
-  FormattedWeatherData formattedWeatherData,
+  WeatherData weatherData,
   ColorScheme colorScheme,
 ) {
   final hour = DateTime.fromMillisecondsSinceEpoch(
-    formattedWeatherData.weatherData!.date * 1000,
+    weatherData.date * 1000,
   ).hour;
   final night = hour > 20 || hour < 6;
-  final shadows = [Shadow(color: Colors.black.withOpacity(0.8))];
+  final shadows = [
+    Shadow(
+      color: Colors.black.withOpacity(0.8),
+      offset: const Offset(0, 1),
+      blurRadius: 3,
+    )
+  ];
 
-  switch (formattedWeatherData.shortDescription) {
+  switch (weatherData.shortDescription) {
     case 'Clouds':
       return Icon(
         night ? YaruIcons.few_clouds_night_filled : YaruIcons.few_clouds_filled,
@@ -108,13 +112,13 @@ Icon getIcon(
   }
 }
 
-WeatherType getWeatherType(FormattedWeatherData formattedWeatherData) {
+WeatherType getWeatherType(WeatherData weatherData) {
   final hour = DateTime.fromMillisecondsSinceEpoch(
-    formattedWeatherData.weatherData!.date * 1000,
+    weatherData.date * 1000,
   ).hour;
   final night = hour > 20 || hour < 6;
 
-  switch (formattedWeatherData.shortDescription) {
+  switch (weatherData.shortDescription) {
     case 'Clouds':
       return night ? WeatherType.cloudyNight : WeatherType.cloudy;
     case 'Drizzle':

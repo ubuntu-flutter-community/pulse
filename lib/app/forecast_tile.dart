@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:open_weather_client/models/weather_data.dart';
 import 'package:pulse/app/utils.dart';
-import 'package:pulse/app/weather_model.dart';
 import 'package:pulse/string_x.dart';
+import 'package:pulse/weather_data_x.dart';
 
-class WeatherTile extends StatelessWidget {
-  final FormattedWeatherData data;
+class ForecastTile extends StatelessWidget {
+  final WeatherData data;
   final String? cityName;
   final double fontSize;
   final Position? position;
   final double? width;
   final double? height;
-  final bool isForeCastTile;
   final String? day;
   final EdgeInsets padding;
   final String? time;
 
-  const WeatherTile({
+  const ForecastTile({
     Key? key,
     required this.data,
     this.cityName,
@@ -26,7 +26,6 @@ class WeatherTile extends StatelessWidget {
     this.position,
     required this.width,
     required this.height,
-    this.isForeCastTile = false,
     this.day,
     required this.padding,
     this.time,
@@ -74,7 +73,7 @@ class WeatherTile extends StatelessWidget {
               day!,
               style: style,
             ),
-            if (time != null && isForeCastTile)
+            if (time != null)
               Text(
                 time!,
                 style: style,
@@ -124,27 +123,17 @@ class WeatherTile extends StatelessWidget {
             ),
           ),
           Center(
-            child: isForeCastTile
-                ? Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Wrap(
-                      alignment: WrapAlignment.center,
-                      crossAxisAlignment: WrapCrossAlignment.center,
-                      spacing: 40,
-                      runAlignment: WrapAlignment.center,
-                      runSpacing: 20,
-                      children: children,
-                    ),
-                  )
-                : Wrap(
-                    direction: Axis.vertical,
-                    alignment: WrapAlignment.center,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 20,
-                    runSpacing: 20,
-                    runAlignment: WrapAlignment.center,
-                    children: children,
-                  ),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 40,
+                runAlignment: WrapAlignment.center,
+                runSpacing: 20,
+                children: children,
+              ),
+            ),
           )
         ],
       ),

@@ -1,8 +1,7 @@
-import 'package:collection/collection.dart';
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:intl/intl.dart';
 import 'package:open_weather_client/open_weather.dart';
+import 'package:pulse/weather_data_x.dart';
+import 'package:pulse/weekday.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
 
 class WeatherModel extends SafeChangeNotifier {
@@ -15,8 +14,7 @@ class WeatherModel extends SafeChangeNotifier {
   Position? get position => _position;
 
   WeatherData? _weatherData;
-  FormattedWeatherData? get data =>
-      _weatherData == null ? null : FormattedWeatherData(_weatherData);
+  WeatherData? get data => _weatherData;
 
   String? _cityName;
   String? get cityName => _cityName;
@@ -66,9 +64,41 @@ class WeatherModel extends SafeChangeNotifier {
   }
 
   List<WeatherData>? _fiveDaysForCast;
-  List<FormattedWeatherData> get forecast => _fiveDaysForCast != null
-      ? _fiveDaysForCast!.map((e) => FormattedWeatherData(e)).toList()
-      : <FormattedWeatherData>[];
+  List<WeatherData> todayForeCast() {
+    if (_fiveDaysForCast == null) return [];
+
+    final foreCast = _fiveDaysForCast!;
+
+    final nowIndex = DateTime.now().weekday - 1;
+
+    final fDf = foreCast
+        .where(
+          (e) => e.getWD(e.date) == WeekDay.values[nowIndex],
+        )
+        .toList();
+
+    return fDf;
+  }
+
+  List<WeatherData> notTodayForeCast() {
+    if (_fiveDaysForCast == null) return [];
+
+    final foreCast = _fiveDaysForCast!;
+
+    final nowIndex = DateTime.now().weekday - 1;
+
+    final fDf = foreCast
+        .where(
+          (e) => e.getWD(e.date) != WeekDay.values[nowIndex],
+        )
+        .toList();
+
+    return fDf;
+  }
+
+  List<WeatherData> get forecast =>
+      _fiveDaysForCast == null ? [] : _fiveDaysForCast!;
+
   List<WeatherData>? get fiveDaysForCast => _fiveDaysForCast;
   set fiveDaysForCast(List<WeatherData>? value) {
     if (value == null || value.isEmpty) return;
@@ -163,39 +193,5 @@ class WeatherModel extends SafeChangeNotifier {
     // continue accessing the position of the device.
 
     return true;
-  }
-}
-
-class FormattedWeatherData {
-  FormattedWeatherData(this.weatherData);
-
-  final WeatherData? weatherData;
-
-  String get currentTemperature =>
-      '${weatherData?.temperature.currentTemperature ?? ''} °C';
-  String get feelsLike => '${weatherData?.temperature.feelsLike ?? ''} °C';
-
-  String get windSpeed => '${weatherData?.wind.speed ?? ''} km/h';
-
-  String get shortDescription =>
-      weatherData?.details.firstOrNull?.weatherShortDescription ?? '';
-  String get longDescription =>
-      weatherData?.details.firstOrNull?.weatherLongDescription ?? '';
-
-  String getDate(BuildContext context) => weatherData?.date == null
-      ? ''
-      : DateFormat.yMMMMEEEEd(
-          Localizations.maybeLocaleOf(context)?.toLanguageTag(),
-        )
-          .format(DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000))
-          .toString();
-  String getTime(BuildContext context) {
-    return weatherData?.date == null
-        ? ''
-        : DateFormat.Hm(Localizations.maybeLocaleOf(context)?.toLanguageTag())
-            .format(
-              DateTime.fromMillisecondsSinceEpoch(weatherData!.date * 1000),
-            )
-            .toString();
   }
 }

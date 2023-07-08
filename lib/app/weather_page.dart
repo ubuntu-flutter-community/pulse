@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:pulse/app/city_search_field.dart';
+import 'package:pulse/app/forecast_tile.dart';
+import 'package:pulse/app/today_tile.dart';
 import 'package:pulse/app/utils.dart';
 import 'package:pulse/app/weather_model.dart';
-import 'package:pulse/app/weather_tile.dart';
+import 'package:pulse/weather_data_x.dart';
 import 'package:yaru_widgets/yaru_widgets.dart';
 
 class WeatherPage extends StatelessWidget {
@@ -30,21 +32,30 @@ class WeatherPage extends StatelessWidget {
       ),
     );
 
-    var foreCastTiles = model.forecast.isEmpty
-        ? <Widget>[]
-        : [
-            for (int i = 0; i < model.forecast.length; i++)
-              WeatherTile(
-                width: mq.size.width - 40,
-                height: 200,
-                padding: const EdgeInsets.only(bottom: 20),
-                day: model.forecast[i].getDate(context),
-                time: model.forecast[i].getTime(context),
-                isForeCastTile: true,
-                data: model.forecast.elementAt(i),
-                fontSize: 15,
-              )
-          ];
+    var foreCastTiles = [
+      if (model.todayForeCast().isNotEmpty == true)
+        for (final todayForecast in model.todayForeCast())
+          ForecastTile(
+            width: mq.size.width - 40,
+            height: 200,
+            padding: const EdgeInsets.only(bottom: 20),
+            day: todayForecast.getDate(context),
+            time: todayForecast.getTime(context),
+            data: todayForecast,
+            fontSize: 15,
+          ),
+      if (model.notTodayForeCast().isNotEmpty == true)
+        for (final todayForecast in model.notTodayForeCast())
+          ForecastTile(
+            width: mq.size.width - 40,
+            height: 200,
+            padding: const EdgeInsets.only(bottom: 20),
+            day: todayForecast.getDate(context),
+            time: todayForecast.getTime(context),
+            data: todayForecast,
+            fontSize: 15,
+          )
+    ];
     final scaffold = Scaffold(
       backgroundColor: model.data == null
           ? null
@@ -72,7 +83,7 @@ class WeatherPage extends StatelessWidget {
                         padding:
                             const EdgeInsets.only(top: 10, right: 20, left: 20),
                         children: [
-                          WeatherTile(
+                          TodayTile(
                             width: mq.size.width - 40,
                             padding: const EdgeInsets.only(bottom: 20),
                             day: 'Now',
@@ -91,7 +102,7 @@ class WeatherPage extends StatelessWidget {
                             const EdgeInsets.only(top: 20, right: 20, left: 20),
                         child: Row(
                           children: [
-                            WeatherTile(
+                            TodayTile(
                               padding: const EdgeInsets.only(
                                 bottom: 20,
                               ),
