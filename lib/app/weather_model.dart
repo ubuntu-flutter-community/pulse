@@ -106,27 +106,38 @@ class WeatherModel extends SafeChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<WeatherData>> loadForeCastByCityName({
+  Future<List<WeatherData>?>? loadForeCastByCityName({
     required String cityName,
   }) async {
-    return (await _openWeather.fiveDaysWeatherForecastByCityName(
-      cityName: cityName,
-      weatherUnits: WeatherUnits.METRIC,
-    ))
-        .forecastData
-        .toList();
+    try {
+      final weatherForecastData =
+          await _openWeather.fiveDaysWeatherForecastByCityName(
+        cityName: cityName,
+        weatherUnits: WeatherUnits.METRIC,
+      );
+
+      return weatherForecastData.forecastData.toList();
+    } on Exception catch (_) {
+      return null;
+    }
   }
 
-  Future<List<WeatherData>> loadForeCastByPosition({
+  Future<List<WeatherData>?> loadForeCastByPosition({
     required double longitude,
     required double latitude,
   }) async {
-    return (await _openWeather.fiveDaysWeatherForecastByLocation(
-      longitude: longitude,
-      latitude: latitude,
-      weatherUnits: WeatherUnits.METRIC,
-    ))
-        .forecastData;
+    try {
+      final weatherForecastData =
+          (await _openWeather.fiveDaysWeatherForecastByLocation(
+        longitude: longitude,
+        latitude: latitude,
+        weatherUnits: WeatherUnits.METRIC,
+      ));
+
+      return weatherForecastData.forecastData;
+    } on Exception catch (_) {
+      return null;
+    }
   }
 
   String? _error;
