@@ -15,7 +15,7 @@ extension WeatherDataX on WeatherData {
       details.firstOrNull?.weatherLongDescription ?? '';
 
   String getDate(BuildContext context) {
-    final realDateTime = getRealDateTime(date);
+    final realDateTime = dateTime();
 
     if (realDateTime.day == DateTime.now().day) {
       return 'Today';
@@ -29,14 +29,14 @@ extension WeatherDataX on WeatherData {
     final weekDay = DateFormat.EEEE(
       Localizations.maybeLocaleOf(context)?.toLanguageTag(),
     ).format(
-      getRealDateTime(date),
+      dateTime(),
     );
 
     return weekDay;
   }
 
-  WeekDay getWD(int date) {
-    var index = getRealDateTime(date).weekday;
+  WeekDay getWD() {
+    var index = dateTime().weekday;
     var weekDay = weekDayFromIndex(index);
     return weekDay;
   }
@@ -44,11 +44,10 @@ extension WeatherDataX on WeatherData {
   String getTime(BuildContext context) {
     return DateFormat.Hm(Localizations.maybeLocaleOf(context)?.toLanguageTag())
         .format(
-          getRealDateTime(date),
+          dateTime(),
         )
         .toString();
   }
 
-  DateTime getRealDateTime(int date) =>
-      DateTime.fromMillisecondsSinceEpoch(date * 1000);
+  DateTime dateTime() => DateTime.fromMillisecondsSinceEpoch(date * 1000);
 }

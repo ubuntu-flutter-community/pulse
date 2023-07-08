@@ -74,14 +74,14 @@ class WeatherModel extends SafeChangeNotifier {
 
     final fDf = foreCast
         .where(
-          (e) => e.getWD(e.date) == WeekDay.values[nowIndex],
+          (e) => e.getWD() == WeekDay.values[nowIndex],
         )
         .toList();
 
     return fDf;
   }
 
-  List<WeatherData> notTodayForeCast() {
+  List<WeatherData> get notTodayForeCast {
     if (_fiveDaysForCast == null) return [];
 
     final foreCast = _fiveDaysForCast!;
@@ -90,7 +90,7 @@ class WeatherModel extends SafeChangeNotifier {
 
     final fDf = foreCast
         .where(
-          (e) => e.getWD(e.date) != WeekDay.values[nowIndex],
+          (e) => e.getWD() != WeekDay.values[nowIndex],
         )
         .toList();
 

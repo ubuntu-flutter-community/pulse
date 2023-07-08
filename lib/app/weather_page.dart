@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:open_weather_client/models/weather_data.dart';
 import 'package:provider/provider.dart';
 import 'package:pulse/app/city_search_field.dart';
 import 'package:pulse/app/forecast_tile.dart';
@@ -44,16 +45,17 @@ class WeatherPage extends StatelessWidget {
             data: todayForecast,
             fontSize: 15,
           ),
-      if (model.notTodayForeCast().isNotEmpty == true)
-        for (final todayForecast in model.notTodayForeCast())
+      if (model.notTodayForeCast.isNotEmpty == true)
+        for (int i = 0; i < model.notTodayForeCast.length; i++)
           ForecastTile(
             width: mq.size.width - 40,
             height: 200,
             padding: const EdgeInsets.only(bottom: 20),
-            day: todayForecast.getDate(context),
-            time: todayForecast.getTime(context),
-            data: todayForecast,
+            day: model.notTodayForeCast[i].getDate(context),
+            time: model.notTodayForeCast[i].getTime(context),
+            data: model.notTodayForeCast[i],
             fontSize: 15,
+            // borderRadius: getBorderRadius(i, model.notTodayForeCast),
           )
     ];
     final scaffold = Scaffold(
@@ -136,5 +138,52 @@ class WeatherPage extends StatelessWidget {
     );
 
     return scaffold;
+  }
+
+  BorderRadius getBorderRadius(int i, List<WeatherData> data) {
+    const radius = Radius.circular(10);
+    if (i < data.length - 1 && data.length > 1) {
+      if (i == 0) {
+        return const BorderRadius.only(topLeft: radius, topRight: radius);
+      }
+      if (i >= 1) {
+        if (data[i].getWD() == data[i + 1].getWD() &&
+            data[i].getWD() == data[i - 1].getWD()) {
+          return BorderRadius.zero;
+        } else if (data[i].getWD() == data[i + 1].getWD()) {
+          return const BorderRadius.only(topLeft: radius, topRight: radius);
+        } else if (data[i].getWD() == data[i - 1].getWD()) {
+          return const BorderRadius.only(
+            bottomLeft: radius,
+            bottomRight: radius,
+          );
+        }
+      }
+    }
+
+    return BorderRadius.circular(10);
+  }
+
+  EdgeInsets getPadding(int i, List<WeatherData> data) {
+    const value = 20.0;
+
+    if (i == data.length - 1) {
+      return const EdgeInsets.only(bottom: value);
+    } else if (i == 0) {
+      return const EdgeInsets.only(top: 10);
+    }
+
+    if (i < data.length - 1 && i >= 1) {
+      if (data[i].getWD() == data[i + 1].getWD() &&
+          data[i].getWD() == data[i - 1].getWD()) {
+        return EdgeInsets.zero;
+      } else if (data[i].getWD() == data[i + 1].getWD()) {
+        return const EdgeInsets.only(top: value);
+      } else if (data[i].getWD() == data[i - 1].getWD()) {
+        return const EdgeInsets.only(bottom: value);
+      }
+    }
+
+    return EdgeInsets.zero;
   }
 }

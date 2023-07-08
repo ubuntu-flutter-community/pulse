@@ -17,9 +17,10 @@ class ForecastTile extends StatelessWidget {
   final String? day;
   final EdgeInsets padding;
   final String? time;
+  final BorderRadius borderRadius;
 
   const ForecastTile({
-    Key? key,
+    super.key,
     required this.data,
     this.cityName,
     this.fontSize = 20,
@@ -29,7 +30,8 @@ class ForecastTile extends StatelessWidget {
     this.day,
     required this.padding,
     this.time,
-  }) : super(key: key);
+    this.borderRadius = const BorderRadius.all(Radius.circular(10)),
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -114,7 +116,7 @@ class ForecastTile extends StatelessWidget {
           Opacity(
             opacity: light ? 1 : 0.4,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: borderRadius,
               child: WeatherBg(
                 weatherType: getWeatherType(data),
                 width: width ?? double.infinity,
