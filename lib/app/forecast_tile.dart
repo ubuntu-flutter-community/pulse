@@ -6,8 +6,9 @@ import 'package:pulse/app/utils.dart';
 import 'package:pulse/string_x.dart';
 import 'package:pulse/weather_data_x.dart';
 
-class ForecastTile extends StatelessWidget {
-  final WeatherData data;
+class ForecastTile extends StatefulWidget {
+  final List<WeatherData> data;
+  final WeatherData selectedData;
   final String? cityName;
   final double fontSize;
   final String? position;
@@ -20,7 +21,7 @@ class ForecastTile extends StatelessWidget {
 
   const ForecastTile({
     super.key,
-    required this.data,
+    required this.selectedData,
     this.cityName,
     this.fontSize = 20,
     this.position,
@@ -30,8 +31,14 @@ class ForecastTile extends StatelessWidget {
     required this.padding,
     this.time,
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
+    required this.data,
   });
 
+  @override
+  State<ForecastTile> createState() => _ForecastTileState();
+}
+
+class _ForecastTileState extends State<ForecastTile> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -44,7 +51,7 @@ class ForecastTile extends StatelessWidget {
           color: Colors.black.withOpacity(0.8),
           offset: const Offset(0, 1),
           blurRadius: 3,
-        )
+        ),
       ],
     );
 
@@ -53,30 +60,30 @@ class ForecastTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            data.currentTemperature,
+            widget.selectedData.currentTemperature,
             style: style,
           ),
           Text(
-            'Feels like: ${data.feelsLike}',
+            'Feels like: ${widget.selectedData.feelsLike}',
             style: style,
           ),
           Text(
-            'Wind: ${data.windSpeed}',
+            'Wind: ${widget.selectedData.windSpeed}',
             style: style,
           ),
         ],
       ),
-      if (day != null)
+      if (widget.day != null)
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              day!,
+              widget.day!,
               style: style,
             ),
-            if (time != null)
+            if (widget.time != null)
               Text(
-                time!,
+                widget.time!,
                 style: style,
               ),
           ],
@@ -84,29 +91,29 @@ class ForecastTile extends StatelessWidget {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          getIcon(data, theme.colorScheme),
+          getIcon(widget.selectedData, theme.colorScheme),
           const SizedBox(
             width: 10,
           ),
           Text(
-            data.longDescription.capitalize(),
+            widget.selectedData.longDescription.capitalize(),
             textAlign: TextAlign.center,
             style: style,
             overflow: TextOverflow.ellipsis,
-          )
+          ),
         ],
       ),
-      if (cityName != null)
+      if (widget.cityName != null)
         Text(
-          cityName!,
+          widget.cityName!,
           style: style,
         )
-      else if (position != null)
+      else if (widget.position != null)
         Text(
-          position ?? '',
+          widget.position ?? '',
           style: style,
           textAlign: TextAlign.center,
-        )
+        ),
     ];
 
     final banner = Card(
@@ -115,11 +122,11 @@ class ForecastTile extends StatelessWidget {
           Opacity(
             opacity: light ? 1 : 0.4,
             child: ClipRRect(
-              borderRadius: borderRadius,
+              borderRadius: widget.borderRadius,
               child: WeatherBg(
-                weatherType: getWeatherType(data),
-                width: width ?? double.infinity,
-                height: height ?? double.infinity,
+                weatherType: getWeatherType(widget.selectedData),
+                width: widget.width ?? double.infinity,
+                height: widget.height ?? double.infinity,
               ),
             ),
           ),
@@ -135,16 +142,16 @@ class ForecastTile extends StatelessWidget {
                 children: children,
               ),
             ),
-          )
+          ),
         ],
       ),
     );
 
     return SizedBox(
-      width: width,
-      height: height,
+      width: widget.width,
+      height: widget.height,
       child: Padding(
-        padding: padding,
+        padding: widget.padding,
         child: banner,
       ),
     );
