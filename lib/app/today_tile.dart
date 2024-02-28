@@ -18,7 +18,7 @@ class TodayTile extends StatelessWidget {
   final String? time;
 
   const TodayTile({
-    Key? key,
+    super.key,
     required this.data,
     this.cityName,
     this.fontSize = 20,
@@ -28,7 +28,7 @@ class TodayTile extends StatelessWidget {
     this.day,
     required this.padding,
     this.time,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class TodayTile extends StatelessWidget {
           color: Colors.black.withOpacity(0.8),
           offset: const Offset(0, 1),
           blurRadius: 3,
-        )
+        ),
       ],
     );
 
@@ -91,7 +91,7 @@ class TodayTile extends StatelessWidget {
             textAlign: TextAlign.center,
             style: style,
             overflow: TextOverflow.ellipsis,
-          )
+          ),
         ],
       ),
       if (cityName != null)
@@ -107,7 +107,7 @@ class TodayTile extends StatelessWidget {
             style: style,
             textAlign: TextAlign.center,
           ),
-        )
+        ),
     ];
 
     final banner = Card(
@@ -134,7 +134,7 @@ class TodayTile extends StatelessWidget {
               runAlignment: WrapAlignment.center,
               children: children,
             ),
-          )
+          ),
         ],
       ),
     );

@@ -45,7 +45,7 @@ Icon getIcon(
       color: Colors.black.withOpacity(0.8),
       offset: const Offset(0, 1),
       blurRadius: 3,
-    )
+    ),
   ];
 
   switch (weatherData.shortDescription) {

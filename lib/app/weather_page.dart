@@ -42,7 +42,8 @@ class WeatherPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 20),
             day: todayForecast.getDate(context),
             time: todayForecast.getTime(context),
-            data: todayForecast,
+            selectedData: todayForecast,
+            data: const [],
             fontSize: 15,
           ),
       if (model.notTodayForeCast.isNotEmpty == true)
@@ -53,10 +54,11 @@ class WeatherPage extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 20),
             day: model.notTodayForeCast[i].getDate(context),
             time: model.notTodayForeCast[i].getTime(context),
-            data: model.notTodayForeCast[i],
+            selectedData: model.notTodayForeCast[i],
+            data: const [],
             fontSize: 15,
             // borderRadius: getBorderRadius(i, model.notTodayForeCast),
-          )
+          ),
     ];
     final scaffold = Scaffold(
       backgroundColor: model.data == null
@@ -99,7 +101,7 @@ class WeatherPage extends StatelessWidget {
                             fontSize: 20,
                             cityName: model.cityName,
                           ),
-                          ...foreCastTiles
+                          ...foreCastTiles,
                         ],
                       );
 
@@ -127,7 +129,7 @@ class WeatherPage extends StatelessWidget {
                               child: ListView(
                                 children: foreCastTiles,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       );
