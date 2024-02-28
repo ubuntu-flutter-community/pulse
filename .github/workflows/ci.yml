@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [master]
 
 env:
   FLUTTER_VERSION: '3.16.x'
