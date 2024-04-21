@@ -121,7 +121,7 @@ class WeatherModel extends SafeChangeNotifier {
   }
 
   List<WeatherData>? _fiveDaysForCast;
-  List<WeatherData> todayForeCast() {
+  List<WeatherData> get todayForeCast {
     if (_fiveDaysForCast == null) return [];
 
     final foreCast = _fiveDaysForCast!;

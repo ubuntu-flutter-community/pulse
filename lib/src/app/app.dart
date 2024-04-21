@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
+import '../../constants.dart';
 import '../../weather.dart';
 import '../weather/view/city_search_field.dart';
 import '../weather/weather_model.dart';
@@ -46,6 +47,7 @@ class MasterDetailPage extends StatelessWidget with WatchItMixin {
       controller: YaruPageController(
         length: favLocationsLength == 0 ? 1 : favLocationsLength,
       ),
+      layoutDelegate: const YaruMasterFixedPaneDelegate(paneWidth: kPaneWidth),
       tileBuilder: (context, index, selected, availableWidth) {
         final location = favLocations.elementAt(index);
         return YaruMasterTile(
@@ -56,17 +58,20 @@ class MasterDetailPage extends StatelessWidget with WatchItMixin {
             favLocations.elementAt(index),
           ),
           trailing: favLocationsLength > 1
-              ? IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    model.removeFavLocation(location).then(
-                          (value) => model.init(
-                            cityName: favLocations.lastOrNull,
-                          ),
-                        );
-                  },
-                  icon: const Icon(
-                    YaruIcons.window_close,
+              ? Center(
+                  widthFactor: 0.1,
+                  child: IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      model.removeFavLocation(location).then(
+                            (value) => model.init(
+                              cityName: favLocations.lastOrNull,
+                            ),
+                          );
+                    },
+                    icon: const Icon(
+                      YaruIcons.window_close,
+                    ),
                   ),
                 )
               : null,
@@ -79,21 +84,7 @@ class MasterDetailPage extends StatelessWidget with WatchItMixin {
         backgroundColor: YaruMasterDetailTheme.of(context).sideBarColor,
         border: BorderSide.none,
         style: YaruTitleBarStyle.undecorated,
-        leading: Center(
-          child: YaruIconButton(
-            padding: EdgeInsets.zero,
-            icon: const Icon(
-              Icons.location_on,
-              size: 16,
-            ),
-            onPressed: () => model.init(cityName: null),
-          ),
-        ),
-        titleSpacing: 0,
-        title: const Padding(
-          padding: EdgeInsets.only(right: 15),
-          child: CitySearchField(),
-        ),
+        title: const CitySearchField(),
       ),
     );
   }

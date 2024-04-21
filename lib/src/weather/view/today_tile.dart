@@ -95,18 +95,19 @@ class TodayTile extends StatelessWidget {
         ],
       ),
       if (cityName != null)
-        Text(
-          cityName!,
-          style: style,
-        )
-      else if (position != null)
         SizedBox(
-          width: 300,
+          width: width,
           child: Text(
-            position ?? '',
+            cityName!,
             style: style,
             textAlign: TextAlign.center,
           ),
+        )
+      else if (position != null)
+        Text(
+          position ?? '',
+          style: style,
+          textAlign: TextAlign.center,
         ),
     ];
 

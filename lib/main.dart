@@ -9,6 +9,7 @@ import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
 import 'src/app/app.dart';
+import 'src/app/app_model.dart';
 import 'src/locations/locations_service.dart';
 import 'src/weather/weather_model.dart';
 
@@ -23,6 +24,7 @@ Future<void> main() async {
       LocationsService(),
       dispose: (s) => s.dispose(),
     );
+    di.registerSingleton(AppModel());
     final weatherModel = WeatherModel(
       locationsService: di<LocationsService>(),
       openWeather: di<OpenWeather>(),

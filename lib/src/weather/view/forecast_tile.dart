@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:open_weather_client/models/weather_data.dart';
+import '../../../build_context_x.dart';
 import '../weather_utils.dart';
 import '../../../string_x.dart';
 import '../weather_data_x.dart';
 
 class ForecastTile extends StatefulWidget {
-  final List<WeatherData> data;
   final WeatherData selectedData;
   final String? cityName;
   final double fontSize;
@@ -31,7 +31,6 @@ class ForecastTile extends StatefulWidget {
     required this.padding,
     this.time,
     this.borderRadius = const BorderRadius.all(Radius.circular(10)),
-    required this.data,
   });
 
   @override
@@ -41,8 +40,8 @@ class ForecastTile extends StatefulWidget {
 class _ForecastTileState extends State<ForecastTile> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final light = theme.brightness == Brightness.light;
+    final theme = context.theme;
+    final light = context.light;
     final style = theme.textTheme.headlineSmall?.copyWith(
       color: Colors.white,
       fontSize: 20,
@@ -120,7 +119,7 @@ class _ForecastTileState extends State<ForecastTile> {
       child: Stack(
         children: [
           Opacity(
-            opacity: light ? 1 : 0.4,
+            opacity: light ? 1 : 0.6,
             child: ClipRRect(
               borderRadius: widget.borderRadius,
               child: WeatherBg(
