@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:open_weather_client/models/weather_data.dart';
-import 'package:pulse/weekday.dart';
+import 'weekday.dart';
 
 extension WeatherDataX on WeatherData {
   String get currentTemperature => '${temperature.currentTemperature} °C';

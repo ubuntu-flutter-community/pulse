@@ -1,7 +1,7 @@
-import 'package:pulse/app/weather_model.dart';
+import '../weather_model.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:yaru_icons/yaru_icons.dart';
+import 'package:watch_it/watch_it.dart';
+import 'package:yaru/icons.dart';
 
 class CitySearchField extends StatefulWidget {
   const CitySearchField({
@@ -29,7 +29,7 @@ class _CitySearchFieldState extends State<CitySearchField> {
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<WeatherModel>();
+    final model = di<WeatherModel>();
     var textField = TextField(
       onSubmitted: (value) => model.init(cityName: _controller.text),
       controller: _controller,

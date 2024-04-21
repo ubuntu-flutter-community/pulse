@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:open_weather_client/models/weather_data.dart';
-import 'package:provider/provider.dart';
-import 'package:pulse/app/city_search_field.dart';
-import 'package:pulse/app/forecast_tile.dart';
-import 'package:pulse/app/today_tile.dart';
-import 'package:pulse/app/utils.dart';
-import 'package:pulse/app/weather_model.dart';
-import 'package:pulse/weather_data_x.dart';
-import 'package:yaru_widgets/yaru_widgets.dart';
+import 'view/city_search_field.dart';
+import 'view/forecast_tile.dart';
+import 'view/today_tile.dart';
+import 'utils.dart';
+import 'weather_model.dart';
+import 'weather_data_x.dart';
+import 'package:watch_it/watch_it.dart';
+import 'package:yaru/widgets.dart';
 
-class WeatherPage extends StatelessWidget {
+class WeatherPage extends StatelessWidget with WatchItMixin {
   const WeatherPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final model = context.watch<WeatherModel>();
+    final model = watchIt<WeatherModel>();
     final mq = MediaQuery.of(context);
     final theme = Theme.of(context);
     final light = theme.brightness == Brightness.light;
