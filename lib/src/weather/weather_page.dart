@@ -34,7 +34,10 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
             ),
           Scaffold(
             backgroundColor: Colors.transparent,
-            appBar: const YaruWindowTitleBar(
+            appBar: YaruWindowTitleBar(
+              leading: Navigator.of(context).canPop()
+                  ? const YaruBackButton()
+                  : null,
               backgroundColor: Colors.transparent,
               border: BorderSide.none,
             ),
@@ -53,7 +56,7 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
                           Expanded(
                             child: TodayTile(
                               width: mq.size.width,
-                              padding: EdgeInsets.zero,
+                              padding: const EdgeInsets.all(kYaruPagePadding),
                               day: 'Now',
                               height: mq.size.height,
                               position: model.cityFromPosition,

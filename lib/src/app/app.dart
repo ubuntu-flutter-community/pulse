@@ -50,13 +50,14 @@ class MasterDetailPage extends StatelessWidget with WatchItMixin {
         final location = favLocations.elementAt(index);
         return YaruMasterTile(
           // TODO: assign pages to location
-          onTap: () {},
+          onTap: () => model.init(cityName: location),
           selected: lastLocation == location,
           title: Text(
             favLocations.elementAt(index),
           ),
           trailing: favLocationsLength > 1
               ? IconButton(
+                  padding: EdgeInsets.zero,
                   onPressed: () {
                     model.removeFavLocation(location).then(
                           (value) => model.init(
