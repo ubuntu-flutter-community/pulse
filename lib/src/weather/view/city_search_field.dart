@@ -37,25 +37,15 @@ class _CitySearchFieldState extends State<CitySearchField> {
           .textTheme
           .bodyMedium
           ?.copyWith(fontWeight: FontWeight.w500),
-      decoration: InputDecoration(
-        prefixIcon: const Icon(
+      decoration: const InputDecoration(
+        prefixIcon: Icon(
           YaruIcons.search,
           size: 15,
         ),
-        prefixIconConstraints:
-            const BoxConstraints(minWidth: 35, minHeight: 30),
-        contentPadding: const EdgeInsets.all(8),
+        prefixIconConstraints: BoxConstraints(minWidth: 35, minHeight: 30),
+        contentPadding: EdgeInsets.all(8),
         filled: true,
         hintText: 'Cityname',
-        enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(40),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.circular(40),
-        ),
-        fillColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
       ),
     );
     return textField;

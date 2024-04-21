@@ -29,6 +29,9 @@ dependencies:
       ref: b9e3943904596809b957b44a3733b3794a43517b
   geocoding_resolver: ^0.0.3+2
   watch_it: ^1.4.1
+  xdg_directories: ^1.0.4
+  path_provider: ^2.1.3
+  path: ^1.9.0
 
 dev_dependencies:
   flutter_lints: ^3.0.1

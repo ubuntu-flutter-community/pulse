@@ -1,19 +1,36 @@
+import 'dart:async';
+
 import 'package:geocoding_resolver/geocoding_resolver.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
 
+import '../locations/locations_service.dart';
 import 'weather_data_x.dart';
 import 'weekday.dart';
 
 class WeatherModel extends SafeChangeNotifier {
-  WeatherModel({required OpenWeather openWeather, required GeoCoder geoCoder})
-      : _openWeather = openWeather,
-        _geoCoder = geoCoder;
+  WeatherModel({
+    required OpenWeather openWeather,
+    required GeoCoder geoCoder,
+    required LocationsService locationsService,
+    required GeolocatorPlatform geolocatorPlatform,
+  })  : _openWeather = openWeather,
+        _geoCoder = geoCoder,
+        _geolocatorPlatform = geolocatorPlatform,
+        _locationsService = locationsService;
 
   final GeoCoder _geoCoder;
   final OpenWeather _openWeather;
-  final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
+  final GeolocatorPlatform _geolocatorPlatform;
+  final LocationsService _locationsService;
+  StreamSubscription<bool>? _lastLocationChangedSub;
+  StreamSubscription<bool>? _favLocationsChangedSub;
+
+  String? get lastLocation => _locationsService.lastLocation;
+  Set<String> get favLocations => _locationsService.favLocations;
+  Future<void> removeFavLocation(String location) =>
+      _locationsService.removeFavLocation(location);
 
   Position? _position;
   Position? get position => _position;
@@ -37,8 +54,7 @@ class WeatherModel extends SafeChangeNotifier {
   WeatherData? _weatherData;
   WeatherData? get data => _weatherData;
 
-  String? _cityName;
-  String? get cityName => _cityName;
+  String? get cityName => _locationsService.lastLocation;
 
   bool? _initializing;
   bool? get initializing => _initializing;
@@ -50,11 +66,14 @@ class WeatherModel extends SafeChangeNotifier {
 
   Future<void> init({String? cityName}) async {
     initializing = true;
-    _cityName = cityName;
 
-    _position = await _getCurrentPosition();
+    _lastLocationChangedSub ??=
+        _locationsService.lastLocationChanged.listen((_) => notifyListeners());
+    _favLocationsChangedSub ??=
+        _locationsService.favLocationsChanged.listen((_) => notifyListeners());
 
-    if (_position != null && (cityName == null || cityName.isEmpty)) {
+    if (cityName == null || _position == null) {
+      _position = await _getCurrentPosition();
       _weatherData = await loadWeatherByPosition(
         latitude: position!.latitude,
         longitude: position!.longitude,
@@ -64,13 +83,28 @@ class WeatherModel extends SafeChangeNotifier {
         latitude: position!.latitude,
       );
       _cityFromPosition = await loadCityFromPosition();
+      if (_cityFromPosition != null) {
+        _locationsService.setLastLocation(_cityFromPosition);
+        _locationsService.addFavLocation(_cityFromPosition!);
+      }
     } else {
-      _weatherData = await loadWeatherFromCityName(cityName!);
-      _cityName = cityName;
+      _weatherData = await loadWeatherFromCityName(cityName);
+      _locationsService.setLastLocation(cityName);
       _fiveDaysForCast = await loadForeCastByCityName(cityName: cityName);
+      if (_weatherData != null) {
+        _locationsService.setLastLocation(cityName);
+        _locationsService.addFavLocation(cityName);
+      }
     }
 
     initializing = false;
+  }
+
+  @override
+  Future<void> dispose() async {
+    super.dispose();
+    await _lastLocationChangedSub?.cancel();
+    await _favLocationsChangedSub?.cancel();
   }
 
   Future<WeatherData?> loadWeatherFromCityName(String cityName) async {

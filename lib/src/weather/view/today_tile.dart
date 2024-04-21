@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
-import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:open_weather_client/models/weather_data.dart';
-import '../utils.dart';
+import '../../../build_context_x.dart';
+import '../weather_utils.dart';
 import '../../../string_x.dart';
 import '../weather_data_x.dart';
 
@@ -16,6 +15,7 @@ class TodayTile extends StatelessWidget {
   final String? day;
   final EdgeInsets padding;
   final String? time;
+  final BorderRadiusGeometry? borderRadius;
 
   const TodayTile({
     super.key,
@@ -28,18 +28,18 @@ class TodayTile extends StatelessWidget {
     this.day,
     required this.padding,
     this.time,
+    this.borderRadius,
   });
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final light = theme.brightness == Brightness.light;
+    final theme = context.theme;
     final style = theme.textTheme.headlineSmall?.copyWith(
       color: Colors.white,
       fontSize: 20,
       shadows: [
         Shadow(
-          color: Colors.black.withOpacity(0.8),
+          color: Colors.black.withOpacity(0.9),
           offset: const Offset(0, 1),
           blurRadius: 3,
         ),
@@ -110,41 +110,22 @@ class TodayTile extends StatelessWidget {
         ),
     ];
 
-    final banner = Card(
-      child: Stack(
-        children: [
-          Opacity(
-            opacity: light ? 1 : 0.4,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: WeatherBg(
-                weatherType: getWeatherType(data),
-                width: width ?? double.infinity,
-                height: height ?? double.infinity,
-              ),
-            ),
-          ),
-          Center(
-            child: Wrap(
-              direction: Axis.vertical,
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 20,
-              runSpacing: 20,
-              runAlignment: WrapAlignment.center,
-              children: children,
-            ),
-          ),
-        ],
-      ),
-    );
-
     return SizedBox(
       width: width,
       height: height,
       child: Padding(
         padding: padding,
-        child: banner,
+        child: Center(
+          child: Wrap(
+            direction: Axis.vertical,
+            alignment: WrapAlignment.center,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            spacing: 20,
+            runSpacing: 20,
+            runAlignment: WrapAlignment.center,
+            children: children,
+          ),
+        ),
       ),
     );
   }
