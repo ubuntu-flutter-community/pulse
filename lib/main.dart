@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:geocoding_resolver/geocoding_resolver.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:watch_it/watch_it.dart';
-import 'package:yaru/theme.dart';
 import 'package:yaru/yaru.dart';
 
 import 'src/app/app.dart';
@@ -24,14 +23,16 @@ Future<void> main() async {
 
     runApp(const App());
   } else {
-    runApp(MaterialApp(
-      theme: yaruLight,
-      home: const Scaffold(
-        body: Center(
-          child: Text('NO VALI API KEY FOUND'),
+    runApp(
+      MaterialApp(
+        theme: yaruLight,
+        home: const Scaffold(
+          body: Center(
+            child: Text('NO VALI API KEY FOUND'),
+          ),
         ),
       ),
-    ));
+    );
   }
 }
 
