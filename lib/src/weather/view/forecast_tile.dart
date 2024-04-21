@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:open_weather_client/models/weather_data.dart';
-import '../utils.dart';
+import '../weather_utils.dart';
 import '../../../string_x.dart';
 import '../weather_data_x.dart';
 
