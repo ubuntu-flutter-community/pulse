@@ -1,25 +1,36 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:pulse/app/weather_model.dart';
-import 'package:pulse/app/weather_page.dart';
+import 'package:geocoding_resolver/geocoding_resolver.dart';
+import 'package:open_weather_client/open_weather.dart';
+import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
-import 'package:yaru_widgets/yaru_widgets.dart';
+
+import 'src/app/app.dart';
+import 'src/weather/weather_model.dart';
 
 Future<void> main() async {
   await YaruWindowTitleBar.ensureInitialized();
-
-  WidgetsFlutterBinding.ensureInitialized();
-
   final apiKey = await loadApiKey();
+  if (apiKey != null && apiKey.isNotEmpty) {
+    di.registerSingleton(OpenWeather(apiKey: apiKey));
+    di.registerSingleton(GeoCoder());
+    final weatherModel =
+        WeatherModel(openWeather: di<OpenWeather>(), geoCoder: di<GeoCoder>());
+    await weatherModel.init();
+    di.registerSingleton(weatherModel);
 
-  if (apiKey != null) {
+    runApp(const App());
+  } else {
     runApp(
-      MyApp.create(
-        apiKey,
+      MaterialApp(
+        theme: yaruLight,
+        home: const Scaffold(
+          body: Center(
+            child: Text('NO VALI API KEY FOUND'),
+          ),
+        ),
       ),
     );
   }
@@ -29,42 +40,4 @@ Future<String?> loadApiKey() async {
   final source = await rootBundle.loadString('assets/apikey.json');
   final json = jsonDecode(source);
   return json['apiKey'] as String;
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key, required this.apiKey});
-
-  final String apiKey;
-
-  static Widget create(String apiKey) {
-    return ChangeNotifierProvider<WeatherModel>(
-      create: (context) => WeatherModel(apiKey)..init(),
-      child: MyApp(apiKey: apiKey),
-    );
-  }
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Weather',
-      debugShowCheckedModeBanner: false,
-      theme: yaruLight,
-      darkTheme: yaruDark,
-      home: const WeatherPage(),
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-          PointerDeviceKind.stylus,
-          PointerDeviceKind.unknown,
-          PointerDeviceKind.trackpad,
-        },
-      ),
-    );
-  }
 }

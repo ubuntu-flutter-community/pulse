@@ -1,17 +1,17 @@
 import 'package:geocoding_resolver/geocoding_resolver.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:open_weather_client/open_weather.dart';
-import 'package:pulse/weather_data_x.dart';
-import 'package:pulse/weekday.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
 
+import 'weather_data_x.dart';
+import 'weekday.dart';
+
 class WeatherModel extends SafeChangeNotifier {
-  WeatherModel(String apiKey)
-      : _openWeather = OpenWeather(apiKey: apiKey),
-        geoCoder = GeoCoder();
+  WeatherModel({required OpenWeather openWeather, required GeoCoder geoCoder})
+      : _openWeather = openWeather,
+        _geoCoder = geoCoder;
 
-  GeoCoder geoCoder;
-
+  final GeoCoder _geoCoder;
   final OpenWeather _openWeather;
   final GeolocatorPlatform _geolocatorPlatform = GeolocatorPlatform.instance;
 
@@ -26,7 +26,7 @@ class WeatherModel extends SafeChangeNotifier {
       return '';
     }
 
-    Address address = await geoCoder.getAddressFromLatLng(
+    Address address = await _geoCoder.getAddressFromLatLng(
       latitude: _position!.latitude,
       longitude: _position!.longitude,
     );

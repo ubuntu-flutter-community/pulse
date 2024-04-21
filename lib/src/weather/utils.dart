@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:open_weather_client/models/weather_data.dart';
-import 'package:pulse/weather_data_x.dart';
-import 'package:yaru_icons/yaru_icons.dart';
+import 'weather_data_x.dart';
+import 'package:yaru/icons.dart';
 
 Color getColor(WeatherData weatherData) {
   final hour = DateTime.fromMillisecondsSinceEpoch(
