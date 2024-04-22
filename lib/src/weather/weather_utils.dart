@@ -118,20 +118,25 @@ WeatherType getWeatherType(WeatherData weatherData) {
   ).hour;
   final night = hour > 20 || hour < 6;
 
-  switch (weatherData.shortDescription) {
-    case 'Clouds':
-      return night ? WeatherType.cloudyNight : WeatherType.cloudy;
-    case 'Drizzle':
-      return WeatherType.lightRainy;
-    case 'Rain':
-      return WeatherType.heavyRainy;
-    case 'Snow':
-      return WeatherType.heavySnow;
-    case 'Clear':
-      return night ? WeatherType.sunnyNight : WeatherType.sunny;
-    case 'Sunny':
-      return night ? WeatherType.sunnyNight : WeatherType.sunny;
-    default:
-      return WeatherType.thunder;
-  }
+  return switch (weatherData.longDescription) {
+    'overcast clouds' => night ? WeatherType.cloudyNight : WeatherType.cloudy,
+    'scattered clouds' => night ? WeatherType.cloudyNight : WeatherType.cloudy,
+    'broken clouds' => night ? WeatherType.cloudyNight : WeatherType.cloudy,
+    'few clouds' => night ? WeatherType.cloudyNight : WeatherType.cloudy,
+    'light rain' => WeatherType.lightRainy,
+    'heavy rain' => WeatherType.heavyRainy,
+    'light snow' => WeatherType.lightSnow,
+    'heavy snow' => WeatherType.heavySnow,
+    'clear sky' => night ? WeatherType.sunnyNight : WeatherType.sunny,
+    _ => switch (weatherData.shortDescription) {
+        'Clouds' => night ? WeatherType.cloudyNight : WeatherType.cloudy,
+        'Drizzle' => WeatherType.lightRainy,
+        'Rain' => WeatherType.middleRainy,
+        'Snow' => WeatherType.heavySnow,
+        'Clear' => night ? WeatherType.sunnyNight : WeatherType.sunny,
+        'Sunny' => night ? WeatherType.sunnyNight : WeatherType.sunny,
+        'Wind' => night ? WeatherType.dusty : WeatherType.dusty,
+        _ => WeatherType.thunder
+      }
+  };
 }

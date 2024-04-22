@@ -8,6 +8,8 @@ import '../../constants.dart';
 import '../../weather.dart';
 import '../weather/view/city_search_field.dart';
 import '../weather/weather_model.dart';
+import 'app_model.dart';
+import 'offline_page.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -38,6 +40,10 @@ class MasterDetailPage extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
+    final isOnline = watchPropertyValue((AppModel m) => m.isOnline);
+    if (!isOnline) {
+      return const OfflinePage();
+    }
     final model = di<WeatherModel>();
     final favLocationsLength =
         watchPropertyValue((WeatherModel m) => m.favLocations.length);

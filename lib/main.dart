@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:geocoding_resolver/geocoding_resolver.dart';
@@ -24,7 +25,9 @@ Future<void> main() async {
       LocationsService(),
       dispose: (s) => s.dispose(),
     );
-    di.registerSingleton(AppModel());
+    final appModel = AppModel(connectivity: Connectivity());
+    await appModel.init();
+    di.registerSingleton(appModel);
     final weatherModel = WeatherModel(
       locationsService: di<LocationsService>(),
       openWeather: di<OpenWeather>(),
@@ -42,10 +45,12 @@ Future<void> main() async {
   } else {
     runApp(
       MaterialApp(
+        debugShowCheckedModeBanner: false,
         theme: yaruLight,
         home: const Scaffold(
+          appBar: YaruWindowTitleBar(),
           body: Center(
-            child: Text('NO VALI API KEY FOUND'),
+            child: Text('NO VALID API KEY FOUND'),
           ),
         ),
       ),
