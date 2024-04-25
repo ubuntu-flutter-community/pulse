@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:open_weather_client/models/weather_data.dart';
+import 'package:yaru/constants.dart';
 import '../../../build_context_x.dart';
 import '../weather_utils.dart';
 import '../../../string_x.dart';
@@ -39,7 +40,7 @@ class TodayTile extends StatelessWidget {
       fontSize: 20,
       shadows: [
         Shadow(
-          color: Colors.black.withOpacity(0.9),
+          color: Colors.black.withOpacity(0.5),
           offset: const Offset(0, 1),
           blurRadius: 3,
         ),
@@ -111,7 +112,16 @@ class TodayTile extends StatelessWidget {
         ),
     ];
 
-    return SizedBox(
+    return Container(
+      margin: const EdgeInsets.only(
+        left: kYaruPagePadding,
+        right: kYaruPagePadding,
+        top: kYaruPagePadding,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(kYaruContainerRadius),
+        color: theme.colorScheme.surface.withOpacity(0.3),
+      ),
       width: width,
       height: height,
       child: Padding(

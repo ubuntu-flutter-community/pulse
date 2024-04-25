@@ -21,23 +21,23 @@ Future<void> main() async {
     di.registerSingleton<OpenWeather>(OpenWeather(apiKey: apiKey));
     di.registerSingleton<GeoCoder>(GeoCoder());
     di.registerSingleton<GeolocatorPlatform>(GeolocatorPlatform.instance);
+    final locationsService = LocationsService();
+    await locationsService.init();
     di.registerSingleton<LocationsService>(
-      LocationsService(),
+      locationsService,
       dispose: (s) => s.dispose(),
     );
     final appModel = AppModel(connectivity: Connectivity());
     await appModel.init();
     di.registerSingleton(appModel);
-    final weatherModel = WeatherModel(
-      locationsService: di<LocationsService>(),
-      openWeather: di<OpenWeather>(),
-      geoCoder: di<GeoCoder>(),
-      geolocatorPlatform: di<GeolocatorPlatform>(),
-    );
-    await weatherModel.init();
 
-    di.registerSingleton(
-      weatherModel,
+    di.registerLazySingleton(
+      () => WeatherModel(
+        locationsService: di<LocationsService>(),
+        openWeather: di<OpenWeather>(),
+        geoCoder: di<GeoCoder>(),
+        geolocatorPlatform: di<GeolocatorPlatform>(),
+      ),
       dispose: (s) => s.dispose(),
     );
 

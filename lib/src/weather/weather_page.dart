@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/constants.dart';
 import 'package:yaru/widgets.dart';
@@ -11,7 +10,6 @@ import 'view/forecast_tile.dart';
 import 'view/today_tile.dart';
 import 'weather_data_x.dart';
 import 'weather_model.dart';
-import 'weather_utils.dart';
 
 class WeatherPage extends StatelessWidget with WatchItMixin {
   const WeatherPage({super.key});
@@ -40,15 +38,6 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
         color: Colors.transparent,
         child: Stack(
           children: [
-            if (data != null)
-              Opacity(
-                opacity: context.light ? 0.4 : 0.3,
-                child: WeatherBg(
-                  weatherType: getWeatherType(data),
-                  width: mq.size.width,
-                  height: mq.size.height,
-                ),
-              ),
             Scaffold(
               backgroundColor: Colors.transparent,
               appBar: YaruWindowTitleBar(
