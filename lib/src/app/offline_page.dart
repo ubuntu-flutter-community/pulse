@@ -36,7 +36,7 @@ class OfflinePage extends StatelessWidget {
                 right: 40,
               ),
               child: Text(
-                "It look's like your computer is not connectedto the internet",
+                "It look's like your computer is not connected to the internet",
                 textAlign: TextAlign.center,
                 style: theme.textTheme.headlineMedium?.copyWith(
                   color: theme.disabledColor,

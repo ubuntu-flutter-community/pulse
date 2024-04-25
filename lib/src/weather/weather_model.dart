@@ -1,3 +1,5 @@
+// ignore_for_file: unused_element
+
 import 'dart:async';
 
 import 'package:geocoding_resolver/geocoding_resolver.dart';
@@ -64,7 +66,7 @@ class WeatherModel extends SafeChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> init({String? cityName}) async {
+  Future<void> loadWeather({String? cityName}) async {
     initializing = true;
 
     _lastLocationChangedSub ??=
@@ -72,22 +74,27 @@ class WeatherModel extends SafeChangeNotifier {
     _favLocationsChangedSub ??=
         _locationsService.favLocationsChanged.listen((_) => notifyListeners());
 
-    if (cityName == null || _position == null) {
-      _position = await _getCurrentPosition();
-      _weatherData = await loadWeatherByPosition(
-        latitude: position!.latitude,
-        longitude: position!.longitude,
-      );
-      _fiveDaysForCast = await loadForeCastByPosition(
-        longitude: position!.longitude,
-        latitude: position!.latitude,
-      );
-      _cityFromPosition = await loadCityFromPosition();
-      if (_cityFromPosition != null) {
-        _locationsService.setLastLocation(_cityFromPosition);
-        _locationsService.addFavLocation(_cityFromPosition!);
-      }
-    } else {
+    // TODO: Location services in Ubuntu are very unprecise, disabling for now
+    // if (cityName == null || _position == null) {
+    //   _position = await _getCurrentPosition();
+    //   if (position != null) {
+    //     _weatherData = await loadWeatherByPosition(
+    //       latitude: position!.latitude,
+    //       longitude: position!.longitude,
+    //     );
+    //     _fiveDaysForCast = await loadForeCastByPosition(
+    //       longitude: position!.longitude,
+    //       latitude: position!.latitude,
+    //     );
+    //     _cityFromPosition = await loadCityFromPosition();
+    //     if (_cityFromPosition != null) {
+    //       _locationsService.setLastLocation(_cityFromPosition);
+    //       _locationsService.addFavLocation(_cityFromPosition!);
+    //     }
+    //   }
+    // }
+
+    if (_weatherData == null && cityName != null || cityName != null) {
       _weatherData = await loadWeatherFromCityName(cityName);
       _locationsService.setLastLocation(cityName);
       _fiveDaysForCast = await loadForeCastByCityName(cityName: cityName);
@@ -115,7 +122,7 @@ class WeatherModel extends SafeChangeNotifier {
       );
       return weatherData;
     } catch (e) {
-      error = e.toString();
+      error = 'Please enter a valid city name';
       return null;
     }
   }

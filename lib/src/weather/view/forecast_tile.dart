@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:open_weather_client/models/weather_data.dart';
+import 'package:yaru/constants.dart';
+
 import '../../../build_context_x.dart';
-import '../weather_utils.dart';
 import '../../../string_x.dart';
 import '../weather_data_x.dart';
+import '../weather_utils.dart';
 
 class ForecastTile extends StatefulWidget {
   final WeatherData selectedData;
@@ -30,7 +32,8 @@ class ForecastTile extends StatefulWidget {
     this.day,
     required this.padding,
     this.time,
-    this.borderRadius = const BorderRadius.all(Radius.circular(10)),
+    this.borderRadius =
+        const BorderRadius.all(Radius.circular(kYaruContainerRadius)),
   });
 
   @override
@@ -41,7 +44,6 @@ class _ForecastTileState extends State<ForecastTile> {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final light = context.light;
     final style = theme.textTheme.headlineSmall?.copyWith(
       color: Colors.white,
       fontSize: 20,
@@ -115,35 +117,33 @@ class _ForecastTileState extends State<ForecastTile> {
         ),
     ];
 
-    final banner = Card(
-      child: Stack(
-        children: [
-          Opacity(
-            opacity: light ? 1 : 0.6,
-            child: ClipRRect(
-              borderRadius: widget.borderRadius,
-              child: WeatherBg(
-                weatherType: getWeatherType(widget.selectedData),
-                width: widget.width ?? double.infinity,
-                height: widget.height ?? double.infinity,
-              ),
+    final banner = Stack(
+      children: [
+        Opacity(
+          opacity: 0.9,
+          child: ClipRRect(
+            borderRadius: widget.borderRadius,
+            child: WeatherBg(
+              weatherType: getWeatherType(widget.selectedData),
+              width: widget.width ?? double.infinity,
+              height: widget.height ?? double.infinity,
             ),
           ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: Wrap(
-                alignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                spacing: 40,
-                runAlignment: WrapAlignment.center,
-                runSpacing: 20,
-                children: children,
-              ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: Wrap(
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 40,
+              runAlignment: WrapAlignment.center,
+              runSpacing: 20,
+              children: children,
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
 
     return SizedBox(
