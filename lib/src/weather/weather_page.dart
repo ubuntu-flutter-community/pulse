@@ -6,6 +6,7 @@ import 'package:yaru/widgets.dart';
 import '../../build_context_x.dart';
 import '../../constants.dart';
 import '../app/app_model.dart';
+import 'view/forecast_chart.dart';
 import 'view/forecast_tile.dart';
 import 'view/today_tile.dart';
 import 'weather_data_x.dart';
@@ -27,7 +28,7 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
     final todayForeCast =
         watchPropertyValue((WeatherModel m) => m.todayForeCast);
     final notTodayForeCast =
-        watchPropertyValue((WeatherModel m) => m.notTodayForeCast);
+        watchPropertyValue((WeatherModel m) => m.notTodayForecastDaily);
     final appModel = watchIt<AppModel>();
     final showToday = appModel.tabIndex == 0;
 
@@ -95,47 +96,53 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
                                   ),
                                 ),
                               ),
-                            SizedBox(
-                              height: showToday
-                                  ? 300
-                                  : mq.size.height - kYaruPagePadding * 3,
-                              width: mq.size.width,
-                              child: ListView.builder(
-                                itemCount: showToday
-                                    ? todayForeCast.length
-                                    : notTodayForeCast.length,
-                                padding: const EdgeInsetsDirectional.all(
-                                  kYaruPagePadding,
-                                ),
-                                scrollDirection: Axis.horizontal,
-                                itemBuilder: (context, index) {
-                                  if (showToday) {
+                            if (!showToday)
+                              ForeCastChart(
+                                data: notTodayForeCast,
+                              ),
+                            if (showToday)
+                              SizedBox(
+                                height: showToday
+                                    ? 300
+                                    : mq.size.height - kYaruPagePadding * 3,
+                                width: mq.size.width,
+                                child: ListView.builder(
+                                  itemCount: showToday
+                                      ? todayForeCast.length
+                                      : notTodayForeCast.length,
+                                  padding: const EdgeInsetsDirectional.all(
+                                    kYaruPagePadding,
+                                  ),
+                                  scrollDirection: Axis.horizontal,
+                                  itemBuilder: (context, index) {
+                                    if (showToday) {
+                                      return ForecastTile(
+                                        width: 300,
+                                        height: 400,
+                                        padding:
+                                            const EdgeInsets.only(right: 20),
+                                        day: todayForeCast[index]
+                                            .getDate(context),
+                                        time: todayForeCast[index]
+                                            .getTime(context),
+                                        selectedData: todayForeCast[index],
+                                        fontSize: 15,
+                                      );
+                                    }
                                     return ForecastTile(
                                       width: 300,
-                                      height: 400,
+                                      height: mq.size.height,
                                       padding: const EdgeInsets.only(right: 20),
-                                      day:
-                                          todayForeCast[index].getDate(context),
-                                      time:
-                                          todayForeCast[index].getTime(context),
-                                      selectedData: todayForeCast[index],
+                                      day: notTodayForeCast[index]
+                                          .getDate(context),
+                                      time: notTodayForeCast[index]
+                                          .getTime(context),
+                                      selectedData: notTodayForeCast[index],
                                       fontSize: 15,
                                     );
-                                  }
-                                  return ForecastTile(
-                                    width: 300,
-                                    height: mq.size.height,
-                                    padding: const EdgeInsets.only(right: 20),
-                                    day: notTodayForeCast[index]
-                                        .getDate(context),
-                                    time: notTodayForeCast[index]
-                                        .getTime(context),
-                                    selectedData: notTodayForeCast[index],
-                                    fontSize: 15,
-                                  );
-                                },
+                                  },
+                                ),
                               ),
-                            ),
                           ],
                         ),
             ),

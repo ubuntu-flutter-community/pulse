@@ -2,8 +2,10 @@
 
 import 'dart:async';
 
+import 'package:collection/collection.dart';
 import 'package:geocoding_resolver/geocoding_resolver.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:open_weather_client/models/temperature.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
 
@@ -144,7 +146,7 @@ class WeatherModel extends SafeChangeNotifier {
     return fDf;
   }
 
-  List<WeatherData> get notTodayForeCast {
+  List<WeatherData> get notTodayFullForecast {
     if (_fiveDaysForCast == null) return [];
 
     final foreCast = _fiveDaysForCast!;
@@ -158,6 +160,46 @@ class WeatherModel extends SafeChangeNotifier {
         .toList();
 
     return fDf;
+  }
+
+  List<WeatherData> get notTodayForecastDaily {
+    if (_fiveDaysForCast == null) return [];
+
+    List<WeatherData> value = [];
+
+    for (var e in notTodayFullForecast) {
+      if (value.none((v) => v.getWD() == e.getWD())) {
+        value.add(
+          WeatherData(
+            details: e.details,
+            temperature: Temperature(
+              currentTemperature: e.temperature.currentTemperature,
+              feelsLike: e.temperature.feelsLike,
+              tempMin: notTodayFullForecast
+                  .where(
+                    (m) => m.getWD() == e.getWD(),
+                  )
+                  .map((e) => e.temperature.tempMin)
+                  .min,
+              tempMax: notTodayFullForecast
+                  .where(
+                    (m) => m.getWD() == e.getWD(),
+                  )
+                  .map((m) => m.temperature.tempMax)
+                  .max,
+              pressure: e.temperature.pressure,
+              humidity: e.temperature.humidity,
+            ),
+            wind: e.wind,
+            coordinates: e.coordinates,
+            name: e.name,
+            date: e.date,
+          ),
+        );
+      }
+    }
+
+    return value;
   }
 
   List<WeatherData> get forecast =>

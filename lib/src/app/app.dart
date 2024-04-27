@@ -23,7 +23,14 @@ class App extends StatelessWidget {
       title: 'Weather',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.dark,
-      darkTheme: yaruDark,
+      darkTheme: yaruDark.copyWith(
+        tabBarTheme: TabBarTheme.of(context).copyWith(
+          labelColor: Colors.white,
+          unselectedLabelColor: Colors.white.withOpacity(
+            0.8,
+          ),
+        ),
+      ),
       home: const AppPage(),
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {
