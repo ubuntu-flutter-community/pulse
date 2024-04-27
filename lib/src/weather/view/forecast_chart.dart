@@ -19,33 +19,48 @@ class ForeCastChart extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final data =
         watchPropertyValue((WeatherModel m) => m.notTodayForecastDaily);
-    return Center(
-      child: Container(
-        margin: kPagePadding,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(kYaruContainerRadius),
-          color: context.theme.colorScheme.surface.withOpacity(0.3),
-        ),
-        height:
-            context.mq.size.height - kYaruTitleBarHeight - 3 * kYaruPagePadding,
-        width: context.mq.size.width - kPaneWidth - 2 * kYaruPagePadding,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: kYaruPagePadding),
-          child: BarChart(
-            BarChartData(
-              baselineY: 0,
-              titlesData: getTitlesData(context, data),
-              borderData: borderData,
-              barGroups: getBarGroups(data),
-              gridData: const FlGridData(show: false),
-              alignment: BarChartAlignment.spaceAround,
-              maxY: data.map((e) => e.temperature.tempMax).max,
-              minY: data.map((e) => e.temperature.tempMin).min,
-            ),
-          ),
-        ),
-      ),
-    );
+    final error = watchPropertyValue((WeatherModel m) => m.error);
+    return error != null
+        ? Center(
+            child: Text(error),
+          )
+        : data == null
+            ? Center(
+                child: YaruCircularProgressIndicator(
+                  color: context.theme.colorScheme.onSurface,
+                  strokeWidth: 3,
+                ),
+              )
+            : Center(
+                child: Container(
+                  margin: kPagePadding,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(kYaruContainerRadius),
+                    color: context.theme.colorScheme.surface.withOpacity(0.3),
+                  ),
+                  height: context.mq.size.height -
+                      kYaruTitleBarHeight -
+                      3 * kYaruPagePadding,
+                  width:
+                      context.mq.size.width - kPaneWidth - 2 * kYaruPagePadding,
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(vertical: kYaruPagePadding),
+                    child: BarChart(
+                      BarChartData(
+                        baselineY: 0,
+                        titlesData: getTitlesData(context, data),
+                        borderData: borderData,
+                        barGroups: getBarGroups(data),
+                        gridData: const FlGridData(show: false),
+                        alignment: BarChartAlignment.spaceAround,
+                        maxY: data.map((e) => e.temperature.tempMax).max,
+                        minY: data.map((e) => e.temperature.tempMin).min,
+                      ),
+                    ),
+                  ),
+                ),
+              );
   }
 
   FlTitlesData getTitlesData(BuildContext context, List<WeatherData> data) =>

@@ -55,10 +55,7 @@ class AppPage extends StatefulWidget with WatchItStatefulWidgetMixin {
 class _AppPageState extends State<AppPage> {
   @override
   void initState() {
-    final lastLocation = di<WeatherModel>().lastLocation;
-    if (lastLocation != null) {
-      di<WeatherModel>().loadWeather(cityName: lastLocation);
-    }
+    di<WeatherModel>().loadWeather();
     super.initState();
   }
 

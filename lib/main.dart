@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:geocoding_resolver/geocoding_resolver.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
@@ -19,8 +17,7 @@ Future<void> main() async {
   final apiKey = await loadApiKey();
   if (apiKey != null && apiKey.isNotEmpty) {
     di.registerSingleton<OpenWeather>(OpenWeather(apiKey: apiKey));
-    di.registerSingleton<GeoCoder>(GeoCoder());
-    di.registerSingleton<GeolocatorPlatform>(GeolocatorPlatform.instance);
+
     final locationsService = LocationsService();
     await locationsService.init();
     di.registerSingleton<LocationsService>(
@@ -35,8 +32,6 @@ Future<void> main() async {
       () => WeatherModel(
         locationsService: di<LocationsService>(),
         openWeather: di<OpenWeather>(),
-        geoCoder: di<GeoCoder>(),
-        geolocatorPlatform: di<GeolocatorPlatform>(),
       ),
       dispose: (s) => s.dispose(),
     );

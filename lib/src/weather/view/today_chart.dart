@@ -2,9 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:open_weather_client/models/weather_data.dart';
 import 'package:watch_it/watch_it.dart';
-import 'package:yaru/constants.dart';
-import 'package:yaru/icons.dart';
-import 'package:yaru/theme.dart';
+import 'package:yaru/yaru.dart';
 
 import '../../../constants.dart';
 import '../../build_context_x.dart';
@@ -29,64 +27,69 @@ class _TodayChartState extends State<TodayChart> {
 
   @override
   Widget build(BuildContext context) {
-    final forecast = watchPropertyValue((WeatherModel m) => m.forecast);
+    final forecast = watchPropertyValue((WeatherModel m) => m.fiveDaysForCast);
     final mq = context.mq;
-    final cityFromPosition =
-        watchPropertyValue((WeatherModel m) => m.cityFromPosition);
-    final cityName = watchPropertyValue((WeatherModel m) => m.cityName);
+
+    final cityName = watchPropertyValue((WeatherModel m) => m.lastLocation);
     final data = watchPropertyValue((WeatherModel m) => m.data);
     final error = watchPropertyValue((WeatherModel m) => m.error);
 
-    return data == null
-        ? Center(
-            child: error != null ? Text(error) : const SizedBox.shrink(),
-          )
-        : Container(
-            width: mq.size.width - kPaneWidth,
-            margin: kPagePadding,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(kYaruContainerRadius),
-              color: context.theme.colorScheme.surface.withOpacity(0.3),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                TodayTile(
-                  day: 'Now',
-                  position: cityFromPosition,
-                  data: data,
-                  fontSize: 20,
-                  cityName: cityName,
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: SizedBox(
-                    height: 400,
-                    width: mq.size.width - kPaneWidth,
-                    child: LineChart(
-                      showAvg ? avgData(forecast) : mainData(forecast),
+    return Stack(
+      children: [
+        Container(
+          margin: kPagePadding,
+          height: mq.size.height,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(kYaruContainerRadius),
+            color: context.theme.colorScheme.surface.withOpacity(0.3),
+          ),
+          child: error != null
+              ? Center(
+                  child: Text(error),
+                )
+              : forecast == null || data == null
+                  ? Center(
+                      child: YaruCircularProgressIndicator(
+                        color: context.theme.colorScheme.onSurface,
+                        strokeWidth: 3,
+                      ),
+                    )
+                  : SingleChildScrollView(
+                      padding: EdgeInsets.only(top: mq.size.height / 3),
+                      scrollDirection: Axis.horizontal,
+                      child: SizedBox(
+                        width: forecast.length * 50,
+                        height: 400,
+                        child: LineChart(
+                          showAvg ? avgData(forecast) : mainData(forecast),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Positioned(
-                  right: 25,
-                  bottom: 55,
-                  child: FloatingActionButton(
-                    backgroundColor: Colors.white,
-                    onPressed: () {
-                      setState(() {
-                        showAvg = !showAvg;
-                      });
-                    },
-                    child: Icon(
-                      showAvg ? YaruIcons.weather : YaruIcons.minus,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
+        ),
+        Positioned(
+          right: 65,
+          bottom: 100,
+          child: FloatingActionButton(
+            backgroundColor: Colors.white,
+            onPressed: () {
+              setState(() {
+                showAvg = !showAvg;
+              });
+            },
+            child: Icon(
+              showAvg ? YaruIcons.weather : YaruIcons.minus,
+              color: Colors.black,
             ),
-          );
+          ),
+        ),
+        if (data != null)
+          TodayTile(
+            data: data,
+            fontSize: 20,
+            cityName: cityName,
+          ),
+      ],
+    );
   }
 
   Widget bottomTitleWidgets(
