@@ -1,10 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:open_weather_client/models/weather_data.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../../build_context_x.dart';
+import '../../build_context_x.dart';
 import '../../../constants.dart';
 import '../weather_data_x.dart';
 
@@ -29,6 +31,7 @@ class ForeCastChart extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: kYaruPagePadding),
           child: BarChart(
             BarChartData(
+              baselineY: 0,
               titlesData: getTitlesData(context),
               borderData: borderData,
               barGroups: barGroups,
@@ -56,9 +59,9 @@ class ForeCastChart extends StatelessWidget {
                   '${data[value.toInt()].temperature.tempMin.toInt()} °',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: data[value.toInt()].temperature.tempMin < 5
-                        ? YaruColors.purple
-                        : YaruColors.blue,
+                    color: data[value.toInt()]
+                        .minColor
+                        .scale(lightness: context.light ? -0.6 : 0.4),
                   ),
                 ),
               );
@@ -71,13 +74,13 @@ class ForeCastChart extends StatelessWidget {
         topTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 110,
+            reservedSize: 150,
             getTitlesWidget: (value, meta) {
               return SideTitleWidget(
                 axisSide: meta.axisSide,
                 child: Column(
                   children: [
-                    Expanded(
+                    Flexible(
                       child: Text(
                         data[value.toInt()].getWeekDay(context),
                         style: const TextStyle(
@@ -85,19 +88,34 @@ class ForeCastChart extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 50,
+                    Flexible(
+                      child: Text(
+                        data[value.toInt()].getDate(context),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                    Expanded(
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Icon(data[value.toInt()].icon),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Flexible(
                       child: Text(
                         '${data[value.toInt()].temperature.tempMax.toInt()} °',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
-                          color: data[value.toInt()].temperature.tempMax > 30
-                              ? YaruColors.orange
-                              : Colors.yellow,
+                          color: data[value.toInt()]
+                              .maxColor
+                              .scale(lightness: context.light ? -0.6 : 0.4),
                         ),
                       ),
+                    ),
+                    const SizedBox(
+                      height: 10,
                     ),
                   ],
                 ),
@@ -114,10 +132,11 @@ class ForeCastChart extends StatelessWidget {
         show: false,
       );
 
-  LinearGradient getBarGradient({required min, required max}) => LinearGradient(
+  LinearGradient getBarGradient({required Color minColor, required maxColor}) =>
+      LinearGradient(
         colors: [
-          max > 30 ? YaruColors.orange : Colors.yellow,
-          min < -5 ? YaruColors.purple : YaruColors.blue,
+          maxColor,
+          minColor,
         ],
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
@@ -133,8 +152,8 @@ class ForeCastChart extends StatelessWidget {
                 toY: data[i].temperature.tempMax,
                 fromY: data[i].temperature.tempMin + 1,
                 gradient: getBarGradient(
-                  max: data[i].temperature.tempMax,
-                  min: data[i].temperature.tempMin,
+                  maxColor: data[i].maxColor,
+                  minColor: data[i].minColor,
                 ),
               ),
             ],

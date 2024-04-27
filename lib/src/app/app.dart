@@ -5,12 +5,12 @@ import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../build_context_x.dart';
+import '../build_context_x.dart';
 import '../../constants.dart';
 import '../../weather.dart';
 import '../weather/view/city_search_field.dart';
+import '../weather/weather_data_x.dart';
 import '../weather/weather_model.dart';
-import '../weather/weather_utils.dart';
 import 'app_model.dart';
 import 'offline_page.dart';
 
@@ -22,7 +22,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Weather',
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.dark,
+      theme: yaruLight,
       darkTheme: yaruDark.copyWith(
         tabBarTheme: TabBarTheme.of(context).copyWith(
           labelColor: Colors.white,
@@ -113,7 +113,7 @@ class _AppPageState extends State<AppPage> {
           Opacity(
             opacity: 0.6,
             child: WeatherBg(
-              weatherType: getWeatherType(data),
+              weatherType: data.weatherType,
               width: mq.size.width,
               height: mq.size.height,
             ),

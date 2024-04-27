@@ -4,13 +4,13 @@ import 'package:flutter_weather_bg_null_safety/flutter_weather_bg.dart';
 import 'package:open_weather_client/models/weather_data.dart';
 import 'package:yaru/constants.dart';
 
-import '../../../build_context_x.dart';
+import '../../build_context_x.dart';
 import '../../../string_x.dart';
+import '../theme_x.dart';
 import '../weather_data_x.dart';
-import '../weather_utils.dart';
 
 class ForecastTile extends StatefulWidget {
-  final WeatherData selectedData;
+  final WeatherData data;
   final String? cityName;
   final double fontSize;
   final String? position;
@@ -23,7 +23,7 @@ class ForecastTile extends StatefulWidget {
 
   const ForecastTile({
     super.key,
-    required this.selectedData,
+    required this.data,
     this.cityName,
     this.fontSize = 20,
     this.position,
@@ -44,32 +44,22 @@ class _ForecastTileState extends State<ForecastTile> {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final style = theme.textTheme.headlineSmall?.copyWith(
-      color: Colors.white,
-      fontSize: 20,
-      shadows: [
-        Shadow(
-          color: Colors.black.withOpacity(0.8),
-          offset: const Offset(0, 1),
-          blurRadius: 3,
-        ),
-      ],
-    );
+    final style = theme.weatherBgTextStyle;
 
     final children = [
       Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            widget.selectedData.currentTemperature,
+            widget.data.currentTemperature,
             style: style,
           ),
           Text(
-            'Feels like: ${widget.selectedData.feelsLike}',
+            'Feels like: ${widget.data.feelsLike}',
             style: style,
           ),
           Text(
-            'Wind: ${widget.selectedData.windSpeed}',
+            'Wind: ${widget.data.windSpeed}',
             style: style,
           ),
         ],
@@ -92,12 +82,16 @@ class _ForecastTileState extends State<ForecastTile> {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          getIcon(widget.selectedData, theme.colorScheme),
+          Icon(
+            widget.data.icon,
+            color: style?.color,
+            shadows: style?.shadows,
+          ),
           const SizedBox(
             width: 10,
           ),
           Text(
-            widget.selectedData.longDescription.capitalize(),
+            widget.data.longDescription.capitalize(),
             textAlign: TextAlign.center,
             style: style,
             overflow: TextOverflow.ellipsis,
@@ -124,7 +118,7 @@ class _ForecastTileState extends State<ForecastTile> {
           child: ClipRRect(
             borderRadius: widget.borderRadius,
             child: WeatherBg(
-              weatherType: getWeatherType(widget.selectedData),
+              weatherType: widget.data.weatherType,
               width: widget.width ?? double.infinity,
               height: widget.height ?? double.infinity,
             ),

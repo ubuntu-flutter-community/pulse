@@ -193,7 +193,7 @@ class WeatherModel extends SafeChangeNotifier {
             wind: e.wind,
             coordinates: e.coordinates,
             name: e.name,
-            date: e.date,
+            date: e.dailyDateTime,
           ),
         );
       }

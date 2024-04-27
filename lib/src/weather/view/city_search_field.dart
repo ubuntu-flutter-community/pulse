@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../../build_context_x.dart';
+import '../../build_context_x.dart';
 import '../weather_model.dart';
 
 class CitySearchField extends StatefulWidget {

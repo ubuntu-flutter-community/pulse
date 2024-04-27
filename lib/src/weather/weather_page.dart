@@ -3,7 +3,7 @@ import 'package:watch_it/watch_it.dart';
 import 'package:yaru/constants.dart';
 import 'package:yaru/widgets.dart';
 
-import '../../build_context_x.dart';
+import '../build_context_x.dart';
 import '../../constants.dart';
 import '../app/app_model.dart';
 import 'view/forecast_chart.dart';
@@ -125,7 +125,7 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
                                             .getDate(context),
                                         time: todayForeCast[index]
                                             .getTime(context),
-                                        selectedData: todayForeCast[index],
+                                        data: todayForeCast[index],
                                         fontSize: 15,
                                       );
                                     }
@@ -137,7 +137,7 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
                                           .getDate(context),
                                       time: notTodayForeCast[index]
                                           .getTime(context),
-                                      selectedData: notTodayForeCast[index],
+                                      data: notTodayForeCast[index],
                                       fontSize: 15,
                                     );
                                   },

@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:open_weather_client/models/weather_data.dart';
 import 'package:yaru/constants.dart';
-import '../../../build_context_x.dart';
-import '../weather_utils.dart';
+
+import '../../build_context_x.dart';
 import '../../../string_x.dart';
+import '../theme_x.dart';
 import '../weather_data_x.dart';
 
 class TodayTile extends StatelessWidget {
@@ -35,17 +36,8 @@ class TodayTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = context.theme;
-    final style = theme.textTheme.headlineSmall?.copyWith(
-      color: Colors.white,
-      fontSize: 20,
-      shadows: [
-        Shadow(
-          color: Colors.black.withOpacity(0.5),
-          offset: const Offset(0, 1),
-          blurRadius: 3,
-        ),
-      ],
-    );
+
+    final style = theme.weatherBgTextStyle;
 
     final children = [
       Column(
@@ -83,7 +75,11 @@ class TodayTile extends StatelessWidget {
       Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          getIcon(data, theme.colorScheme),
+          Icon(
+            data.icon,
+            color: style?.color,
+            shadows: style?.shadows,
+          ),
           const SizedBox(
             width: 10,
           ),
