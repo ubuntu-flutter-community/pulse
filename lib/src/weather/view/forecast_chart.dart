@@ -4,19 +4,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:open_weather_client/models/weather_data.dart';
+import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../build_context_x.dart';
 import '../../../constants.dart';
+import '../../build_context_x.dart';
 import '../weather_data_x.dart';
+import '../weather_model.dart';
 
-class ForeCastChart extends StatelessWidget {
-  const ForeCastChart({super.key, required this.data});
-
-  final List<WeatherData> data;
+class ForeCastChart extends StatelessWidget with WatchItMixin {
+  const ForeCastChart({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final data =
+        watchPropertyValue((WeatherModel m) => m.notTodayForecastDaily);
     return Center(
       child: Container(
         margin: kPagePadding,
@@ -32,9 +34,9 @@ class ForeCastChart extends StatelessWidget {
           child: BarChart(
             BarChartData(
               baselineY: 0,
-              titlesData: getTitlesData(context),
+              titlesData: getTitlesData(context, data),
               borderData: borderData,
-              barGroups: barGroups,
+              barGroups: getBarGroups(data),
               gridData: const FlGridData(show: false),
               alignment: BarChartAlignment.spaceAround,
               maxY: data.map((e) => e.temperature.tempMax).max,
@@ -46,7 +48,8 @@ class ForeCastChart extends StatelessWidget {
     );
   }
 
-  FlTitlesData getTitlesData(BuildContext context) => FlTitlesData(
+  FlTitlesData getTitlesData(BuildContext context, List<WeatherData> data) =>
+      FlTitlesData(
         show: true,
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
@@ -142,7 +145,8 @@ class ForeCastChart extends StatelessWidget {
         end: Alignment.bottomCenter,
       );
 
-  List<BarChartGroupData> get barGroups => data.mapIndexed(
+  List<BarChartGroupData> getBarGroups(List<WeatherData> data) =>
+      data.mapIndexed(
         (i, e) {
           return BarChartGroupData(
             x: i,

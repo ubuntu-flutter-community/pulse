@@ -1,82 +1,108 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:open_weather_client/models/weather_data.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/constants.dart';
+import 'package:yaru/icons.dart';
+import 'package:yaru/theme.dart';
 
+import '../../../constants.dart';
 import '../../build_context_x.dart';
+import '../weather_data_x.dart';
 import '../weather_model.dart';
+import 'today_tile.dart';
 
-class LineChartSample2 extends StatefulWidget with WatchItStatefulWidgetMixin {
-  const LineChartSample2({super.key});
+class TodayChart extends StatefulWidget with WatchItStatefulWidgetMixin {
+  const TodayChart({super.key});
 
   @override
-  State<LineChartSample2> createState() => _LineChartSample2State();
+  State<TodayChart> createState() => _TodayChartState();
 }
 
-class _LineChartSample2State extends State<LineChartSample2> {
+class _TodayChartState extends State<TodayChart> {
   List<Color> gradientColors = [
     Colors.cyan,
-    Colors.blue,
+    YaruColors.blue,
   ];
 
   bool showAvg = false;
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
-    final todayForeCast =
-        watchPropertyValue((WeatherModel m) => m.todayForeCast);
+    final forecast = watchPropertyValue((WeatherModel m) => m.forecast);
+    final mq = context.mq;
+    final cityFromPosition =
+        watchPropertyValue((WeatherModel m) => m.cityFromPosition);
+    final cityName = watchPropertyValue((WeatherModel m) => m.cityName);
+    final data = watchPropertyValue((WeatherModel m) => m.data);
+    final error = watchPropertyValue((WeatherModel m) => m.error);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(kYaruContainerRadius),
-      child: Stack(
-        children: <Widget>[
-          LineChart(
-            showAvg ? avgData() : mainData(),
-          ),
-          Positioned(
-            right: 25,
-            bottom: 25,
-            child: FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  showAvg = !showAvg;
-                });
-              },
-              child: Text(
-                'avg',
-                style: TextStyle(
-                  fontSize: 12,
-                  color: showAvg ? Colors.white.withOpacity(0.5) : Colors.white,
-                ),
-              ),
+    return data == null
+        ? Center(
+            child: error != null ? Text(error) : const SizedBox.shrink(),
+          )
+        : Container(
+            width: mq.size.width - kPaneWidth,
+            margin: kPagePadding,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(kYaruContainerRadius),
+              color: context.theme.colorScheme.surface.withOpacity(0.3),
             ),
-          ),
-        ],
-      ),
-    );
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                TodayTile(
+                  day: 'Now',
+                  position: cityFromPosition,
+                  data: data,
+                  fontSize: 20,
+                  cityName: cityName,
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: SizedBox(
+                    height: 400,
+                    width: mq.size.width - kPaneWidth,
+                    child: LineChart(
+                      showAvg ? avgData(forecast) : mainData(forecast),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 25,
+                  bottom: 55,
+                  child: FloatingActionButton(
+                    backgroundColor: Colors.white,
+                    onPressed: () {
+                      setState(() {
+                        showAvg = !showAvg;
+                      });
+                    },
+                    child: Icon(
+                      showAvg ? YaruIcons.weather : YaruIcons.minus,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+  Widget bottomTitleWidgets(
+    double value,
+    TitleMeta meta,
+    List<WeatherData> data,
+  ) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16,
     );
     Widget text;
-    switch (value.toInt()) {
-      case 2:
-        text = const Text('MAR', style: style);
-        break;
-      case 5:
-        text = const Text('JUN', style: style);
-        break;
-      case 8:
-        text = const Text('SEP', style: style);
-        break;
-      default:
-        text = const Text('', style: style);
-        break;
-    }
+    text = Text(
+      data[value.toInt()].getTime(context),
+      style: style,
+    );
 
     return SideTitleWidget(
       axisSide: meta.axisSide,
@@ -104,43 +130,52 @@ class _LineChartSample2State extends State<LineChartSample2> {
         return Container();
     }
 
-    return Text(text, style: style, textAlign: TextAlign.left);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(text, style: style, textAlign: TextAlign.left),
+    );
   }
 
-  LineChartData mainData() {
+  LineChartData mainData(List<WeatherData> data) {
+    final outlineColor = context.theme.colorScheme.onSurface.withOpacity(0.2);
+
     return LineChartData(
       gridData: FlGridData(
         show: false,
         drawVerticalLine: true,
+        drawHorizontalLine: true,
         horizontalInterval: 1,
         verticalInterval: 1,
         getDrawingHorizontalLine: (value) {
           return FlLine(
-            color: context.theme.colorScheme.onSurface,
+            color: outlineColor,
             strokeWidth: 1,
           );
         },
         getDrawingVerticalLine: (value) {
           return FlLine(
-            color: context.theme.colorScheme.onSurface,
+            color: outlineColor,
             strokeWidth: 1,
           );
         },
       ),
       titlesData: FlTitlesData(
-        show: false,
+        show: true,
         rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
         topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
         ),
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 0,
+            reservedSize: 35,
             interval: 1,
-            getTitlesWidget: bottomTitleWidgets,
+            getTitlesWidget: (value, meta) =>
+                bottomTitleWidgets(value, meta, data),
           ),
         ),
         leftTitles: AxisTitles(
@@ -154,7 +189,9 @@ class _LineChartSample2State extends State<LineChartSample2> {
       ),
       borderData: FlBorderData(
         show: false,
-        border: Border.all(color: const Color(0xff37434d)),
+        border: Border.all(
+          color: context.theme.colorScheme.onSurface.withOpacity(0.2),
+        ),
       ),
       minX: 0,
       maxX: 11,
@@ -193,7 +230,7 @@ class _LineChartSample2State extends State<LineChartSample2> {
     );
   }
 
-  LineChartData avgData() {
+  LineChartData avgData(List<WeatherData> data) {
     return LineChartData(
       lineTouchData: const LineTouchData(enabled: false),
       gridData: FlGridData(
@@ -220,7 +257,8 @@ class _LineChartSample2State extends State<LineChartSample2> {
           sideTitles: SideTitles(
             showTitles: false,
             reservedSize: 30,
-            getTitlesWidget: bottomTitleWidgets,
+            getTitlesWidget: (value, meta) =>
+                bottomTitleWidgets(value, meta, data),
             interval: 1,
           ),
         ),

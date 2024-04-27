@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:open_weather_client/models/weather_data.dart';
 import 'package:yaru/constants.dart';
 
-import '../../build_context_x.dart';
+import '../../../constants.dart';
 import '../../../string_x.dart';
+import '../../build_context_x.dart';
 import '../theme_x.dart';
 import '../weather_data_x.dart';
-import 'today_chart.dart';
 
 class TodayTile extends StatelessWidget {
   final WeatherData data;
   final String? cityName;
   final double fontSize;
   final String? position;
-  final double? width;
-  final double? height;
   final String? day;
   final String? time;
   final BorderRadiusGeometry? borderRadius;
@@ -25,8 +23,6 @@ class TodayTile extends StatelessWidget {
     this.cityName,
     this.fontSize = 20,
     this.position,
-    required this.width,
-    required this.height,
     this.day,
     this.time,
     this.borderRadius,
@@ -91,13 +87,10 @@ class TodayTile extends StatelessWidget {
         ],
       ),
       if (cityName != null)
-        SizedBox(
-          width: width,
-          child: Text(
-            cityName!,
-            style: style,
-            textAlign: TextAlign.center,
-          ),
+        Text(
+          cityName!,
+          style: style,
+          textAlign: TextAlign.center,
         )
       else if (position != null)
         Text(
@@ -107,35 +100,26 @@ class TodayTile extends StatelessWidget {
         ),
     ];
 
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(kYaruContainerRadius),
-        color: theme.colorScheme.surface.withOpacity(0.3),
-      ),
-      width: width,
-      height: height,
-      child: Center(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 2 * kYaruPagePadding,
-            ),
-            Wrap(
-              direction: Axis.vertical,
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 20,
-              runSpacing: 20,
-              runAlignment: WrapAlignment.center,
-              children: children,
-            ),
-            Expanded(
-              child: SizedBox(
-                width: width,
-                child: const LineChartSample2(),
+    return Center(
+      child: Container(
+        margin: kPagePadding,
+        child: Center(
+          child: Column(
+            children: [
+              const SizedBox(
+                height: 2 * kYaruPagePadding,
               ),
-            ),
-          ],
+              Wrap(
+                direction: Axis.vertical,
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: 20,
+                runSpacing: 20,
+                runAlignment: WrapAlignment.center,
+                children: children,
+              ),
+            ],
+          ),
         ),
       ),
     );
