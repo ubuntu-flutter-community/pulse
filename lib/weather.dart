@@ -1,1 +1,1 @@
-export 'src/weather/weather_page.dart';
+export 'src/weather/view/weather_page.dart';

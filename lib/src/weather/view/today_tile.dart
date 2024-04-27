@@ -6,6 +6,7 @@ import '../../build_context_x.dart';
 import '../../../string_x.dart';
 import '../theme_x.dart';
 import '../weather_data_x.dart';
+import 'today_chart.dart';
 
 class TodayTile extends StatelessWidget {
   final WeatherData data;
@@ -15,7 +16,6 @@ class TodayTile extends StatelessWidget {
   final double? width;
   final double? height;
   final String? day;
-  final EdgeInsets padding;
   final String? time;
   final BorderRadiusGeometry? borderRadius;
 
@@ -28,7 +28,6 @@ class TodayTile extends StatelessWidget {
     required this.width,
     required this.height,
     this.day,
-    required this.padding,
     this.time,
     this.borderRadius,
   });
@@ -109,29 +108,34 @@ class TodayTile extends StatelessWidget {
     ];
 
     return Container(
-      margin: const EdgeInsets.only(
-        left: kYaruPagePadding,
-        right: kYaruPagePadding,
-        top: kYaruPagePadding,
-      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(kYaruContainerRadius),
         color: theme.colorScheme.surface.withOpacity(0.3),
       ),
       width: width,
       height: height,
-      child: Padding(
-        padding: padding,
-        child: Center(
-          child: Wrap(
-            direction: Axis.vertical,
-            alignment: WrapAlignment.center,
-            crossAxisAlignment: WrapCrossAlignment.center,
-            spacing: 20,
-            runSpacing: 20,
-            runAlignment: WrapAlignment.center,
-            children: children,
-          ),
+      child: Center(
+        child: Column(
+          children: [
+            const SizedBox(
+              height: 2 * kYaruPagePadding,
+            ),
+            Wrap(
+              direction: Axis.vertical,
+              alignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 20,
+              runSpacing: 20,
+              runAlignment: WrapAlignment.center,
+              children: children,
+            ),
+            Expanded(
+              child: SizedBox(
+                width: width,
+                child: const LineChartSample2(),
+              ),
+            ),
+          ],
         ),
       ),
     );

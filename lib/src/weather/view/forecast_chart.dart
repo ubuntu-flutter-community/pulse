@@ -19,13 +19,13 @@ class ForeCastChart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        margin: const EdgeInsets.all(2 * kYaruPagePadding),
+        margin: kPagePadding,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(kYaruContainerRadius),
           color: context.theme.colorScheme.surface.withOpacity(0.3),
         ),
         height:
-            context.mq.size.height - kYaruTitleBarHeight - 4 * kYaruPagePadding,
+            context.mq.size.height - kYaruTitleBarHeight - 3 * kYaruPagePadding,
         width: context.mq.size.width - kPaneWidth - 2 * kYaruPagePadding,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: kYaruPagePadding),
