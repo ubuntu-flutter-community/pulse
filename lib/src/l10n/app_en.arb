@@ -9,5 +9,6 @@
     "enterValidApiKey": "Please enter a (valid) API key",
     "hourly": "Hourly",
     "daily": "Daily",
-    "now": "Now"
+    "now": "Now",
+    "today": "Today"
 }

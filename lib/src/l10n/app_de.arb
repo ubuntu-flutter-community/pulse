@@ -9,5 +9,6 @@
     "enterValidApiKey": "Bitte gib einen (gültigen) API Schlüssel ein",
     "hourly": "Stündlich",
     "daily": "Täglich",
-    "now": "Jetzt"
+    "now": "Jetzt",
+    "today": "Heute"
 }

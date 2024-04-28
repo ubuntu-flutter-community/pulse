@@ -7,6 +7,7 @@ import 'package:yaru/yaru.dart';
 
 import '../../../constants.dart';
 import '../../build_context_x.dart';
+import '../../l10n/l10n.dart';
 import '../weather_data_x.dart';
 import '../weather_model.dart';
 import 'error_view.dart';
@@ -42,7 +43,7 @@ class _TodayChartState extends State<TodayChart> {
   @override
   Widget build(BuildContext context) {
     final forecast =
-        watchPropertyValue((WeatherModel m) => m.notTodayFullForecast);
+        watchPropertyValue((WeatherModel m) => m.fiveDaysForCast ?? []);
     final mq = context.mq;
 
     final cityName = watchPropertyValue((WeatherModel m) => m.lastLocation);
@@ -76,7 +77,7 @@ class _TodayChartState extends State<TodayChart> {
                         width: forecast.length * 100,
                         height: 400,
                         child: LineChart(
-                          mainData(forecast),
+                          mainData(forecast: forecast, data: data),
                         ),
                       ),
                     ),
@@ -123,29 +124,41 @@ class _TodayChartState extends State<TodayChart> {
     );
   }
 
-  Widget bottomTitleWidgets(
-    double value,
-    TitleMeta meta,
-    List<WeatherData> data,
-  ) {
-    const style = TextStyle(
-      fontWeight: FontWeight.bold,
-      fontSize: 16,
-    );
-    Widget text;
-    text = Text(
-      data[value.toInt()].getTime(context),
-      style: style,
-    );
-
+  Widget bottomTitleWidgets({
+    required double value,
+    required TitleMeta meta,
+    required List<WeatherData> forecast,
+    required WeatherData data,
+  }) {
+    final weekday = forecast[value.toInt()].getWeekDay(context);
     return SideTitleWidget(
       fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
       axisSide: meta.axisSide,
-      child: text,
+      child: Column(
+        children: [
+          Text(
+            forecast[value.toInt()].getTime(context),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+          Text(
+            weekday == data.getWeekDay(context) ? context.l10n.today : weekday,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 10,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
-  LineChartData mainData(List<WeatherData> forecast) {
+  LineChartData mainData({
+    required List<WeatherData> forecast,
+    required WeatherData data,
+  }) {
     final outlineColor = context.theme.colorScheme.onSurface.withOpacity(0.2);
 
     return LineChartData(
@@ -181,10 +194,14 @@ class _TodayChartState extends State<TodayChart> {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 35,
+            reservedSize: 55,
             interval: 1,
-            getTitlesWidget: (value, meta) =>
-                bottomTitleWidgets(value, meta, forecast),
+            getTitlesWidget: (value, meta) => bottomTitleWidgets(
+              value: value,
+              meta: meta,
+              forecast: forecast,
+              data: data,
+            ),
           ),
         ),
         leftTitles: const AxisTitles(
