@@ -6,6 +6,7 @@ import 'package:yaru/yaru.dart';
 import '../../../string_x.dart';
 import '../../app/offline_page.dart';
 import '../../build_context_x.dart';
+import '../../l10n/l10n.dart';
 import '../weather_model.dart';
 import 'city_search_field.dart';
 
@@ -76,7 +77,7 @@ class _ErrorViewState extends State<ErrorView> {
                             minWidth: 45,
                           ),
                           suffixIcon: Tooltip(
-                            message: 'Save',
+                            message: context.l10n.save,
                             child: ClipRRect(
                               borderRadius: const BorderRadius.only(
                                 topRight: Radius.circular(kYaruButtonRadius),
@@ -98,7 +99,7 @@ class _ErrorViewState extends State<ErrorView> {
                           ),
                           errorMaxLines: 5,
                           errorText: widget.error.invalidKey
-                              ? 'Please enter a valid API key'
+                              ? context.l10n.enterValidApiKey
                               : widget.error,
                           border: const OutlineInputBorder(
                             borderSide: BorderSide.none,
@@ -108,7 +109,7 @@ class _ErrorViewState extends State<ErrorView> {
                           ),
                           fillColor: context.theme.colorScheme.surface
                               .withOpacity(0.3),
-                          label: const Text('OpenWeather API key'),
+                          label: Text(context.l10n.openWeatherApiKey),
                         ),
                       ),
                     ),

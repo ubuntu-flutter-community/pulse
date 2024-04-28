@@ -97,7 +97,6 @@ class WeatherModel extends SafeChangeNotifier {
       return weatherData;
     } catch (e) {
       error = e.toString();
-      print(error);
       return null;
     }
   }

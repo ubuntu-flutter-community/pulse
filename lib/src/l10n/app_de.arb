@@ -1,0 +1,13 @@
+{
+    "@@locale": "de",
+    "save": "Speichern",
+    "openWeatherApiKey": "OpenWeather API Schlüssel",
+    "offline": "Keine Netzwerkverbindung",
+    "cityName": "Ortsnamen",
+    "cityNotFound": "Ort nicht gefunden",
+    "enterACityName": "Bitte gib einen Ort ein",
+    "enterValidApiKey": "Bitte gib einen (gültigen) API Schlüssel ein",
+    "hourly": "Stündlich",
+    "daily": "Täglich",
+    "now": "Jetzt"
+}
