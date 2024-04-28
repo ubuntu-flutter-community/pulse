@@ -6,8 +6,8 @@ import '../../../constants.dart';
 import '../../app/app_model.dart';
 import '../../app/side_bar.dart';
 import '../../l10n/l10n.dart';
-import 'forecast_chart.dart';
-import 'today_chart.dart';
+import 'daily_bar_chart.dart';
+import 'hourly_line_chart.dart';
 
 class WeatherPage extends StatelessWidget with WatchItMixin {
   const WeatherPage({super.key, this.showDrawer = false});
@@ -59,7 +59,7 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
             ),
           ),
         ),
-        body: showToday ? const TodayChart() : const ForeCastChart(),
+        body: showToday ? const HourlyLineChart() : const DailyBarChart(),
       ),
     );
   }
