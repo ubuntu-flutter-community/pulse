@@ -11,16 +11,16 @@ import '../../l10n/l10n.dart';
 import '../weather_data_x.dart';
 import '../weather_model.dart';
 import 'error_view.dart';
-import 'today_tile.dart';
+import 'now_tile.dart';
 
-class TodayChart extends StatefulWidget with WatchItStatefulWidgetMixin {
-  const TodayChart({super.key});
+class HourlyLineChart extends StatefulWidget with WatchItStatefulWidgetMixin {
+  const HourlyLineChart({super.key});
 
   @override
-  State<TodayChart> createState() => _TodayChartState();
+  State<HourlyLineChart> createState() => _HourlyLineChartState();
 }
 
-class _TodayChartState extends State<TodayChart> {
+class _HourlyLineChartState extends State<HourlyLineChart> {
   late ScrollController _scrollController;
 
   List<Color> gradientColors = [
@@ -115,7 +115,7 @@ class _TodayChartState extends State<TodayChart> {
             ),
           ),
         if (data != null)
-          TodayTile(
+          NowTile(
             data: data,
             fontSize: 20,
             cityName: cityName,

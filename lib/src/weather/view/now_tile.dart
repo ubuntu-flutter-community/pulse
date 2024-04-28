@@ -9,7 +9,7 @@ import '../../l10n/l10n.dart';
 import '../theme_x.dart';
 import '../weather_data_x.dart';
 
-class TodayTile extends StatelessWidget {
+class NowTile extends StatelessWidget {
   final WeatherData data;
   final String? cityName;
   final double fontSize;
@@ -17,7 +17,7 @@ class TodayTile extends StatelessWidget {
   final String? time;
   final BorderRadiusGeometry? borderRadius;
 
-  const TodayTile({
+  const NowTile({
     super.key,
     required this.data,
     this.cityName,

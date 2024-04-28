@@ -13,8 +13,8 @@ import '../weather_data_x.dart';
 import '../weather_model.dart';
 import 'error_view.dart';
 
-class ForeCastChart extends StatelessWidget with WatchItMixin {
-  const ForeCastChart({super.key});
+class DailyBarChart extends StatelessWidget with WatchItMixin {
+  const DailyBarChart({super.key});
 
   @override
   Widget build(BuildContext context) {
