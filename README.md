@@ -1,17 +1,12 @@
-# Pulse - Weather and news app for the Ubuntu Desktop
+### Pulse - Weather app for the Linux Desktop
 
-WIP - Soon available as snap.
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/pulse)
 
 ![screenshot_dark_linux](.github/images/screenshot_dark_linux.png)
 
-- [X] Dynamic, animated weather backgrounds
-- [X] Display weather of current location
-- [X] Display weather of a location X
-- [X] Save your favorite locations
-- [X] Filter per day/week
-- [ ] Show news in your location
-- [ ] Show news of location X
-- [ ] Filter news by topic/location
+### Api Key
+
+Requires an api key from [openweathermap](https://openweathermap.org) which you need to create yourself (free tier) in your own account.
 
 ## Build
 
@@ -27,7 +22,3 @@ sudo apt -y install git curl cmake meson make clang libgtk-3-dev pkg-config && m
 ```
 
 </details>
-
-### Api Key
-
-Requires an api key from [openweathermap](https://openweathermap.org) which you need to create yourself (free tier) in your own account.
