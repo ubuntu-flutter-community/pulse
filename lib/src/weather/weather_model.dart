@@ -191,116 +191,112 @@ class WeatherModel extends SafeChangeNotifier {
   }
 }
 
+// TODO: Location services in Ubuntu are very unprecise, disabling for now
+// if (cityName == null || _position == null) {
+//   _position = await _getCurrentPosition();
+//   if (position != null) {
+//     _weatherData = await loadWeatherByPosition(
+//       latitude: position!.latitude,
+//       longitude: position!.longitude,
+//     );
+//     _fiveDaysForCast = await loadForeCastByPosition(
+//       longitude: position!.longitude,
+//       latitude: position!.latitude,
+//     );
+//     _cityFromPosition = await loadCityFromPosition();
+//     if (_cityFromPosition != null) {
+//       _locationsService.setLastLocation(_cityFromPosition);
+//       _locationsService.addFavLocation(_cityFromPosition!);
+//     }
+//   }
+// }
 
-  // TODO: Location services in Ubuntu are very unprecise, disabling for now
-  // if (cityName == null || _position == null) {
-  //   _position = await _getCurrentPosition();
-  //   if (position != null) {
-  //     _weatherData = await loadWeatherByPosition(
-  //       latitude: position!.latitude,
-  //       longitude: position!.longitude,
-  //     );
-  //     _fiveDaysForCast = await loadForeCastByPosition(
-  //       longitude: position!.longitude,
-  //       latitude: position!.latitude,
-  //     );
-  //     _cityFromPosition = await loadCityFromPosition();
-  //     if (_cityFromPosition != null) {
-  //       _locationsService.setLastLocation(_cityFromPosition);
-  //       _locationsService.addFavLocation(_cityFromPosition!);
-  //     }
-  //   }
-  // }
+// Position? _position;
+// Position? get position => _position;
 
+// String? _cityFromPosition;
+// String? get cityFromPosition => _cityFromPosition;
 
-  // Position? _position;
-  // Position? get position => _position;
+// Future<String> loadCityFromPosition() async {
+//   if (position == null) {
+//     return '';
+//   }
 
+//   Address address = await _geoCoder.getAddressFromLatLng(
+//     latitude: _position!.latitude,
+//     longitude: _position!.longitude,
+//   );
 
-  // String? _cityFromPosition;
-  // String? get cityFromPosition => _cityFromPosition;
+//   return address.displayName;
+// }
 
+// Future<List<WeatherData>?> loadForeCastByPosition({
+//   required double longitude,
+//   required double latitude,
+// }) async {
+//   try {
+//     final weatherForecastData =
+//         (await _openWeather.fiveDaysWeatherForecastByLocation(
+//       longitude: longitude,
+//       latitude: latitude,
+//       weatherUnits: WeatherUnits.METRIC,
+//     ));
 
-  // Future<String> loadCityFromPosition() async {
-  //   if (position == null) {
-  //     return '';
-  //   }
+//     return weatherForecastData.forecastData;
+//   } on Exception catch (e) {
+//     error = e.toString();
+//     return null;
+//   }
+// }
 
-  //   Address address = await _geoCoder.getAddressFromLatLng(
-  //     latitude: _position!.latitude,
-  //     longitude: _position!.longitude,
-  //   );
+// Future<WeatherData?> loadWeatherByPosition({
+//   required double latitude,
+//   required double longitude,
+// }) async {
+//   try {
+//     final weatherData = await _openWeather.currentWeatherByLocation(
+//       latitude: latitude,
+//       longitude: longitude,
+//       weatherUnits: WeatherUnits.METRIC,
+//     );
+//     return weatherData;
+//   } on Exception catch (e) {
+//     error = e.toString();
+//     return null;
+//   }
+// }
 
-  //   return address.displayName;
-  // }
+// Future<Position?> _getCurrentPosition() async {
+//   final hasPermission = await _handlePermission();
 
-  // Future<List<WeatherData>?> loadForeCastByPosition({
-  //   required double longitude,
-  //   required double latitude,
-  // }) async {
-  //   try {
-  //     final weatherForecastData =
-  //         (await _openWeather.fiveDaysWeatherForecastByLocation(
-  //       longitude: longitude,
-  //       latitude: latitude,
-  //       weatherUnits: WeatherUnits.METRIC,
-  //     ));
+//   if (!hasPermission) {
+//     return null;
+//   }
 
-  //     return weatherForecastData.forecastData;
-  //   } on Exception catch (e) {
-  //     error = e.toString();
-  //     return null;
-  //   }
-  // }
+//   final position = await _geolocatorPlatform.getCurrentPosition();
+//   return position;
+// }
 
-  // Future<WeatherData?> loadWeatherByPosition({
-  //   required double latitude,
-  //   required double longitude,
-  // }) async {
-  //   try {
-  //     final weatherData = await _openWeather.currentWeatherByLocation(
-  //       latitude: latitude,
-  //       longitude: longitude,
-  //       weatherUnits: WeatherUnits.METRIC,
-  //     );
-  //     return weatherData;
-  //   } on Exception catch (e) {
-  //     error = e.toString();
-  //     return null;
-  //   }
-  // }
+// Future<bool> _handlePermission() async {
+//   bool serviceEnabled;
+//   LocationPermission permission;
 
-  // Future<Position?> _getCurrentPosition() async {
-  //   final hasPermission = await _handlePermission();
+//   serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
+//   if (!serviceEnabled) {
+//     return false;
+//   }
 
-  //   if (!hasPermission) {
-  //     return null;
-  //   }
+//   permission = await _geolocatorPlatform.checkPermission();
+//   if (permission == LocationPermission.denied) {
+//     permission = await _geolocatorPlatform.requestPermission();
+//     if (permission == LocationPermission.denied) {
+//       return false;
+//     }
+//   }
 
-  //   final position = await _geolocatorPlatform.getCurrentPosition();
-  //   return position;
-  // }
+//   if (permission == LocationPermission.deniedForever) {
+//     return false;
+//   }
 
-  // Future<bool> _handlePermission() async {
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-
-  //   serviceEnabled = await _geolocatorPlatform.isLocationServiceEnabled();
-  //   if (!serviceEnabled) {
-  //     return false;
-  //   }
-
-  //   permission = await _geolocatorPlatform.checkPermission();
-  //   if (permission == LocationPermission.denied) {
-  //     permission = await _geolocatorPlatform.requestPermission();
-  //     if (permission == LocationPermission.denied) {
-  //       return false;
-  //     }
-  //   }
-
-  //   if (permission == LocationPermission.deniedForever) {
-  //     return false;
-  //   }
-
-  //   return true;
-  // }
+//   return true;
+// }
