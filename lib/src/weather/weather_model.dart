@@ -19,8 +19,16 @@ class WeatherModel extends SafeChangeNotifier {
   })  : _openWeather = openWeather,
         _locationsService = locationsService;
 
-  final OpenWeather _openWeather;
+  OpenWeather _openWeather;
+  void setApiKeyAndLoadWeather(String apiKey) {
+    _locationsService.setApiKey(apiKey).then((_) {
+      _openWeather = OpenWeather(apiKey: apiKey);
+      loadWeather();
+    });
+  }
+
   final LocationsService _locationsService;
+  StreamSubscription<bool>? _apiKeyChangedSub;
   StreamSubscription<bool>? _lastLocationChangedSub;
   StreamSubscription<bool>? _favLocationsChangedSub;
 
@@ -48,21 +56,21 @@ class WeatherModel extends SafeChangeNotifier {
     _error = null;
     notifyListeners();
 
-    cityName ??= lastLocation;
+    cityName ??= lastLocation ?? '';
 
+    _apiKeyChangedSub =
+        _locationsService.apiKeyChanged.listen((_) => notifyListeners());
     _lastLocationChangedSub ??=
         _locationsService.lastLocationChanged.listen((_) => notifyListeners());
     _favLocationsChangedSub ??=
         _locationsService.favLocationsChanged.listen((_) => notifyListeners());
 
-    if (cityName != null) {
-      _weatherData = await loadWeatherFromCityName(cityName);
+    _weatherData = await loadWeatherFromCityName(cityName);
+    _locationsService.setLastLocation(cityName);
+    _fiveDaysForCast = await loadForeCastByCityName(cityName: cityName);
+    if (_weatherData != null) {
       _locationsService.setLastLocation(cityName);
-      _fiveDaysForCast = await loadForeCastByCityName(cityName: cityName);
-      if (_weatherData != null) {
-        _locationsService.setLastLocation(cityName);
-        _locationsService.addFavLocation(cityName);
-      }
+      _locationsService.addFavLocation(cityName);
     }
 
     if (_weatherData?.weatherType != null) {
@@ -75,6 +83,7 @@ class WeatherModel extends SafeChangeNotifier {
   @override
   Future<void> dispose() async {
     super.dispose();
+    await _apiKeyChangedSub?.cancel();
     await _lastLocationChangedSub?.cancel();
     await _favLocationsChangedSub?.cancel();
   }

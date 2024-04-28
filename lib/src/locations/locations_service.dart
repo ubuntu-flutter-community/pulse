@@ -4,13 +4,26 @@ import '../../constants.dart';
 import '../../utils.dart';
 
 class LocationsService {
+  String? _apiKey;
+  String? get apiKey => _apiKey;
+  Future<void> setApiKey(String? value) {
+    if (value == _apiKey) return Future.value();
+    return writeSetting(kApiKey, value).then((_) {
+      _apiKey = value;
+      _apiKeyController.add(true);
+    });
+  }
+
+  final _apiKeyController = StreamController<bool>.broadcast();
+  Stream<bool> get apiKeyChanged => _apiKeyController.stream;
+
   String? _lastLocation;
   String? get lastLocation => _lastLocation;
   void setLastLocation(String? value) {
     if (value == _lastLocation) return;
     writeAppState(kLastLocation, value).then((_) {
-      _lastLocationController.add(true);
       _lastLocation = value;
+      _lastLocationController.add(true);
     });
   }
 
@@ -42,6 +55,7 @@ class LocationsService {
   }
 
   Future<void> init() async {
+    _apiKey = (await readSetting(kApiKey)) as String?;
     _lastLocation = (await readAppState(kLastLocation)) as String?;
     _favLocations = Set.from(
       (await readStringIterable(filename: kFavLocationsFileName) ?? <String>{}),

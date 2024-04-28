@@ -8,6 +8,7 @@ const kAppStateFileName = 'appstate.json';
 const kSettingsFileName = 'settings.json';
 const kFavLocationsFileName = 'favlocations.json';
 const kLastLocation = 'lastLocation';
+const kApiKey = 'apiKey';
 
 const kPaneWidth = 240.0;
 const kBreakPoint = 800.0;

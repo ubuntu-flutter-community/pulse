@@ -11,6 +11,7 @@ import '../../../constants.dart';
 import '../../build_context_x.dart';
 import '../weather_data_x.dart';
 import '../weather_model.dart';
+import 'error_view.dart';
 
 class ForeCastChart extends StatelessWidget with WatchItMixin {
   const ForeCastChart({super.key});
@@ -31,15 +32,7 @@ class ForeCastChart extends StatelessWidget with WatchItMixin {
         ),
         width: context.mq.size.width,
         child: (error != null)
-            ? Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(kYaruPagePadding),
-                  child: Text(
-                    error,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              )
+            ? ErrorView(error: error)
             : (notTodayForecastDaily == null)
                 ? Center(
                     child: YaruCircularProgressIndicator(

@@ -8,6 +8,7 @@ import '../../../constants.dart';
 import '../../build_context_x.dart';
 import '../weather_data_x.dart';
 import '../weather_model.dart';
+import 'error_view.dart';
 import 'today_tile.dart';
 
 class TodayChart extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -57,15 +58,7 @@ class _TodayChartState extends State<TodayChart> {
             color: context.theme.colorScheme.surface.withOpacity(0.3),
           ),
           child: error != null
-              ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(kYaruPagePadding),
-                    child: Text(
-                      error,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                )
+              ? ErrorView(error: error)
               : forecast == null || data == null
                   ? Center(
                       child: YaruCircularProgressIndicator(

@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
+import '../../../string_x.dart';
 import '../../build_context_x.dart';
 import '../weather_model.dart';
 
-class CitySearchField extends StatefulWidget {
+class CitySearchField extends StatefulWidget with WatchItStatefulWidgetMixin {
   const CitySearchField({
     super.key,
+    this.watchError = false,
   });
+
+  final bool watchError;
 
   @override
   State<CitySearchField> createState() => _CitySearchFieldState();
@@ -32,6 +36,7 @@ class _CitySearchFieldState extends State<CitySearchField> {
   @override
   Widget build(BuildContext context) {
     final model = di<WeatherModel>();
+    final error = watchPropertyValue((WeatherModel m) => m.error);
     final theme = context.theme;
     var textField = TextField(
       autofocus: true,
@@ -49,9 +54,10 @@ class _CitySearchFieldState extends State<CitySearchField> {
           ?.copyWith(fontWeight: FontWeight.w500),
       decoration: InputDecoration(
         fillColor: theme.colorScheme.onSurface.withOpacity(0.2),
-        prefixIcon: const Icon(
+        prefixIcon: Icon(
           YaruIcons.search,
           size: 15,
+          color: theme.colorScheme.onSurface,
         ),
         border: const OutlineInputBorder(borderSide: BorderSide.none),
         enabledBorder: const OutlineInputBorder(borderSide: BorderSide.none),
@@ -59,7 +65,15 @@ class _CitySearchFieldState extends State<CitySearchField> {
         prefixIconConstraints:
             const BoxConstraints(minWidth: 35, minHeight: 30),
         filled: true,
-        hintText: 'Cityname',
+        hintText: 'City name',
+        errorText: widget.watchError
+            ? (error?.cityNotFound == true
+                ? 'City not found'
+                : error?.emptyCity == true
+                    ? 'Please enter a city name'
+                    : error)
+            : null,
+        errorMaxLines: 10,
         suffixIconConstraints: const BoxConstraints(
           maxHeight: kYaruTitleBarItemHeight,
           minHeight: kYaruTitleBarItemHeight,
