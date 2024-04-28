@@ -21,7 +21,7 @@ dependencies:
   flutter_weather_bg_null_safety:
     git:
       url: https://github.com/Feichtmeier/flutter_weather_bg_null_safety
-      ref: b9e3943904596809b957b44a3733b3794a43517b
+      ref: 657a3107993c32d9aa85b272b2991440f3081f3a       
 
   handy_window: ^0.4.0
   intl: ^0.19.0
