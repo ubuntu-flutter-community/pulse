@@ -3,9 +3,9 @@ title: Pulse
 base: core22
 version: git
 contact: frederik.feichtmeier@gmail.com
-summary: Weather and news app for Ubuntu.
+summary: Weather app for the Linux Desktop.
 description: |
-  A beautiful weather and news app made with Flutter, and Yaru widgets.
+  A beautiful weather app made with Flutter, and yaru.dart.
 source-code: https://github.com/ubuntu-flutter-community/pulse
 issues: https://github.com/ubuntu-flutter-community/pulse/issues
 license: GPL-3.0+

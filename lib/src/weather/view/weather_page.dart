@@ -5,6 +5,7 @@ import 'package:yaru/yaru.dart';
 import '../../../constants.dart';
 import '../../app/app_model.dart';
 import '../../app/side_bar.dart';
+import '../../l10n/l10n.dart';
 import 'forecast_chart.dart';
 import 'today_chart.dart';
 
@@ -51,9 +52,9 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
             width: kPaneWidth,
             child: YaruTabBar(
               onTap: (v) => appModel.tabIndex = v,
-              tabs: const [
-                Tab(text: 'Hourly'),
-                Tab(text: 'Daily'),
+              tabs: [
+                Tab(text: context.l10n.hourly),
+                Tab(text: context.l10n.daily),
               ],
             ),
           ),

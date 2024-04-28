@@ -5,6 +5,7 @@ import 'package:yaru/constants.dart';
 import '../../../constants.dart';
 import '../../../string_x.dart';
 import '../../build_context_x.dart';
+import '../../l10n/l10n.dart';
 import '../theme_x.dart';
 import '../weather_data_x.dart';
 
@@ -50,7 +51,7 @@ class TodayTile extends StatelessWidget {
                 runAlignment: WrapAlignment.center,
                 children: [
                   Text(
-                    'Now',
+                    context.l10n.now,
                     style: style?.copyWith(fontWeight: FontWeight.bold),
                   ),
                   if (cityName != null)

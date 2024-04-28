@@ -7,6 +7,7 @@ import 'package:yaru/yaru.dart';
 
 import '../../constants.dart';
 import '../../weather.dart';
+import '../l10n/l10n.dart';
 import '../weather/weather_model.dart';
 import 'side_bar.dart';
 
@@ -16,7 +17,9 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: kAppTitle,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: supportedLocales,
+      onGenerateTitle: (context) => 'MusicPod',
       debugShowCheckedModeBanner: false,
       theme: yaruLight,
       darkTheme: yaruDark.copyWith(
@@ -51,6 +54,12 @@ class AppPage extends StatefulWidget with WatchItStatefulWidgetMixin {
 class _AppPageState extends State<AppPage> {
   @override
   void initState() {
+    YaruWindow.of(context).onClose(
+      () async {
+        await di.reset();
+        return true;
+      },
+    );
     di<WeatherModel>().loadWeather();
     super.initState();
   }

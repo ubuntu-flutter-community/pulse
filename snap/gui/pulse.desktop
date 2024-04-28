@@ -9,7 +9,7 @@ Name=Pulse
 Terminal=false
 Exec=pulse
 
-Keywords=Weather;News;Utilities;
-Comment=Weather and news app for Ubuntu
+Keywords=Weather;Utilities;
+Comment=Weather app for the Linux Desktop
 Categories=Utilities;
 Icon=weather-app

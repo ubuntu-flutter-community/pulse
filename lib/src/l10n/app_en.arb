@@ -1,0 +1,13 @@
+{
+    "@@locale": "en",
+    "save": "Save",
+    "openWeatherApiKey": "OpenWeather API key",
+    "offline": "Offline",
+    "cityName": "City name",
+    "cityNotFound": "City not found",
+    "enterACityName": "Please enter a city name",
+    "enterValidApiKey": "Please enter a (valid) API key",
+    "hourly": "Hourly",
+    "daily": "Daily",
+    "now": "Now"
+}

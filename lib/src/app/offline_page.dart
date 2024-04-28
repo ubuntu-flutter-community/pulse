@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 
 import '../build_context_x.dart';
+import '../l10n/l10n.dart';
 
 class OfflinePage extends StatelessWidget {
   const OfflinePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = context.theme;
     return YaruDetailPage(
       backgroundColor: Colors.transparent,
       appBar: YaruWindowTitleBar(
         border: BorderSide.none,
-        title: const Text('Offline'),
+        title: Text(context.l10n.offline),
         backgroundColor: Colors.transparent,
         leading: Navigator.of(context).canPop() == true
             ? const YaruBackButton(

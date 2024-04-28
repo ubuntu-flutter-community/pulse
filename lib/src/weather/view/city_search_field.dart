@@ -4,6 +4,7 @@ import 'package:yaru/yaru.dart';
 
 import '../../../string_x.dart';
 import '../../build_context_x.dart';
+import '../../l10n/l10n.dart';
 import '../weather_model.dart';
 
 class CitySearchField extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -65,12 +66,12 @@ class _CitySearchFieldState extends State<CitySearchField> {
         prefixIconConstraints:
             const BoxConstraints(minWidth: 35, minHeight: 30),
         filled: true,
-        hintText: 'City name',
+        hintText: context.l10n.cityName,
         errorText: widget.watchError
             ? (error?.cityNotFound == true
-                ? 'City not found'
+                ? context.l10n.cityNotFound
                 : error?.emptyCity == true
-                    ? 'Please enter a city name'
+                    ? context.l10n.enterACityName
                     : error)
             : null,
         errorMaxLines: 10,
