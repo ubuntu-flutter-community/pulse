@@ -8,8 +8,6 @@ import 'package:yaru/yaru.dart';
 import '../../constants.dart';
 import '../../weather.dart';
 import '../weather/weather_model.dart';
-import 'app_model.dart';
-import 'offline_page.dart';
 import 'side_bar.dart';
 
 class App extends StatelessWidget {
@@ -59,8 +57,6 @@ class _AppPageState extends State<AppPage> {
 
   @override
   Widget build(BuildContext context) {
-    final isOnline = watchPropertyValue((AppModel m) => m.isOnline);
-
     final weatherType = watchPropertyValue((WeatherModel m) => m.weatherType);
 
     return LayoutBuilder(
@@ -79,11 +75,9 @@ class _AppPageState extends State<AppPage> {
               children: [
                 if (constraints.maxWidth > kBreakPoint) const SideBar(),
                 Expanded(
-                  child: !isOnline
-                      ? const OfflinePage()
-                      : WeatherPage(
-                          showDrawer: constraints.maxWidth < kBreakPoint,
-                        ),
+                  child: WeatherPage(
+                    showDrawer: constraints.maxWidth < kBreakPoint,
+                  ),
                 ),
               ],
             ),

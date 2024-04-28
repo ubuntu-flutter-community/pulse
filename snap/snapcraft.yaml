@@ -21,7 +21,7 @@ architectures:
 parts:
   flutter-git:
     source: https://github.com/flutter/flutter.git
-    source-tag: 3.10.0
+    source-tag: 3.19.5
     plugin: nil
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
@@ -72,4 +72,3 @@ apps:
     - desktop 
     - desktop-legacy
     - unity7
-    - location-observe

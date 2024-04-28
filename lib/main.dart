@@ -1,4 +1,3 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:watch_it/watch_it.dart';
@@ -18,9 +17,7 @@ Future<void> main() async {
     locationsService,
     dispose: (s) => s.dispose(),
   );
-  final appModel = AppModel(connectivity: Connectivity());
-  await appModel.init();
-  di.registerSingleton(appModel);
+  di.registerSingleton(AppModel());
 
   di.registerLazySingleton(
     () => WeatherModel(

@@ -21,31 +21,43 @@ class OfflinePage extends StatelessWidget {
               )
             : const SizedBox.shrink(),
       ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            YaruAnimatedVectorIcon(
-              YaruAnimatedIcons.no_network,
-              size: 200,
-              color: theme.disabledColor,
+      body: const OfflineBody(),
+    );
+  }
+}
+
+class OfflineBody extends StatelessWidget {
+  const OfflineBody({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = context.theme;
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          YaruAnimatedVectorIcon(
+            YaruAnimatedIcons.no_network,
+            size: 200,
+            color: theme.disabledColor,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              top: kYaruPagePadding,
+              left: 40,
+              right: 40,
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                top: kYaruPagePadding,
-                left: 40,
-                right: 40,
-              ),
-              child: Text(
-                "It look's like your computer is not connected to the internet",
-                textAlign: TextAlign.center,
-                style: theme.textTheme.headlineMedium?.copyWith(
-                  color: theme.disabledColor,
-                ),
+            child: Text(
+              "It look's like your computer is not connected to the internet",
+              textAlign: TextAlign.center,
+              style: theme.textTheme.headlineMedium?.copyWith(
+                color: theme.disabledColor,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

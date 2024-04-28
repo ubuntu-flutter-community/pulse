@@ -13,4 +13,5 @@ extension StringExtension on String {
   bool get emptyCity => contains('Nothing to geocode');
   bool get cityNotFound => contains('city not found');
   bool get invalidKey => contains('Invalid API key');
+  bool get networkProblem => contains('Failed host lookup');
 }

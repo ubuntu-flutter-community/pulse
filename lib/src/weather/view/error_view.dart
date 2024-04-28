@@ -4,6 +4,7 @@ import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
 import '../../../string_x.dart';
+import '../../app/offline_page.dart';
 import '../../build_context_x.dart';
 import '../weather_model.dart';
 import 'city_search_field.dart';
@@ -35,6 +36,10 @@ class _ErrorViewState extends State<ErrorView> {
   @override
   Widget build(BuildContext context) {
     final model = di<WeatherModel>();
+
+    if (widget.error.networkProblem == true) {
+      return const OfflineBody();
+    }
 
     return Center(
       child: Padding(
