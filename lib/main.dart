@@ -14,43 +14,29 @@ import 'src/weather/weather_model.dart';
 
 Future<void> main() async {
   await YaruWindowTitleBar.ensureInitialized();
+
   final apiKey = await loadApiKey();
-  if (apiKey != null && apiKey.isNotEmpty) {
-    di.registerSingleton<OpenWeather>(OpenWeather(apiKey: apiKey));
+  di.registerSingleton<OpenWeather>(OpenWeather(apiKey: apiKey ?? ''));
 
-    final locationsService = LocationsService();
-    await locationsService.init();
-    di.registerSingleton<LocationsService>(
-      locationsService,
-      dispose: (s) => s.dispose(),
-    );
-    final appModel = AppModel(connectivity: Connectivity());
-    await appModel.init();
-    di.registerSingleton(appModel);
+  final locationsService = LocationsService();
+  await locationsService.init();
+  di.registerSingleton<LocationsService>(
+    locationsService,
+    dispose: (s) => s.dispose(),
+  );
+  final appModel = AppModel(connectivity: Connectivity());
+  await appModel.init();
+  di.registerSingleton(appModel);
 
-    di.registerLazySingleton(
-      () => WeatherModel(
-        locationsService: di<LocationsService>(),
-        openWeather: di<OpenWeather>(),
-      ),
-      dispose: (s) => s.dispose(),
-    );
+  di.registerLazySingleton(
+    () => WeatherModel(
+      locationsService: di<LocationsService>(),
+      openWeather: di<OpenWeather>(),
+    ),
+    dispose: (s) => s.dispose(),
+  );
 
-    runApp(const App());
-  } else {
-    runApp(
-      MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: yaruLight,
-        home: const Scaffold(
-          appBar: YaruWindowTitleBar(),
-          body: Center(
-            child: Text('NO VALID API KEY FOUND'),
-          ),
-        ),
-      ),
-    );
-  }
+  runApp(const App());
 }
 
 Future<String?> loadApiKey() async {

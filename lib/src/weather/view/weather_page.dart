@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
-import 'package:yaru/widgets.dart';
+import 'package:yaru/yaru.dart';
 
 import '../../../constants.dart';
 import '../../app/app_model.dart';
+import '../../app/side_bar.dart';
 import 'forecast_chart.dart';
 import 'today_chart.dart';
 
 class WeatherPage extends StatelessWidget with WatchItMixin {
-  const WeatherPage({super.key});
+  const WeatherPage({super.key, this.showDrawer = false});
+
+  final bool showDrawer;
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +22,29 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
       initialIndex: appModel.tabIndex,
       length: 2,
       child: Scaffold(
+        drawer: Drawer(
+          child: Builder(
+            builder: (context) {
+              return SideBar(
+                onSelected: () => Scaffold.of(context).closeDrawer(),
+              );
+            },
+          ),
+        ),
         backgroundColor: Colors.transparent,
         appBar: YaruWindowTitleBar(
-          leading:
-              Navigator.of(context).canPop() ? const YaruBackButton() : null,
+          leading: showDrawer
+              ? Builder(
+                  builder: (context) {
+                    return Center(
+                      child: IconButton(
+                        onPressed: () => Scaffold.of(context).openDrawer(),
+                        icon: const Icon(YaruIcons.menu),
+                      ),
+                    );
+                  },
+                )
+              : null,
           backgroundColor: Colors.transparent,
           border: BorderSide.none,
           title: SizedBox(

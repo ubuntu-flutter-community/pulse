@@ -10,6 +10,7 @@ const kFavLocationsFileName = 'favlocations.json';
 const kLastLocation = 'lastLocation';
 
 const kPaneWidth = 240.0;
+const kBreakPoint = 800.0;
 
 const kPagePadding = EdgeInsets.only(
   top: kYaruPagePadding,

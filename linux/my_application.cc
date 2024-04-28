@@ -16,8 +16,6 @@ G_DEFINE_TYPE(MyApplication, my_application, GTK_TYPE_APPLICATION)
 static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
 
-  hdy_init();
-
   GtkWindow* window = GTK_WINDOW(hdy_application_window_new());
   gtk_window_set_application(window, GTK_APPLICATION(application));
 
@@ -26,10 +24,10 @@ static void my_application_activate(GApplication* application) {
   gtk_container_add(GTK_CONTAINER(window), GTK_WIDGET(box));
 
   GdkGeometry geometry_min;
-  geometry_min.min_width = 800;
+  geometry_min.min_width = 600;
   geometry_min.min_height = 800;
   gtk_window_set_geometry_hints(window, nullptr, &geometry_min, GDK_HINT_MIN_SIZE);
-  gtk_window_set_default_size(window, 1200, 800);
+  gtk_window_set_default_size(window, 1000, 800);
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
   fl_dart_project_set_dart_entrypoint_arguments(

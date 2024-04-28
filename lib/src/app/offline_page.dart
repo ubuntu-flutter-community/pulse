@@ -10,6 +10,7 @@ class OfflinePage extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = context.theme;
     return YaruDetailPage(
+      backgroundColor: Colors.transparent,
       appBar: YaruWindowTitleBar(
         border: BorderSide.none,
         title: const Text('Offline'),

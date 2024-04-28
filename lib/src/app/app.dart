@@ -5,14 +5,12 @@ import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../build_context_x.dart';
 import '../../constants.dart';
 import '../../weather.dart';
-import '../weather/view/city_search_field.dart';
-import '../weather/weather_data_x.dart';
 import '../weather/weather_model.dart';
 import 'app_model.dart';
 import 'offline_page.dart';
+import 'side_bar.dart';
 
 class App extends StatelessWidget {
   const App({super.key});
@@ -20,7 +18,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Weather',
+      title: kAppTitle,
       debugShowCheckedModeBanner: false,
       theme: yaruLight,
       darkTheme: yaruDark.copyWith(
@@ -63,88 +61,35 @@ class _AppPageState extends State<AppPage> {
   Widget build(BuildContext context) {
     final isOnline = watchPropertyValue((AppModel m) => m.isOnline);
 
-    final model = di<WeatherModel>();
-    final mq = context.mq;
-    final theme = context.theme;
-    final data = watchPropertyValue((WeatherModel m) => m.data);
-    final favLocationsLength =
-        watchPropertyValue((WeatherModel m) => m.favLocations.length);
-    final favLocations = watchPropertyValue((WeatherModel m) => m.favLocations);
-    final lastLocation = watchPropertyValue((WeatherModel m) => m.lastLocation);
+    final weatherType = watchPropertyValue((WeatherModel m) => m.weatherType);
 
-    final listView = ListView.builder(
-      itemCount: favLocationsLength,
-      itemBuilder: (context, index) {
-        final location = favLocations.elementAt(index);
-        return YaruMasterTile(
-          onTap: () => model.loadWeather(cityName: location),
-          selected: lastLocation == location,
-          title: Text(
-            favLocations.elementAt(index),
-          ),
-          trailing: favLocationsLength > 1
-              ? Center(
-                  widthFactor: 0.1,
-                  child: IconButton(
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      model.removeFavLocation(location).then(
-                            (value) => model.loadWeather(
-                              cityName: favLocations.lastOrNull,
-                            ),
-                          );
-                    },
-                    icon: const Icon(
-                      YaruIcons.window_close,
-                    ),
-                  ),
-                )
-              : null,
-        );
-      },
-    );
-
-    return Stack(
-      children: [
-        if (data != null)
-          Opacity(
-            opacity: 0.6,
-            child: WeatherBg(
-              weatherType: data.weatherType,
-              width: mq.size.width,
-              height: mq.size.height,
-            ),
-          ),
-        Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Stack(
           children: [
-            Material(
-              color: theme.colorScheme.surface.withOpacity(0.4),
-              child: SizedBox(
-                width: kPaneWidth,
-                child: Column(
-                  children: [
-                    const YaruDialogTitleBar(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(kYaruContainerRadius),
-                        ),
-                      ),
-                      backgroundColor: Colors.transparent,
-                      border: BorderSide.none,
-                      style: YaruTitleBarStyle.undecorated,
-                      title: CitySearchField(),
-                    ),
-                    Expanded(child: listView),
-                  ],
-                ),
+            Opacity(
+              opacity: 0.7,
+              child: WeatherBg(
+                weatherType: weatherType,
+                width: constraints.maxWidth,
+                height: constraints.maxHeight,
               ),
             ),
-            Expanded(
-              child: !isOnline ? const OfflinePage() : const WeatherPage(),
+            Row(
+              children: [
+                if (constraints.maxWidth > kBreakPoint) const SideBar(),
+                Expanded(
+                  child: !isOnline
+                      ? const OfflinePage()
+                      : WeatherPage(
+                          showDrawer: constraints.maxWidth < kBreakPoint,
+                        ),
+                ),
+              ],
             ),
           ],
-        ),
-      ],
+        );
+      },
     );
   }
 }

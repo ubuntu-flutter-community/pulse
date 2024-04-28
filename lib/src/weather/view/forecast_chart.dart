@@ -17,50 +17,59 @@ class ForeCastChart extends StatelessWidget with WatchItMixin {
 
   @override
   Widget build(BuildContext context) {
-    final data =
+    final notTodayForecastDaily =
         watchPropertyValue((WeatherModel m) => m.notTodayForecastDaily);
+
     final error = watchPropertyValue((WeatherModel m) => m.error);
-    return error != null
-        ? Center(
-            child: Text(error),
-          )
-        : data == null
+
+    return Center(
+      child: Container(
+        margin: kPagePadding,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(kYaruContainerRadius),
+          color: context.theme.colorScheme.surface.withOpacity(0.3),
+        ),
+        width: context.mq.size.width,
+        child: (error != null)
             ? Center(
-                child: YaruCircularProgressIndicator(
-                  color: context.theme.colorScheme.onSurface,
-                  strokeWidth: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(kYaruPagePadding),
+                  child: Text(
+                    error,
+                    textAlign: TextAlign.center,
+                  ),
                 ),
               )
-            : Center(
-                child: Container(
-                  margin: kPagePadding,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(kYaruContainerRadius),
-                    color: context.theme.colorScheme.surface.withOpacity(0.3),
-                  ),
-                  height: context.mq.size.height -
-                      kYaruTitleBarHeight -
-                      3 * kYaruPagePadding,
-                  width:
-                      context.mq.size.width - kPaneWidth - 2 * kYaruPagePadding,
-                  child: Padding(
+            : (notTodayForecastDaily == null)
+                ? Center(
+                    child: YaruCircularProgressIndicator(
+                      color: context.theme.colorScheme.onSurface,
+                      strokeWidth: 3,
+                    ),
+                  )
+                : Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: kYaruPagePadding),
                     child: BarChart(
                       BarChartData(
                         baselineY: 0,
-                        titlesData: getTitlesData(context, data),
+                        titlesData:
+                            getTitlesData(context, notTodayForecastDaily + []),
                         borderData: borderData,
-                        barGroups: getBarGroups(data),
+                        barGroups: getBarGroups(notTodayForecastDaily),
                         gridData: const FlGridData(show: false),
                         alignment: BarChartAlignment.spaceAround,
-                        maxY: data.map((e) => e.temperature.tempMax).max,
-                        minY: data.map((e) => e.temperature.tempMin).min,
+                        maxY: notTodayForecastDaily
+                            .map((e) => e.temperature.tempMax)
+                            .max,
+                        minY: notTodayForecastDaily
+                            .map((e) => e.temperature.tempMin)
+                            .min,
                       ),
                     ),
                   ),
-                ),
-              );
+      ),
+    );
   }
 
   FlTitlesData getTitlesData(BuildContext context, List<WeatherData> data) =>

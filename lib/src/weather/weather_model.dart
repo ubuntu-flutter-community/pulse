@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
+import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:open_weather_client/models/temperature.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
@@ -30,10 +31,14 @@ class WeatherModel extends SafeChangeNotifier {
 
   WeatherData? _weatherData;
   WeatherData? get data => _weatherData;
+  // needed for smooth transition
+  WeatherType _weatherType = WeatherType.sunny;
+  WeatherType get weatherType => _weatherType;
 
   String? _error;
   String? get error => _error;
   set error(String? value) {
+    if (value == _error) return;
     _error = value;
     notifyListeners();
   }
@@ -60,6 +65,10 @@ class WeatherModel extends SafeChangeNotifier {
       }
     }
 
+    if (_weatherData?.weatherType != null) {
+      _weatherType = _weatherData!.weatherType;
+    }
+
     notifyListeners();
   }
 
@@ -78,7 +87,7 @@ class WeatherModel extends SafeChangeNotifier {
       );
       return weatherData;
     } catch (e) {
-      error = 'Please enter a valid city name';
+      error = e.toString();
       return null;
     }
   }
@@ -95,7 +104,7 @@ class WeatherModel extends SafeChangeNotifier {
 
       return weatherForecastData.forecastData.toList();
     } catch (e) {
-      error = 'Please enter a valid city name';
+      error = e.toString();
       return null;
     }
   }

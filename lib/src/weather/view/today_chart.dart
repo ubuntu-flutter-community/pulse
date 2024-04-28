@@ -18,12 +18,24 @@ class TodayChart extends StatefulWidget with WatchItStatefulWidgetMixin {
 }
 
 class _TodayChartState extends State<TodayChart> {
+  late ScrollController _scrollController;
+
   List<Color> gradientColors = [
     Colors.cyan,
     YaruColors.blue,
   ];
 
-  bool showAvg = false;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +47,7 @@ class _TodayChartState extends State<TodayChart> {
     final error = watchPropertyValue((WeatherModel m) => m.error);
 
     return Stack(
+      alignment: Alignment.center,
       children: [
         Container(
           margin: kPagePadding,
@@ -45,7 +58,13 @@ class _TodayChartState extends State<TodayChart> {
           ),
           child: error != null
               ? Center(
-                  child: Text(error),
+                  child: Padding(
+                    padding: const EdgeInsets.all(kYaruPagePadding),
+                    child: Text(
+                      error,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 )
               : forecast == null || data == null
                   ? Center(
@@ -55,33 +74,50 @@ class _TodayChartState extends State<TodayChart> {
                       ),
                     )
                   : SingleChildScrollView(
+                      controller: _scrollController,
                       padding: EdgeInsets.only(top: mq.size.height / 3),
                       scrollDirection: Axis.horizontal,
                       child: SizedBox(
                         width: forecast.length * 50,
                         height: 400,
                         child: LineChart(
-                          showAvg ? avgData(forecast) : mainData(forecast),
+                          mainData(forecast),
                         ),
                       ),
                     ),
         ),
-        Positioned(
-          right: 65,
-          bottom: 100,
-          child: FloatingActionButton(
-            backgroundColor: Colors.white,
-            onPressed: () {
-              setState(() {
-                showAvg = !showAvg;
-              });
-            },
-            child: Icon(
-              showAvg ? YaruIcons.weather : YaruIcons.minus,
-              color: Colors.black,
+        if (error == null)
+          Positioned(
+            left: 65,
+            child: FloatingActionButton.small(
+              backgroundColor: Colors.white,
+              onPressed: () => _scrollController.animateTo(
+                _scrollController.position.pixels - 200,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.bounceIn,
+              ),
+              child: const Icon(
+                YaruIcons.go_previous,
+                color: Colors.black,
+              ),
             ),
           ),
-        ),
+        if (error == null)
+          Positioned(
+            right: 65,
+            child: FloatingActionButton.small(
+              backgroundColor: Colors.white,
+              onPressed: () => _scrollController.animateTo(
+                _scrollController.position.pixels + 200,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.ease,
+              ),
+              child: const Icon(
+                YaruIcons.go_next,
+                color: Colors.black,
+              ),
+            ),
+          ),
         if (data != null)
           TodayTile(
             data: data,
@@ -226,104 +262,6 @@ class _TodayChartState extends State<TodayChart> {
               colors: gradientColors
                   .map((color) => color.withOpacity(0.3))
                   .toList(),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  LineChartData avgData(List<WeatherData> data) {
-    return LineChartData(
-      lineTouchData: const LineTouchData(enabled: false),
-      gridData: FlGridData(
-        show: false,
-        drawHorizontalLine: true,
-        verticalInterval: 1,
-        horizontalInterval: 1,
-        getDrawingVerticalLine: (value) {
-          return const FlLine(
-            color: Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-        getDrawingHorizontalLine: (value) {
-          return const FlLine(
-            color: Color(0xff37434d),
-            strokeWidth: 1,
-          );
-        },
-      ),
-      titlesData: FlTitlesData(
-        show: false,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-            reservedSize: 30,
-            getTitlesWidget: (value, meta) =>
-                bottomTitleWidgets(value, meta, data),
-            interval: 1,
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: false,
-            getTitlesWidget: leftTitleWidgets,
-            reservedSize: 42,
-            interval: 1,
-          ),
-        ),
-        topTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: const AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      ),
-      borderData: FlBorderData(
-        show: false,
-        border: Border.all(color: const Color(0xff37434d)),
-      ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: 6,
-      lineBarsData: [
-        LineChartBarData(
-          spots: const [
-            FlSpot(0, 3.44),
-            FlSpot(2.6, 3.44),
-            FlSpot(4.9, 3.44),
-            FlSpot(6.8, 3.44),
-            FlSpot(8, 3.44),
-            FlSpot(9.5, 3.44),
-            FlSpot(11, 3.44),
-          ],
-          isCurved: true,
-          gradient: LinearGradient(
-            colors: [
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-              ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                  .lerp(0.2)!,
-            ],
-          ),
-          barWidth: 5,
-          isStrokeCapRound: true,
-          dotData: const FlDotData(
-            show: false,
-          ),
-          belowBarData: BarAreaData(
-            show: true,
-            gradient: LinearGradient(
-              colors: [
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-                ColorTween(begin: gradientColors[0], end: gradientColors[1])
-                    .lerp(0.2)!
-                    .withOpacity(0.1),
-              ],
             ),
           ),
         ),
