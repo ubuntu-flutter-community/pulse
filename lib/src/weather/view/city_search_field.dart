@@ -38,6 +38,8 @@ class _CitySearchFieldState extends State<CitySearchField> {
   Widget build(BuildContext context) {
     final model = di<WeatherModel>();
     final error = watchPropertyValue((WeatherModel m) => m.error);
+    final loading = watchPropertyValue((WeatherModel m) => m.loading);
+
     final theme = context.theme;
     var textField = TextField(
       autofocus: true,
@@ -76,26 +78,23 @@ class _CitySearchFieldState extends State<CitySearchField> {
             : null,
         errorMaxLines: 10,
         suffixIconConstraints: const BoxConstraints(
-          maxHeight: kYaruTitleBarItemHeight,
-          minHeight: kYaruTitleBarItemHeight,
-          minWidth: kYaruTitleBarItemHeight,
-          maxWidth: kYaruTitleBarItemHeight,
+          maxHeight: 20,
+          minHeight: 20,
+          minWidth: 20,
+          maxWidth: 20,
         ),
-        // suffixIcon: ClipRRect(
-        //   borderRadius: const BorderRadius.only(
-        //     topRight: Radius.circular(kYaruButtonRadius),
-        //     bottomRight: Radius.circular(kYaruButtonRadius),
-        //   ),
-        //   child: Material(
-        //     color: Colors.transparent,
-        //     child: InkWell(
-        //       child: const Icon(
-        //         YaruIcons.location,
-        //       ),
-        //       onTap: () => model.init(cityName: null),
-        //     ),
-        //   ),
-        // ),
+        suffixIcon: (loading)
+            ? Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: SizedBox.square(
+                  dimension: 20,
+                  child: YaruCircularProgressIndicator(
+                    color: context.theme.colorScheme.onSurface,
+                    strokeWidth: 1,
+                  ),
+                ),
+              )
+            : null,
       ),
     );
     return textField;

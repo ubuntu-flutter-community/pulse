@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:yaru/yaru.dart';
 
 import '../../constants.dart';
 import '../../weather.dart';
+import '../build_context_x.dart';
 import '../l10n/l10n.dart';
 import '../weather/weather_model.dart';
 import 'side_bar.dart';
@@ -70,10 +72,19 @@ class _AppPageState extends State<AppPage> {
 
     return LayoutBuilder(
       builder: (context, constraints) {
+        var list = [
+          if (constraints.maxWidth > kBreakPoint) const SideBar(),
+          Expanded(
+            child: WeatherPage(
+              showDrawer: constraints.maxWidth < kBreakPoint,
+            ),
+          ),
+        ];
         return Stack(
+          alignment: Alignment.center,
           children: [
             Opacity(
-              opacity: 0.7,
+              opacity: Platform.isMacOS ? (context.light ? 1 : 0.6) : 0.7,
               child: WeatherBg(
                 weatherType: weatherType,
                 width: constraints.maxWidth,
@@ -81,14 +92,7 @@ class _AppPageState extends State<AppPage> {
               ),
             ),
             Row(
-              children: [
-                if (constraints.maxWidth > kBreakPoint) const SideBar(),
-                Expanded(
-                  child: WeatherPage(
-                    showDrawer: constraints.maxWidth < kBreakPoint,
-                  ),
-                ),
-              ],
+              children: Platform.isMacOS ? list.reversed.toList() : list,
             ),
           ],
         );

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
@@ -23,29 +25,22 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
       initialIndex: appModel.tabIndex,
       length: 2,
       child: Scaffold(
-        drawer: Drawer(
-          child: Builder(
-            builder: (context) {
-              return SideBar(
-                onSelected: () => Scaffold.of(context).closeDrawer(),
-              );
-            },
-          ),
-        ),
+        drawer: Platform.isMacOS ? null : const _Drawer(),
+        endDrawer: Platform.isMacOS ? const _Drawer() : null,
         backgroundColor: Colors.transparent,
         appBar: YaruWindowTitleBar(
-          leading: showDrawer
-              ? Builder(
-                  builder: (context) {
-                    return Center(
-                      child: IconButton(
-                        onPressed: () => Scaffold.of(context).openDrawer(),
-                        icon: const Icon(YaruIcons.menu),
-                      ),
-                    );
-                  },
-                )
-              : null,
+          leading: Platform.isMacOS
+              ? null
+              : showDrawer
+                  ? const _DrawerButton()
+                  : null,
+          actions: [
+            if (Platform.isMacOS && showDrawer)
+              const Padding(
+                padding: EdgeInsets.only(right: 8),
+                child: _DrawerButton(),
+              ),
+          ],
           backgroundColor: Colors.transparent,
           border: BorderSide.none,
           title: SizedBox(
@@ -60,6 +55,53 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
           ),
         ),
         body: showToday ? const HourlyLineChart() : const DailyBarChart(),
+      ),
+    );
+  }
+}
+
+class _DrawerButton extends StatelessWidget {
+  const _DrawerButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        return Center(
+          child: IconButton(
+            onPressed: () {
+              if (Platform.isMacOS) {
+                Scaffold.of(context).openEndDrawer();
+              } else {
+                Scaffold.of(context).openDrawer();
+              }
+            },
+            icon: const Icon(YaruIcons.menu),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _Drawer extends StatelessWidget {
+  const _Drawer();
+
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      child: Builder(
+        builder: (context) {
+          return SideBar(
+            onSelected: () {
+              if (Platform.isMacOS) {
+                Scaffold.of(context).closeEndDrawer();
+              } else {
+                Scaffold.of(context).closeDrawer();
+              }
+            },
+          );
+        },
       ),
     );
   }
