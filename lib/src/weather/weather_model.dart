@@ -51,10 +51,17 @@ class WeatherModel extends SafeChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> loadWeather({String? cityName}) async {
-    _weatherData = null;
-    _error = null;
+  bool _loading = false;
+  bool get loading => _loading;
+  set loading(bool value) {
+    if (value == _loading) return;
+    _loading = value;
     notifyListeners();
+  }
+
+  Future<void> loadWeather({String? cityName}) async {
+    _error = null;
+    loading = true;
 
     cityName ??= lastLocation ?? '';
 
@@ -77,7 +84,7 @@ class WeatherModel extends SafeChangeNotifier {
       _weatherType = _weatherData!.weatherType;
     }
 
-    notifyListeners();
+    loading = false;
   }
 
   @override

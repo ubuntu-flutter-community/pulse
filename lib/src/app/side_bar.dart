@@ -27,18 +27,24 @@ class SideBar extends StatelessWidget with WatchItMixin {
       itemCount: favLocationsLength,
       itemBuilder: (context, index) {
         final location = favLocations.elementAt(index);
-        return YaruMasterTile(
-          onTap: () {
-            model.loadWeather(cityName: location);
-            onSelected?.call();
-          },
-          selected: lastLocation == location,
-          title: Text(
-            favLocations.elementAt(index),
-          ),
-          trailing: favLocationsLength > 1
-              ? Center(
-                  widthFactor: 0.1,
+        return Stack(
+          alignment: Alignment.centerRight,
+          children: [
+            YaruMasterTile(
+              onTap: () {
+                model.loadWeather(cityName: location);
+                onSelected?.call();
+              },
+              selected: lastLocation == location,
+              title: Text(
+                favLocations.elementAt(index),
+              ),
+            ),
+            if (favLocationsLength > 1 && lastLocation == location)
+              Positioned(
+                right: 20,
+                child: SizedBox.square(
+                  dimension: 30,
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     onPressed: () {
@@ -52,8 +58,9 @@ class SideBar extends StatelessWidget with WatchItMixin {
                       YaruIcons.window_close,
                     ),
                   ),
-                )
-              : null,
+                ),
+              ),
+          ],
         );
       },
     );

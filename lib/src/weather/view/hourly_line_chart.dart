@@ -219,8 +219,12 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
       ),
       minX: 0,
       maxX: (forecast.length - 1).toDouble(),
-      minY: forecast.map((e) => e.temperature.currentTemperature).min,
-      maxY: forecast.map((e) => e.temperature.currentTemperature).max,
+      minY: forecast.isEmpty
+          ? 10
+          : forecast.map((e) => e.temperature.currentTemperature).min,
+      maxY: forecast.isEmpty
+          ? 100
+          : forecast.map((e) => e.temperature.currentTemperature).max,
       lineBarsData: [
         LineChartBarData(
           spots: forecast
