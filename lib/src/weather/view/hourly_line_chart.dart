@@ -71,7 +71,8 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
                     )
                   : SingleChildScrollView(
                       controller: _scrollController,
-                      padding: EdgeInsets.only(top: mq.size.height / 3),
+                      padding:
+                          EdgeInsets.only(top: (mq.size.height / 2.8) + 20),
                       scrollDirection: Axis.horizontal,
                       child: SizedBox(
                         width: forecast.length * 100,
@@ -150,6 +151,10 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
               fontSize: 10,
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Icon(forecast[value.toInt()].icon),
+          ),
         ],
       ),
     );
@@ -194,7 +199,7 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
             showTitles: true,
-            reservedSize: 55,
+            reservedSize: 85,
             interval: 1,
             getTitlesWidget: (value, meta) => bottomTitleWidgets(
               value: value,
