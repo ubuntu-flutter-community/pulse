@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:open_weather_client/models/weather_data.dart';
 import 'package:yaru/constants.dart';
 
-import '../../../constants.dart';
-import '../../../string_x.dart';
-import '../../build_context_x.dart';
+import '../../constants.dart';
+import '../../extensions/string_x.dart';
+import '../../extensions/build_context_x.dart';
 import '../../l10n/l10n.dart';
 import '../theme_x.dart';
 import '../weather_data_x.dart';

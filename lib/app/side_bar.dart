@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../constants.dart';
-import '../build_context_x.dart';
+import '../constants.dart';
+import '../extensions/build_context_x.dart';
 import '../weather/view/city_search_field.dart';
 import '../weather/weather_model.dart';
 
@@ -66,7 +66,7 @@ class SideBar extends StatelessWidget with WatchItMixin {
     );
 
     return Material(
-      color: theme.colorScheme.surface.withOpacity(0.4),
+      color: theme.colorScheme.surface.withValues(alpha: 0.4),
       child: SizedBox(
         width: kPaneWidth,
         child: Column(

@@ -6,9 +6,9 @@ import 'package:flutter_weather_bg_null_safety/bg/weather_bg.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../constants.dart';
-import '../../weather.dart';
-import '../build_context_x.dart';
+import '../constants.dart';
+import '../weather.dart';
+import '../extensions/build_context_x.dart';
 import '../l10n/l10n.dart';
 import '../weather/weather_model.dart';
 import 'side_bar.dart';
@@ -27,12 +27,12 @@ class App extends StatelessWidget {
       darkTheme: yaruDark.copyWith(
         tabBarTheme: TabBarTheme.of(context).copyWith(
           labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withOpacity(
-            0.8,
+          unselectedLabelColor: Colors.white.withValues(
+            alpha: 0.8,
           ),
         ),
       ),
-      home: const AppPage(),
+      home: const StartPage(),
       scrollBehavior: const MaterialScrollBehavior().copyWith(
         dragDevices: {
           PointerDeviceKind.mouse,
@@ -46,6 +46,45 @@ class App extends StatelessWidget {
   }
 }
 
+class StartPage extends StatefulWidget {
+  const StartPage({super.key});
+
+  @override
+  State<StartPage> createState() => _StartPageState();
+}
+
+class _StartPageState extends State<StartPage> {
+  late final Future<void> _allReady;
+
+  @override
+  void initState() {
+    super.initState();
+    _allReady = di.allReady();
+  }
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder(
+        future: _allReady,
+        builder: (context, snapshot) =>
+            snapshot.hasData ? const AppPage() : const LoadingPage(),
+      );
+}
+
+class LoadingPage extends StatelessWidget {
+  const LoadingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) => const Scaffold(
+        appBar: YaruWindowTitleBar(
+          border: BorderSide.none,
+          backgroundColor: Colors.transparent,
+        ),
+        body: Center(
+          child: YaruCircularProgressIndicator(),
+        ),
+      );
+}
+
 class AppPage extends StatefulWidget with WatchItStatefulWidgetMixin {
   const AppPage({super.key});
 
@@ -56,12 +95,6 @@ class AppPage extends StatefulWidget with WatchItStatefulWidgetMixin {
 class _AppPageState extends State<AppPage> {
   @override
   void initState() {
-    YaruWindow.of(context).onClose(
-      () async {
-        await di.reset();
-        return true;
-      },
-    );
     di<WeatherModel>().loadWeather();
     super.initState();
   }

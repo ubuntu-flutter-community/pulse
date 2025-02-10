@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yaru/yaru.dart';
 
-import '../build_context_x.dart';
+import '../extensions/build_context_x.dart';
 import '../l10n/l10n.dart';
 
 class OfflinePage extends StatelessWidget {
