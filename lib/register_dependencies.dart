@@ -10,10 +10,19 @@ import 'weather/weather_model.dart';
 
 void registerDependencies() {
   di
-    ..registerSingleton<FlutterSecureStorage>(
-      const FlutterSecureStorage(
-        aOptions: AndroidOptions(encryptedSharedPreferences: true),
-      ),
+    ..registerSingletonAsync<FlutterSecureStorage>(
+      () async {
+        const flutterSecureStorage = FlutterSecureStorage(
+          aOptions: AndroidOptions(encryptedSharedPreferences: true),
+        );
+
+        const apiKey = String.fromEnvironment('API_KEY', defaultValue: '');
+
+        if (apiKey.isNotEmpty) {
+          flutterSecureStorage.write(key: SettingKeys.apiKey, value: apiKey);
+        }
+        return flutterSecureStorage;
+      },
     )
     ..registerSingletonAsync<SharedPreferences>(
       () async => SharedPreferences.getInstance(),
@@ -23,26 +32,21 @@ void registerDependencies() {
         sharedPreferences: di<SharedPreferences>(),
         flutterSecureStorage: di<FlutterSecureStorage>(),
       ),
-      dependsOn: [SharedPreferences],
+      dependsOn: [FlutterSecureStorage, SharedPreferences],
       dispose: (s) => s.dispose(),
     )
-    ..registerSingletonAsync<LocationsService>(
-      () async {
-        final locationsService = LocationsService(
-          settingsService: di<SettingsService>(),
-        );
-        await locationsService.init();
-        return locationsService;
-      },
+    ..registerSingletonWithDependencies<LocationsService>(
+      () => LocationsService(
+        settingsService: di<SettingsService>(),
+      ),
       dependsOn: [SettingsService],
     )
     ..registerSingletonAsync<OpenWeather>(
-      () async {
-        final apiKey = (await di<SettingsService>()
-                .getStringSecure(key: SettingKeys.apiKey)) ??
-            '';
-        return OpenWeather(apiKey: apiKey);
-      },
+      () async => OpenWeather(
+        apiKey:
+            await di<FlutterSecureStorage>().read(key: SettingKeys.apiKey) ??
+                '',
+      ),
       dependsOn: [SettingsService],
     )
     ..registerSingletonWithDependencies(

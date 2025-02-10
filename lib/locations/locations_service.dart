@@ -8,16 +8,6 @@ class LocationsService {
   }) : _settingsService = settingsService;
   final SettingsService _settingsService;
 
-  String? _apiKey;
-  String? get apiKey => _apiKey;
-  void setApiKey(String? value) {
-    _settingsService.setString(
-      key: SettingKeys.apiKey,
-      value: value ?? '',
-      secure: true,
-    );
-  }
-
   String? get lastLocation =>
       _settingsService.getString(key: SettingKeys.lastLocation);
   void setLastLocation(String? value) {
@@ -53,8 +43,4 @@ class LocationsService {
   }
 
   Stream<bool> get propertiesChanged => _settingsService.propertiesChanged;
-
-  Future<void> init() async {
-    _apiKey = await _settingsService.getStringSecure(key: SettingKeys.apiKey);
-  }
 }

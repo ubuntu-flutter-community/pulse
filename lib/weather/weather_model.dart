@@ -22,8 +22,6 @@ class WeatherModel extends SafeChangeNotifier {
 
   OpenWeather _openWeather;
   void setApiKeyAndLoadWeather(String apiKey) {
-    _locationsService.setApiKey(apiKey);
-
     di
       ..unregister<OpenWeather>()
       ..registerSingleton<OpenWeather>(OpenWeather(apiKey: apiKey));

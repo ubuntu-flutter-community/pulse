@@ -17,43 +17,41 @@ class App extends StatelessWidget {
   const App({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: supportedLocales,
-      onGenerateTitle: (context) => 'MusicPod',
-      debugShowCheckedModeBanner: false,
-      theme: yaruLight,
-      darkTheme: yaruDark.copyWith(
-        tabBarTheme: TabBarTheme.of(context).copyWith(
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.white.withValues(
-            alpha: 0.8,
+  Widget build(BuildContext context) => MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: supportedLocales,
+        onGenerateTitle: (context) => 'MusicPod',
+        debugShowCheckedModeBanner: false,
+        theme: yaruLight,
+        darkTheme: yaruDark.copyWith(
+          tabBarTheme: TabBarTheme.of(context).copyWith(
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.white.withValues(
+              alpha: 0.8,
+            ),
           ),
         ),
-      ),
-      home: const StartPage(),
-      scrollBehavior: const MaterialScrollBehavior().copyWith(
-        dragDevices: {
-          PointerDeviceKind.mouse,
-          PointerDeviceKind.touch,
-          PointerDeviceKind.stylus,
-          PointerDeviceKind.unknown,
-          PointerDeviceKind.trackpad,
-        },
-      ),
-    );
-  }
+        home: const _StartPage(),
+        scrollBehavior: const MaterialScrollBehavior().copyWith(
+          dragDevices: {
+            PointerDeviceKind.mouse,
+            PointerDeviceKind.touch,
+            PointerDeviceKind.stylus,
+            PointerDeviceKind.unknown,
+            PointerDeviceKind.trackpad,
+          },
+        ),
+      );
 }
 
-class StartPage extends StatefulWidget {
-  const StartPage({super.key});
+class _StartPage extends StatefulWidget {
+  const _StartPage();
 
   @override
-  State<StartPage> createState() => _StartPageState();
+  State<_StartPage> createState() => _StartPageState();
 }
 
-class _StartPageState extends State<StartPage> {
+class _StartPageState extends State<_StartPage> {
   late final Future<void> _allReady;
 
   @override
@@ -66,12 +64,12 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) => FutureBuilder(
         future: _allReady,
         builder: (context, snapshot) =>
-            snapshot.hasData ? const AppPage() : const LoadingPage(),
+            snapshot.hasData ? const _AppPage() : const _LoadingPage(),
       );
 }
 
-class LoadingPage extends StatelessWidget {
-  const LoadingPage({super.key});
+class _LoadingPage extends StatelessWidget {
+  const _LoadingPage();
 
   @override
   Widget build(BuildContext context) => const Scaffold(
@@ -85,14 +83,14 @@ class LoadingPage extends StatelessWidget {
       );
 }
 
-class AppPage extends StatefulWidget with WatchItStatefulWidgetMixin {
-  const AppPage({super.key});
+class _AppPage extends StatefulWidget with WatchItStatefulWidgetMixin {
+  const _AppPage();
 
   @override
-  State<AppPage> createState() => _AppPageState();
+  State<_AppPage> createState() => _AppPageState();
 }
 
-class _AppPageState extends State<AppPage> {
+class _AppPageState extends State<_AppPage> {
   @override
   void initState() {
     di<WeatherModel>().loadWeather();
