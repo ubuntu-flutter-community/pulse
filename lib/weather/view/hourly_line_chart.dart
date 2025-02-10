@@ -5,8 +5,8 @@ import 'package:open_weather_client/models/weather_data.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../../constants.dart';
-import '../../build_context_x.dart';
+import '../../constants.dart';
+import '../../extensions/build_context_x.dart';
 import '../../l10n/l10n.dart';
 import '../weather_data_x.dart';
 import '../weather_model.dart';
@@ -58,7 +58,7 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
           height: mq.size.height,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(kYaruContainerRadius),
-            color: context.theme.colorScheme.surface.withOpacity(0.3),
+            color: context.theme.colorScheme.surface.withValues(alpha: 0.3),
           ),
           child: error != null
               ? ErrorView(error: error)
@@ -134,7 +134,7 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
     final weekday = forecast[value.toInt()].getWeekDay(context);
     return SideTitleWidget(
       fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
-      axisSide: meta.axisSide,
+      meta: meta,
       child: Column(
         children: [
           Text(
@@ -164,7 +164,8 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
     required List<WeatherData> forecast,
     required WeatherData data,
   }) {
-    final outlineColor = context.theme.colorScheme.onSurface.withOpacity(0.2);
+    final outlineColor =
+        context.theme.colorScheme.onSurface.withValues(alpha: 0.2);
 
     return LineChartData(
       gridData: FlGridData(
@@ -219,7 +220,7 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
       borderData: FlBorderData(
         show: false,
         border: Border.all(
-          color: context.theme.colorScheme.onSurface.withOpacity(0.2),
+          color: context.theme.colorScheme.onSurface.withValues(alpha: 0.2),
         ),
       ),
       minX: 0,
@@ -253,7 +254,7 @@ class _HourlyLineChartState extends State<HourlyLineChart> {
             show: true,
             gradient: LinearGradient(
               colors: gradientColors
-                  .map((color) => color.withOpacity(0.3))
+                  .map((color) => color.withValues(alpha: 0.3))
                   .toList(),
             ),
           ),

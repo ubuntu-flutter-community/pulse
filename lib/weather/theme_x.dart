@@ -9,7 +9,7 @@ extension ThemeX on ThemeData {
         shadows: [
           if (!light)
             Shadow(
-              color: Colors.black.withOpacity(light ? 1 : 0.8),
+              color: Colors.black.withValues(alpha: light ? 1 : 0.8),
               offset: const Offset(0, 0),
               blurRadius: light ? 2 : 3,
             ),

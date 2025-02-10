@@ -1,0 +1,61 @@
+name: Create Snap Package
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+env:
+  FLUTTER_VERSION: "3.27.4"
+
+jobs:
+  build_and_release_linux_snap_edge_amd64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 5
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          flutter-version: ${{env.FLUTTER_VERSION}}
+      - run: sudo apt update
+      - run: sudo apt install -y clang cmake curl libgtk-3-dev ninja-build pkg-config unzip libunwind-dev libsecret-1-dev
+      - run: flutter pub get
+      - uses: snapcore/action-build@v1
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+        id: build
+      - uses: snapcore/action-publish@v1
+        if: steps.build.outcome == 'success'
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: edge
+
+  build_and_release_linux_snap_edge_arm64:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 5
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: "main"
+          flutter-version: ${{env.FLUTTER_VERSION}}
+      - run: sudo apt update
+      - run: sudo apt install -y clang cmake curl libgtk-3-dev ninja-build pkg-config unzip libunwind-dev libsecret-1-dev
+      - run: flutter pub get
+      - uses: snapcore/action-build@v1
+        id: build
+        env:
+          API_KEY: ${{ secrets.API_KEY }}
+      - uses: snapcore/action-publish@v1
+        if: steps.build.outcome == 'success'
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
+        with:
+          snap: ${{ steps.build.outputs.snap }}
+          release: edge

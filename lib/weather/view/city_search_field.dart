@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../../string_x.dart';
-import '../../build_context_x.dart';
+import '../../extensions/string_x.dart';
+import '../../extensions/build_context_x.dart';
 import '../../l10n/l10n.dart';
 import '../weather_model.dart';
 
@@ -56,7 +56,7 @@ class _CitySearchFieldState extends State<CitySearchField> {
           .bodyMedium
           ?.copyWith(fontWeight: FontWeight.w500),
       decoration: InputDecoration(
-        fillColor: theme.colorScheme.onSurface.withOpacity(0.2),
+        fillColor: theme.colorScheme.onSurface.withValues(alpha: 0.2),
         prefixIcon: Icon(
           YaruIcons.search,
           size: 15,
@@ -83,7 +83,7 @@ class _CitySearchFieldState extends State<CitySearchField> {
           minWidth: 20,
           maxWidth: 20,
         ),
-        suffixIcon: (loading)
+        suffixIcon: loading
             ? Padding(
                 padding: const EdgeInsets.only(right: 8),
                 child: SizedBox.square(

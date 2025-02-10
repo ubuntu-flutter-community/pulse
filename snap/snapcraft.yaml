@@ -11,7 +11,6 @@ issues: https://github.com/ubuntu-flutter-community/pulse/issues
 license: GPL-3.0+
 icon: snap/gui/pulse.png
 
-
 grade: stable
 confinement: strict
 architectures:
@@ -21,7 +20,7 @@ architectures:
 parts:
   flutter-git:
     source: https://github.com/flutter/flutter.git
-    source-tag: 3.19.5
+    source-tag: 3.27.4
     plugin: nil
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
@@ -43,32 +42,33 @@ parts:
     plugin: nil
     source: .
     after: [flutter-git]
-    
+
     override-build: |
-      set -eux
+      set -eu
       flutter doctor
       flutter pub get
-      flutter build linux --release -v
+      export API_KEY=$API_KEY
+      flutter build linux --release -v --dart-define=API_KEY="$API_KEY"
       mkdir -p $CRAFT_PART_INSTALL/bin/
-      cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/bin/ 
+      cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/bin/
 
 slots:
-  pulse-dbus: 
-   interface: dbus
-   bus: session
-   name: org.feichtmeier.Pulse
+  pulse-dbus:
+    interface: dbus
+    bus: session
+    name: org.feichtmeier.Pulse
 
 apps:
   pulse:
-   command: bin/pulse
-   desktop: snap/gui/pulse.desktop
-   extensions: [gnome]
-   common-id: org.feichtmeier.Pulse
-   plugs:
-    - network
-    - network-status
-    - x11
-    - wayland 
-    - desktop 
-    - desktop-legacy
-    - unity7
+    command: bin/pulse
+    desktop: snap/gui/pulse.desktop
+    extensions: [gnome]
+    common-id: org.feichtmeier.Pulse
+    plugs:
+      - network
+      - network-status
+      - x11
+      - wayland
+      - desktop
+      - desktop-legacy
+      - unity7

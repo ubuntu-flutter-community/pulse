@@ -7,8 +7,8 @@ import 'package:open_weather_client/models/weather_data.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../../constants.dart';
-import '../../build_context_x.dart';
+import '../../constants.dart';
+import '../../extensions/build_context_x.dart';
 import '../weather_data_x.dart';
 import '../weather_model.dart';
 import 'error_view.dart';
@@ -28,7 +28,7 @@ class DailyBarChart extends StatelessWidget with WatchItMixin {
         margin: kPagePadding,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(kYaruContainerRadius),
-          color: context.theme.colorScheme.surface.withOpacity(0.3),
+          color: context.theme.colorScheme.surface.withValues(alpha: 0.3),
         ),
         width: context.mq.size.width,
         child: (error != null)
@@ -74,7 +74,7 @@ class DailyBarChart extends StatelessWidget with WatchItMixin {
             reservedSize: 30,
             getTitlesWidget: (value, meta) {
               return SideTitleWidget(
-                axisSide: meta.axisSide,
+                meta: meta,
                 child: Text(
                   '${data[value.toInt()].temperature.tempMin.toInt()} °',
                   style: TextStyle(
@@ -97,7 +97,7 @@ class DailyBarChart extends StatelessWidget with WatchItMixin {
             reservedSize: 150,
             getTitlesWidget: (value, meta) {
               return SideTitleWidget(
-                axisSide: meta.axisSide,
+                meta: meta,
                 child: Column(
                   children: [
                     Flexible(

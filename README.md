@@ -8,7 +8,12 @@
 
 Requires an api key from [openweathermap](https://openweathermap.org) which you need to create yourself (free tier) in your own account.
 
+
 ## Build
+
+### Install libsecret
+
+`sudo apt install libsecret-1-dev`
 
 ### Install Flutter
 
@@ -22,3 +27,13 @@ sudo apt -y install git curl cmake meson make clang libgtk-3-dev pkg-config && m
 ```
 
 </details>
+
+### Run the app
+
+For the first run or after every `flutter clean`, the app needs to be started with your API_KEY:
+
+`flutter run --dart-define=API_KEY=YOUR_API_KEY_HERE_WITHOUT_QUOTES`
+
+any other times you can use
+
+`flutter run`

@@ -7,6 +7,7 @@ import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:open_weather_client/models/temperature.dart';
 import 'package:open_weather_client/open_weather.dart';
 import 'package:safe_change_notifier/safe_change_notifier.dart';
+import 'package:watch_it/watch_it.dart';
 
 import '../locations/locations_service.dart';
 import 'weather_data_x.dart';
@@ -21,16 +22,15 @@ class WeatherModel extends SafeChangeNotifier {
 
   OpenWeather _openWeather;
   void setApiKeyAndLoadWeather(String apiKey) {
-    _locationsService.setApiKey(apiKey).then((_) {
-      _openWeather = OpenWeather(apiKey: apiKey);
-      loadWeather();
-    });
+    di
+      ..unregister<OpenWeather>()
+      ..registerSingleton<OpenWeather>(OpenWeather(apiKey: apiKey));
+    _openWeather = di<OpenWeather>();
+    loadWeather();
   }
 
   final LocationsService _locationsService;
-  StreamSubscription<bool>? _apiKeyChangedSub;
-  StreamSubscription<bool>? _lastLocationChangedSub;
-  StreamSubscription<bool>? _favLocationsChangedSub;
+  StreamSubscription<bool>? _propertiesChangedSub;
 
   String? get lastLocation => _locationsService.lastLocation;
   Set<String> get favLocations => _locationsService.favLocations;
@@ -65,12 +65,8 @@ class WeatherModel extends SafeChangeNotifier {
 
     cityName ??= lastLocation ?? '';
 
-    _apiKeyChangedSub =
-        _locationsService.apiKeyChanged.listen((_) => notifyListeners());
-    _lastLocationChangedSub ??=
-        _locationsService.lastLocationChanged.listen((_) => notifyListeners());
-    _favLocationsChangedSub ??=
-        _locationsService.favLocationsChanged.listen((_) => notifyListeners());
+    _propertiesChangedSub =
+        _locationsService.propertiesChanged.listen((_) => notifyListeners());
 
     _weatherData = await loadWeatherFromCityName(cityName);
     _locationsService.setLastLocation(cityName);
@@ -90,9 +86,7 @@ class WeatherModel extends SafeChangeNotifier {
   @override
   Future<void> dispose() async {
     super.dispose();
-    await _apiKeyChangedSub?.cancel();
-    await _lastLocationChangedSub?.cancel();
-    await _favLocationsChangedSub?.cancel();
+    await _propertiesChangedSub?.cancel();
   }
 
   Future<WeatherData?> loadWeatherFromCityName(String cityName) async {

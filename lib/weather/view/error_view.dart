@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../../string_x.dart';
+import '../../extensions/string_x.dart';
 import '../../app/offline_page.dart';
-import '../../build_context_x.dart';
+import '../../extensions/build_context_x.dart';
 import '../../l10n/l10n.dart';
 import '../weather_model.dart';
 import 'city_search_field.dart';
@@ -108,7 +108,7 @@ class _ErrorViewState extends State<ErrorView> {
                             borderSide: BorderSide.none,
                           ),
                           fillColor: context.theme.colorScheme.surface
-                              .withOpacity(0.3),
+                              .withValues(alpha: 0.3),
                           label: Text(context.l10n.openWeatherApiKey),
                         ),
                       ),

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../../constants.dart';
+import '../../constants.dart';
 import '../../app/app_model.dart';
 import '../../app/side_bar.dart';
 import '../../l10n/l10n.dart';
