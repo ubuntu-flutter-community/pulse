@@ -20,7 +20,7 @@ architectures:
 parts:
   flutter-git:
     source: https://github.com/flutter/flutter.git
-    source-tag: 3.27.4
+    source-tag: 3.29.0
     plugin: nil
     override-build: |
       mkdir -p $CRAFT_PART_INSTALL/usr/bin
@@ -38,6 +38,9 @@ parts:
     prime:
       - -*
 
+# TODO: How to get the api key from the environment of the github action?
+# flutter build linux --release -v --dart-define=API_KEY="$API_KEY"
+
   pulse:
     plugin: nil
     source: .
@@ -47,8 +50,7 @@ parts:
       set -eu
       flutter doctor
       flutter pub get
-      export API_KEY=$API_KEY
-      flutter build linux --release -v --dart-define=API_KEY="$API_KEY"
+      flutter build linux --release -v
       mkdir -p $CRAFT_PART_INSTALL/bin/
       cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/bin/
 

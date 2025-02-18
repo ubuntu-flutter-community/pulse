@@ -1,8 +1,10 @@
 // ignore_for_file: unused_element
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:open_weather_client/models/temperature.dart';
 import 'package:open_weather_client/open_weather.dart';
@@ -12,6 +14,7 @@ import 'package:watch_it/watch_it.dart';
 import '../locations/locations_service.dart';
 import 'weather_data_x.dart';
 import 'weekday.dart';
+import 'package:http/http.dart' as http;
 
 class WeatherModel extends SafeChangeNotifier {
   WeatherModel({
@@ -99,6 +102,47 @@ class WeatherModel extends SafeChangeNotifier {
     } catch (e) {
       error = e.toString();
       return null;
+    }
+  }
+
+  Future<List<String>> findCityNames(
+    String query, {
+    required void Function(String error) onError,
+  }) async {
+    final String apiUrl =
+        'http://api.openweathermap.org/geo/1.0/direct?q=$query&limit=5&appid=${_openWeather.apiKey}&lang=${WidgetsBinding.instance.platformDispatcher.locale.countryCode?.toLowerCase()}';
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonData = jsonDecode(response.body);
+        List<String> cityNames = [];
+
+        for (var item in jsonData) {
+          if (item is Map<String, dynamic> && item.containsKey('name')) {
+            String? cityName = item['name'];
+            String? country = item['country'];
+            String? state = item['state'];
+
+            String formattedName = cityName ?? '';
+            if (state != null) {
+              formattedName += ', $state';
+            }
+            if (country != null) {
+              formattedName += ', $country';
+            }
+            cityNames.add(formattedName);
+          }
+        }
+        return cityNames;
+      } else {
+        onError('Error: ${response.statusCode}, ${response.body}');
+        return [];
+      }
+    } catch (e) {
+      onError('Error: $e');
+      return [];
     }
   }
 
