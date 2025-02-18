@@ -31,6 +31,7 @@ extension WeatherDataX on WeatherData {
           'Clear' => night ? WeatherType.sunnyNight : WeatherType.sunny,
           'Sunny' => night ? WeatherType.sunnyNight : WeatherType.sunny,
           'Wind' => night ? WeatherType.dusty : WeatherType.dusty,
+          'Mist' => WeatherType.foggy,
           _ => WeatherType.thunder
         }
     };
