@@ -20,12 +20,11 @@ jobs:
         with:
           channel: "stable"
           flutter-version: ${{env.FLUTTER_VERSION}}
+      - run: echo ${{ secrets.API_KEY }} > secrets.txt
       - run: sudo apt update
       - run: sudo apt install -y clang cmake curl libgtk-3-dev ninja-build pkg-config unzip libunwind-dev libsecret-1-dev
       - run: flutter pub get
       - uses: snapcore/action-build@v1
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
         id: build
       - uses: snapcore/action-publish@v1
         if: steps.build.outcome == 'success'
@@ -45,13 +44,12 @@ jobs:
         with:
           channel: "main"
           flutter-version: ${{env.FLUTTER_VERSION}}
+      - run: echo ${{ secrets.API_KEY }} > secrets.txt
       - run: sudo apt update
       - run: sudo apt install -y clang cmake curl libgtk-3-dev ninja-build pkg-config unzip libunwind-dev libsecret-1-dev
       - run: flutter pub get
       - uses: snapcore/action-build@v1
         id: build
-        env:
-          API_KEY: ${{ secrets.API_KEY }}
       - uses: snapcore/action-publish@v1
         if: steps.build.outcome == 'success'
         env:

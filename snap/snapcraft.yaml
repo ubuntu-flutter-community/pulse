@@ -45,12 +45,11 @@ parts:
     plugin: nil
     source: .
     after: [flutter-git]
-
     override-build: |
       set -eu
       flutter doctor
       flutter pub get
-      flutter build linux --release -v
+      flutter build linux --release -v --dart-define=API_KEY="$(cat secrets.txt)"
       mkdir -p $CRAFT_PART_INSTALL/bin/
       cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/bin/
 
