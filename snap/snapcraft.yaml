@@ -1,6 +1,6 @@
 name: pulse
 title: Pulse
-base: core22
+base: core24
 version: git
 contact: frederik.feichtmeier@gmail.com
 summary: Weather app for the Linux Desktop.
@@ -13,9 +13,9 @@ icon: snap/gui/pulse.png
 
 grade: stable
 confinement: strict
-architectures:
-  - build-on: amd64
-  - build-on: arm64
+platforms:
+  amd64:
+  arm64:
 
 parts:
   flutter-git:
@@ -45,12 +45,11 @@ parts:
     plugin: nil
     source: .
     after: [flutter-git]
-
     override-build: |
       set -eu
       flutter doctor
       flutter pub get
-      flutter build linux --release -v
+      flutter build linux --release -v --dart-define=API_KEY="$(cat secrets.txt)"
       mkdir -p $CRAFT_PART_INSTALL/bin/
       cp -r build/linux/*/release/bundle/* $CRAFT_PART_INSTALL/bin/
 
