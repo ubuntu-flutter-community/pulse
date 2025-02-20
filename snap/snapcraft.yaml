@@ -1,6 +1,6 @@
 name: pulse
 title: Pulse
-base: core24
+base: core22
 version: git
 contact: frederik.feichtmeier@gmail.com
 summary: Weather app for the Linux Desktop.
