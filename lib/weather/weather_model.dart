@@ -12,6 +12,7 @@ import 'package:safe_change_notifier/safe_change_notifier.dart';
 import 'package:watch_it/watch_it.dart';
 
 import '../locations/locations_service.dart';
+import '../settings/settings_service.dart';
 import 'weather_data_x.dart';
 import 'weekday.dart';
 import 'package:http/http.dart' as http;
@@ -20,11 +21,18 @@ class WeatherModel extends SafeChangeNotifier {
   WeatherModel({
     required OpenWeather openWeather,
     required LocationsService locationsService,
+    required SettingsService settingsService,
   })  : _openWeather = openWeather,
-        _locationsService = locationsService;
+        _locationsService = locationsService,
+        _settingsService = settingsService;
 
   OpenWeather _openWeather;
   void setApiKeyAndLoadWeather(String apiKey) {
+    _settingsService.setString(
+      key: SettingKeys.apiKey,
+      value: apiKey,
+      secure: true,
+    );
     di
       ..unregister<OpenWeather>()
       ..registerSingleton<OpenWeather>(OpenWeather(apiKey: apiKey));
@@ -32,6 +40,7 @@ class WeatherModel extends SafeChangeNotifier {
     loadWeather();
   }
 
+  final SettingsService _settingsService;
   final LocationsService _locationsService;
   StreamSubscription<bool>? _propertiesChangedSub;
 
