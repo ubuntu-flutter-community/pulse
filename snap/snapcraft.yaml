@@ -1,6 +1,6 @@
 name: pulse
 title: Pulse
-base: core24
+base: core22
 version: git
 contact: frederik.feichtmeier@gmail.com
 summary: Weather app for the Linux Desktop.
@@ -13,9 +13,9 @@ icon: snap/gui/pulse.png
 
 grade: stable
 confinement: strict
-platforms:
-  amd64:
-  arm64:
+architectures:
+  - build-on: amd64
+  - build-on: arm64
 
 parts:
   flutter-git:

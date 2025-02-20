@@ -18,7 +18,7 @@ void registerDependencies() {
 
         const apiKey = String.fromEnvironment('API_KEY', defaultValue: '');
 
-        if (apiKey.isNotEmpty) {
+        if (apiKey.trim().isNotEmpty) {
           flutterSecureStorage.write(key: SettingKeys.apiKey, value: apiKey);
         }
         return flutterSecureStorage;
@@ -51,10 +51,11 @@ void registerDependencies() {
     )
     ..registerSingletonWithDependencies(
       () => WeatherModel(
+        settingsService: di<SettingsService>(),
         locationsService: di<LocationsService>(),
         openWeather: di<OpenWeather>(),
       ),
-      dependsOn: [OpenWeather],
+      dependsOn: [OpenWeather, SettingsService],
       dispose: (s) => s.dispose(),
     )
     ..registerLazySingleton(AppModel.new);
