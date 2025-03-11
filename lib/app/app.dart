@@ -20,17 +20,10 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: supportedLocales,
-        onGenerateTitle: (context) => 'MusicPod',
+        onGenerateTitle: (context) => 'Pulse',
         debugShowCheckedModeBanner: false,
         theme: yaruLight,
-        darkTheme: yaruDark.copyWith(
-          tabBarTheme: TabBarTheme.of(context).copyWith(
-            labelColor: Colors.white,
-            unselectedLabelColor: Colors.white.withValues(
-              alpha: 0.8,
-            ),
-          ),
-        ),
+        darkTheme: yaruDark,
         home: const _StartPage(),
         scrollBehavior: const MaterialScrollBehavior().copyWith(
           dragDevices: {

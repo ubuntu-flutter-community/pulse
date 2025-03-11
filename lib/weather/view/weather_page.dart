@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_weather_bg_null_safety/utils/weather_type.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:yaru/yaru.dart';
 
-import '../../constants.dart';
 import '../../app/app_model.dart';
 import '../../app/side_bar.dart';
+import '../../constants.dart';
 import '../../l10n/l10n.dart';
+import '../weather_data_x.dart';
+import '../weather_model.dart';
 import 'daily_bar_chart.dart';
 import 'hourly_line_chart.dart';
 
@@ -20,7 +23,12 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
   Widget build(BuildContext context) {
     final appModel = watchIt<AppModel>();
     final showToday = appModel.tabIndex == 0;
+    final weatherType =
+        watchPropertyValue((WeatherModel m) => m.data?.weatherType);
 
+    final labelColor = weatherType == null
+        ? null
+        : contrastColor(WeatherUtil.getColor(weatherType).first);
     return DefaultTabController(
       initialIndex: appModel.tabIndex,
       length: 2,
@@ -46,6 +54,8 @@ class WeatherPage extends StatelessWidget with WatchItMixin {
           title: SizedBox(
             width: kPaneWidth,
             child: YaruTabBar(
+              labelColor: labelColor,
+              unselectedLabelColor: labelColor?.withValues(alpha: 0.8),
               onTap: (v) => appModel.tabIndex = v,
               tabs: [
                 Tab(text: context.l10n.hourly),
