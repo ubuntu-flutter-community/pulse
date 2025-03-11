@@ -34,7 +34,10 @@ dependencies:
   shared_preferences: ^2.5.1
   watch_it: ^1.6.2
   xdg_directories: ^1.0.4
-  yaru: ^7.0.0
+  yaru:
+    git:
+      url: https://github.com/ubuntu/yaru.dart
+      ref: e4be44ca80d4535eacb85a8c7fb422fa9c15d43c
 
 dev_dependencies:
   build_runner: ^2.4.8

@@ -28,11 +28,14 @@ extension WeatherDataX on WeatherData {
           'Drizzle' => WeatherType.lightRainy,
           'Rain' => WeatherType.middleRainy,
           'Snow' => WeatherType.heavySnow,
-          'Clear' => night ? WeatherType.sunnyNight : WeatherType.sunny,
-          'Sunny' => night ? WeatherType.sunnyNight : WeatherType.sunny,
+          'Clear' ||
+          'Sunny' =>
+            night ? WeatherType.sunnyNight : WeatherType.sunny,
           'Wind' => night ? WeatherType.dusty : WeatherType.dusty,
           'Mist' => WeatherType.foggy,
-          _ => WeatherType.thunder
+          'Fog' => WeatherType.foggy,
+          'Thunderstorm' || 'Thunder' || 'Lightning' => WeatherType.thunder,
+          _ => WeatherType.sunny
         }
     };
   }
